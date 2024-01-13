@@ -1,3 +1,6 @@
+/* eslint-disable no-bitwise */
+/* eslint-disable no-var */
+/* eslint-disable one-var */
 /* The MIT License (MIT)
  *
  * Copyright (c) 2022-present David G. Simmons
@@ -20,15 +23,12 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-import { createRoot } from "react-dom/client";
-import { Provider } from "react-redux";
-import App from "./App";
-import { mainStore } from "./stores/store";
-
-const container = document.getElementById("root")!;
-const root = createRoot(container);
-root.render(
-  <Provider store={mainStore}>
-    <App />
-  </Provider>
-);
+export default function ReactId(): string {
+  // eslint-disable-next-line func-names
+  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+    // eslint-disable-next-line no-bitwise
+    var r = (Math.random() * 16) | 0,
+      v = c === 'x' ? r : (r & 0x3) | 0x8;
+    return v.toString(16);
+  });
+}

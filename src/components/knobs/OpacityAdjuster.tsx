@@ -20,15 +20,31 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-import { createRoot } from "react-dom/client";
-import { Provider } from "react-redux";
-import App from "./App";
-import { mainStore } from "./stores/store";
+import { JSX } from 'react';
+import AdjusterKnob from './AdjusterKnob';
 
-const container = document.getElementById("root")!;
-const root = createRoot(container);
-root.render(
-  <Provider store={mainStore}>
-    <App />
-  </Provider>
-);
+interface OpacityAdjusterProps {
+  val: number;
+  disabled: boolean;
+  // eslint-disable-next-line no-unused-vars
+  callback: (value: number) => void;
+}
+export default function OpacityAdjuster(
+  props: OpacityAdjusterProps,
+): JSX.Element {
+  const { val, disabled, callback } = props;
+  return (
+    <AdjusterKnob
+      name="brandOpacity"
+      value={Math.round(val * 1e2) / 1e2}
+      min={0.0}
+      max={1.0}
+      step={0.1}
+      disabled={!disabled}
+      callback={(value) => {
+        const v = value;
+        callback(v);
+      }}
+    />
+  );
+}

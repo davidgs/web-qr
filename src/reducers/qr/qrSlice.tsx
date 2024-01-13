@@ -20,15 +20,31 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-import { createRoot } from "react-dom/client";
-import { Provider } from "react-redux";
-import App from "./App";
-import { mainStore } from "./stores/store";
+import { createSlice } from '@reduxjs/toolkit';
+import { QRSettings, defaultQRSettings } from '../../types';
 
-const container = document.getElementById("root")!;
-const root = createRoot(container);
-root.render(
-  <Provider store={mainStore}>
-    <App />
-  </Provider>
-);
+const initialState = {
+  settings: defaultQRSettings,
+};
+
+export const qrSlice = createSlice({
+  name: 'qr',
+  initialState,
+  reducers: {
+    updateQRType: (state, action) => {
+      state.settings.QRType = action.payload;
+    },
+    updateXParent: (state, action) => {
+      state.settings.XParent = action.payload;
+    },
+    updateQRSettings: (state, action) => {
+      const qSet: QRSettings = action.payload;
+      state.settings = qSet;
+    },
+  },
+});
+
+export const { updateQRType, updateXParent, updateQRSettings } =
+  qrSlice.actions;
+
+export default qrSlice.reducer;

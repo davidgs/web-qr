@@ -20,15 +20,25 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-import { createRoot } from "react-dom/client";
-import { Provider } from "react-redux";
-import App from "./App";
-import { mainStore } from "./stores/store";
+import { JSX } from 'react';
 
-const container = document.getElementById("root")!;
-const root = createRoot(container);
-root.render(
-  <Provider store={mainStore}>
-    <App />
-  </Provider>
-);
+export default function ImgElement({
+  byteString,
+  width,
+  height,
+  alt,
+}: {
+  byteString: string;
+  width: number;
+  height: number;
+  alt: string;
+}): JSX.Element {
+  return (
+    <img
+      src={byteString}
+      alt={alt}
+      width={width > 0 ? `${width}px` : '75%'}
+      height={height > 0 ? `${height}px` : 'auto'}
+    />
+  );
+}

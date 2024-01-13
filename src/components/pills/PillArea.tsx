@@ -20,15 +20,47 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-import { createRoot } from "react-dom/client";
-import { Provider } from "react-redux";
-import App from "./App";
-import { mainStore } from "./stores/store";
+import { JSX } from 'react';
+import ReactId from '../../utils/ReactId';
+import Pill from './Pill';
+import { UtmKeyValue } from '../../types';
 
-const container = document.getElementById("root")!;
-const root = createRoot(container);
-root.render(
-  <Provider store={mainStore}>
-    <App />
-  </Provider>
-);
+interface ICallback {
+  // eslint-disable-next-line no-unused-vars
+  (value: string, type: string): void;
+}
+interface PillAreaProps {
+  pills: UtmKeyValue[];
+  type: string;
+  callback: ICallback;
+}
+
+export default function PillArea(props: PillAreaProps): JSX.Element {
+  const { pills, type, callback } = props;
+  const myUUID: string = ReactId();
+  const removePill = (id: string) => {
+    callback(id, type);
+  };
+
+  return (
+    <div
+      className="pillArea"
+      key={`${myUUID}-pillArea`}
+      style={{ paddingTop: '0.5rem' }}
+    >
+      {pills.length > 0
+        ? pills.map((pill) => {
+            return pill.key !== '' && pill.value !== '' ? (
+              <Pill
+                id={`${pill.key}-${type}`}
+                valKey={`${pill.key}`}
+                type={type}
+                value={pill.value}
+                callback={removePill}
+              />
+            ) : null;
+          })
+        : null}
+    </div>
+  );
+}

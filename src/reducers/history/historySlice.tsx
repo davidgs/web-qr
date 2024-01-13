@@ -20,15 +20,43 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-import { createRoot } from "react-dom/client";
-import { Provider } from "react-redux";
-import App from "./App";
-import { mainStore } from "./stores/store";
+import { createSlice } from '@reduxjs/toolkit';
+import { WiFiLink, defaultActiveLink, utmLink } from '../../types';
 
-const container = document.getElementById("root")!;
-const root = createRoot(container);
-root.render(
-  <Provider store={mainStore}>
-    <App />
-  </Provider>
-);
+const initialState = {
+  linkHistory: {
+    utm_link: [] as utmLink[],
+    wifi_link: [] as WiFiLink[],
+  },
+  utm_link: [] as utmLink[],
+  wifi_link: [] as WiFiLink[],
+  activeLink: defaultActiveLink,
+};
+
+export const historySlice = createSlice({
+  name: 'history',
+  initialState,
+  reducers: {
+    setUtmLinkHistory: (state, action) => {
+      state.utm_link = action.payload;
+    },
+    setWifiLinkHistory: (state, action) => {
+      state.wifi_link = action.payload;
+    },
+    setLinkHistory: (state, action) => {
+      state.linkHistory = action.payload;
+    },
+    setActiveLink: (state, action) => {
+      state.activeLink = action.payload;
+    },
+  },
+});
+
+export const {
+  setUtmLinkHistory,
+  setWifiLinkHistory,
+  setLinkHistory,
+  setActiveLink,
+} = historySlice.actions;
+
+export default historySlice.reducer;

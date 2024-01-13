@@ -20,15 +20,22 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-import { createRoot } from "react-dom/client";
-import { Provider } from "react-redux";
-import App from "./App";
-import { mainStore } from "./stores/store";
+import { createSlice } from '@reduxjs/toolkit';
 
-const container = document.getElementById("root")!;
-const root = createRoot(container);
-root.render(
-  <Provider store={mainStore}>
-    <App />
-  </Provider>
-);
+const initialState = {
+  dark: false,
+};
+
+export const darkSlice = createSlice({
+  name: 'bitly',
+  initialState,
+  reducers: {
+    setDark: (state, action) => {
+      state.dark = action.payload as boolean;
+    },
+  },
+});
+
+export const { setDark } = darkSlice.actions;
+
+export default darkSlice.reducer;

@@ -20,15 +20,28 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-import { createRoot } from "react-dom/client";
-import { Provider } from "react-redux";
-import App from "./App";
-import { mainStore } from "./stores/store";
+import { Accordion } from 'react-bootstrap';
+import UTMMediumAccordian from '../../components/Accordions/UTMMediumAccordian';
+import UTMContentAccordian from '../../components/Accordions/UTMContentAccordian';
+import UTMCampaignAccordian from '../../components/Accordions/UTMCampaignAccordian';
+import UTMTermAccordian from '../../components/Accordions/UTMTermAccordian';
+import UTMKeywordAccordian from '../../components/Accordions/UTMKeywordAccordian';
+import UTMSourceAccordian from '../../components/Accordions/UTMSourceAccordian';
+import UTMTargetAccordian from '../../components/Accordions/UTMTargetAccordian';
 
-const container = document.getElementById("root")!;
-const root = createRoot(container);
-root.render(
-  <Provider store={mainStore}>
-    <App />
-  </Provider>
-);
+export default function UTMConfigurator() {
+  return (
+    <Accordion.Body id="utm_codes">
+      {/* utm configuration */}
+      <Accordion>
+        <UTMTargetAccordian />
+        <UTMSourceAccordian />
+        <UTMMediumAccordian />
+        <UTMContentAccordian />
+        <UTMCampaignAccordian />
+        <UTMTermAccordian />
+        <UTMKeywordAccordian />
+      </Accordion>
+    </Accordion.Body>
+  );
+}
