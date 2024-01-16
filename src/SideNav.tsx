@@ -48,7 +48,7 @@ import AboutModal from './components/AboutModal';
 export default function SideNav() {
   const dark = useSelector((state: RootState) => state.dark);
   const dispatch = useDispatch();
-  const [updateText, setUpdateText] = useState<string>('');
+  const [updateText, ] = useState<string>('');
   const [editConfig, setEditConfig] = useState(false);
   const [showAboutModal, setShowAboutModal] = useState(false);
   const mainSet = useSelector((state: RootState) => state.main.settings);
@@ -70,9 +70,9 @@ export default function SideNav() {
   const setSaveDark = () => {
     const d = { ...dark }
     d.dark = !d.dark;
+    dispatch(setDark(d.dark));
     store.set('dark', d);
     console.log(`Dark Mode: ${store.get('dark').dark}`)
-    dispatch(setDark(d.dark));
   };
 
   return (

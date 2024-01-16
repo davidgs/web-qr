@@ -22,8 +22,9 @@
  */
 import { createSlice } from '@reduxjs/toolkit';
 import { CornerRadii, DefaultQRStyle, IProps } from '../../types';
+import store from 'store2';
 
-const initialState = {
+const initialState = store.get('qr-style') || {
   settings: DefaultQRStyle,
 };
 

@@ -25,38 +25,16 @@ import { MemoryRouter as Router, Routes, Route } from "react-router-dom";
 import "./css/App.css";
 import { useDispatch, useSelector } from "react-redux";
 import { ChevronDoubleDown, ChevronDoubleRight } from "react-bootstrap-icons";
-import { Row, OverlayTrigger, Tooltip } from "react-bootstrap";
-import {
-  BitlyConfig,
-  QRSettings,
-  IProps,
-  LinkData,
-} from "./types";
+import { OverlayTrigger, Tooltip } from "react-bootstrap";
 import store from "store2";
-import Userfront, { SignupForm } from "@userfront/toolkit";
+import Userfront from "@userfront/toolkit";
 import { RootState } from "./stores/store";
 import { updateMainSettings } from "./reducers/main/mainSlice";
-import { updateQRSettings } from "./reducers/qr/qrSlice";
-import { updateUTMCampaignSettings } from "./reducers/utm/utmCampaignSlice";
-import { updateUTMContentSettings } from "./reducers/utm/utmContentSlice";
-import { updateUTMKeywordSettings } from "./reducers/utm/utmKeywordSlice";
-import { updateUTMMediumSettings } from "./reducers/utm/utmMediumSlice";
-import { updateUTMSourceSettings } from "./reducers/utm/utmSourceSlice";
-import { updateUTMTargetSettings } from "./reducers/utm/utmTargetSlice";
-import { updateUTMTermSettings } from "./reducers/utm/utmTermSlice";
-import { updateBitlySettings } from "./reducers/bitly/bitlySlice";
-import { updateQRStyleSettings } from "./reducers/qr/qrCodeSettingsSlice";
-import { setDark } from "./reducers/dark/darkSlice";
 import SideNav from "./SideNav";
 // import LinkToolbar from './components/LinkToolbar';
 import QCode from "./forms/QRCodeForm";
 import URLForm from "./forms/URLForm";
 import WifiForm from "./forms/WiFiForm";
-import {
-  setUtmLinkHistory,
-  setWifiLinkHistory,
-  setLinkHistory,
-} from "./reducers/history/historySlice";
 import LinkToolbar from "./components/LinkToolbar";
 
 export default function App() {
@@ -65,50 +43,8 @@ export default function App() {
   const dark = useSelector((state: RootState) => state.dark.dark);
   const mainSet = useSelector((state: RootState) => state.main.settings);
 
-Userfront.init("qbjrr47b");
+  Userfront.init("qbjrr47b");
   // Userfront.init("qbjrr47b");
-
-  useEffect(() => {
-    const d = store.get("dark");
-    if (d !== null) {
-      dispatch(setDark(d));
-    }
-    const uc = store.get("utm-config");
-    if (uc !== null) {
-      dispatch(updateUTMCampaignSettings(uc.utm_campaign));
-      dispatch(updateUTMMediumSettings(uc.utm_medium));
-      dispatch(updateUTMSourceSettings(uc.utm_source));
-      dispatch(updateUTMTermSettings(uc.utm_term));
-      dispatch(updateUTMContentSettings(uc.utm_content));
-      dispatch(updateUTMKeywordSettings(uc.utm_keyword));
-      dispatch(updateUTMTargetSettings(uc.utm_target));
-    }
-    const mset = store.get("main-config");
-    if (mset !== null) {
-      console.log("mset", mset);
-      dispatch(updateMainSettings(mset));
-    }
-    const qr: QRSettings = store.get("qr-config");
-    if (qr !== null) {
-      dispatch(updateQRSettings(qr));
-    }
-    const qs: IProps = store.get("qr-style");
-    if (qs !== null) {
-      console.log("qs", qs);
-      dispatch(updateQRStyleSettings(qs));
-    }
-    const bc: BitlyConfig = store.get("bitly-config");
-    if (bc !== null) {
-      dispatch(updateBitlySettings(bc));
-    }
-    const ht: LinkData = store.get("history");
-    if (ht !== null) {
-      dispatch(setLinkHistory(ht));
-      dispatch(setUtmLinkHistory(ht.utm_link));
-      dispatch(setWifiLinkHistory(ht.wifi_link));
-    }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
 
   const toggleOpen = () => {
     const ms = { ...mainSet };
@@ -146,7 +82,7 @@ Userfront.init("qbjrr47b");
           path="/"
           element={
             <>
-              <Row>
+              <div className="fullrow">
                 {/* <div className="content"> */}
                 <div
                   className={
@@ -156,6 +92,7 @@ Userfront.init("qbjrr47b");
                   }
                   style={{
                     width: mainSet.sidebar === "open" ? "270px" : "60px",
+                    marginTop: "-7px",
                   }}
                 >
                   <OverlayTrigger
@@ -216,7 +153,7 @@ Userfront.init("qbjrr47b");
                     {mainSet.formType === "wifi" ? <WifiForm /> : <URLForm />}
                   </div>
                 </div>
-              </Row>
+              </div>
               {/* <Analytics /> */}
             </>
           }

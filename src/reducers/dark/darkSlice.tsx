@@ -21,8 +21,9 @@
  * SOFTWARE.
  */
 import { createSlice } from '@reduxjs/toolkit';
+import store from 'store2';
 
-const initialState = {
+const initialState = store.get('dark') || {
   dark: false,
 };
 

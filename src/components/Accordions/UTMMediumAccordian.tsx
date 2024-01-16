@@ -27,15 +27,15 @@ import Checker from '../buttons/Checker';
 import { RootState } from '../../stores/store';
 import { useSelector, useDispatch } from 'react-redux';
 import {
-  updateLabel,
-  updateValue,
-  updateAriaLabel,
-  updateError,
-  updateIsChooser,
-  updateShowName,
-  updateTooltip,
-  updateUseValue,
-} from '../../reducers/utm/utmMediumSlice';
+  updateMediumLabel,
+  updateMediumValue,
+  updateMediumAriaLabel,
+  updateMediumError,
+  updateMediumIsChooser,
+  updateMediumShowName,
+  updateMediumTooltip,
+  updateMediumUseValue,
+} from "../../reducers/utm/utmSlice";
 import PillArea from '../pills/PillArea';
 
 export default function UTMMediumAccordian(): JSX.Element {
@@ -46,7 +46,7 @@ export default function UTMMediumAccordian(): JSX.Element {
   const itemNo: string = '2';
   const type: string = 'UTM Medium';
   const accValue = useSelector(
-    (state: RootState) => state.utmMedium.settings as UtmObj,
+    (state: RootState) => state.utmStuff.utm_medium as UtmObj,
   );
   const [kvValue, setKvValue] = useState<string>('');
   const [valValid, setValValid] = useState<boolean>(true);
@@ -66,7 +66,7 @@ export default function UTMMediumAccordian(): JSX.Element {
       setFieldValue(v);
     }
     const newV = v.replace(`(${valKind})`, '').trim();
-    dispatch(updateLabel(newV));
+    dispatch(updateMediumLabel(newV));
   };
   /**
    * delete a pill value
@@ -81,7 +81,7 @@ export default function UTMMediumAccordian(): JSX.Element {
         tEntries.splice(t, 1);
       }
     }
-    dispatch(updateValue(tEntries));
+    dispatch(updateMediumValue(tEntries));
   };
 
   /**
@@ -104,7 +104,7 @@ export default function UTMMediumAccordian(): JSX.Element {
       value: target?.value?.replace(/,/g, '').split('=')[0].trim(),
     };
     newTrm.push(newTrmPill);
-    dispatch(updateValue(newTrm));
+    dispatch(updateMediumValue(newTrm));
   };
 
   return (
@@ -140,7 +140,7 @@ export default function UTMMediumAccordian(): JSX.Element {
                     : `Check to use the '${valKind}' value`
                 }
                 callback={(value) => {
-                  dispatch(updateUseValue(value));
+                  dispatch(updateMediumUseValue(value));
                 }}
               />
             </div>
@@ -200,7 +200,7 @@ export default function UTMMediumAccordian(): JSX.Element {
                       } else {
                         setFieldValue(`${accValue?.label}`);
                       }
-                      dispatch(updateShowName(value));
+                      dispatch(updateMediumShowName(value));
                     }}
                   />
                 </div>
@@ -229,7 +229,7 @@ export default function UTMMediumAccordian(): JSX.Element {
                     placeholder={`Enter ${valKind} field tooltip`}
                     value={accValue.tooltip ? accValue.tooltip : ''}
                     onChange={(e) => {
-                      dispatch(updateTooltip(e.target.value));
+                      dispatch(updateMediumTooltip(e.target.value));
                     }}
                   />
                 </OverlayTrigger>
@@ -259,7 +259,7 @@ export default function UTMMediumAccordian(): JSX.Element {
                     required
                     value={accValue.ariaLabel}
                     onChange={(e) => {
-                      dispatch(updateAriaLabel(e.target.value));
+                      dispatch(updateMediumAriaLabel(e.target.value));
                     }}
                   />
                 </OverlayTrigger>
@@ -287,7 +287,7 @@ export default function UTMMediumAccordian(): JSX.Element {
                     placeholder={`Enter ${valKind} field error text`}
                     value={accValue.error}
                     onChange={(e) => {
-                      dispatch(updateError(e.target.value));
+                      dispatch(updateMediumError(e.target.value));
                     }}
                   />
                 </OverlayTrigger>
@@ -306,7 +306,7 @@ export default function UTMMediumAccordian(): JSX.Element {
                         label=""
                         tooltip={`Use a chooser to create a pre-defined list of allowed values for ${valKind}`}
                         callback={(value) => {
-                          dispatch(updateIsChooser(value));
+                          dispatch(updateMediumIsChooser(value));
                         }}
                       />
                     </div>
@@ -323,7 +323,7 @@ export default function UTMMediumAccordian(): JSX.Element {
                         label=""
                         tooltip={`Use a Text Field to allow the user to enter any value for ${valKind}`}
                         callback={(value) => {
-                          dispatch(updateIsChooser(!value));
+                          dispatch(updateMediumIsChooser(!value));
                         }}
                       />
                     </div>
