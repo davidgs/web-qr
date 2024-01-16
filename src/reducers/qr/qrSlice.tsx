@@ -22,8 +22,9 @@
  */
 import { createSlice } from '@reduxjs/toolkit';
 import { QRSettings, defaultQRSettings } from '../../types';
+import store from 'store2';
 
-const initialState = {
+const initialState = store.get('qr-config') || {
   settings: defaultQRSettings,
 };
 

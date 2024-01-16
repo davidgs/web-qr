@@ -22,8 +22,9 @@
  */
 import { createSlice } from '@reduxjs/toolkit';
 import { MainSettings, defaultMainSettings } from '../../types';
+import store from 'store2';
 
-const initialState = {
+const initialState = store.get('main-settings') || {
   settings: defaultMainSettings,
 };
 

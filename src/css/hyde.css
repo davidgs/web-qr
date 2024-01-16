@@ -565,6 +565,9 @@ a.sidebar-nav-item:focus {
 .column {
   width: 100%;
 }
+.main-row-special {
+  --bs-gutter-x: 0rem !important;
+}
 
 @media (min-width: 48em) {
   .aside-column {
@@ -574,7 +577,7 @@ a.sidebar-nav-item:focus {
     /* width: 25%; */
     max-width: 250px;
     margin-right: 10px;
-    border-radius: 10px;
+    border-top-right-radius: 10px;
     background-color: rgb(10, 28, 46);;
   }
 
@@ -582,7 +585,7 @@ a.sidebar-nav-item:focus {
     transition: width 0.3s ease-in-out;
     width: 60px;
     padding-top: 10px;
-    border-radius: 10px;
+    border-top-right-radius: 10px;
     height: 100vh;
     float: left;
     margin-right: 10px;
@@ -625,7 +628,7 @@ float: right;
     margin-right: 10px;
     padding-right: 10px;
     padding-top: 10px;
-    border-radius: 10px;
+    border-top-right-radius: 10px;
     background-color: rgb(10, 28, 46);;
   }
 
@@ -636,7 +639,7 @@ float: right;
     float: left;
     margin-right: 10px;
     padding-top: 10px;
-    border-radius: 10px;
+    border-top-right-radius: 10px;
     background-color: rgb(10, 28, 46);;
   }
   .main-column {

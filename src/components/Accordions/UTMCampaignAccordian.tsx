@@ -20,39 +20,42 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-import { JSX, useState, SyntheticEvent } from 'react';
-import { Accordion, Form, OverlayTrigger, Tooltip } from 'react-bootstrap';
-import { UtmKeyValue, UtmObj } from '../../types';
-import Checker from '../buttons/Checker';
-import { RootState } from '../../stores/store';
-import { useSelector, useDispatch } from 'react-redux';
+import { JSX, useState, SyntheticEvent } from "react";
+import { Accordion, Form, OverlayTrigger, Tooltip } from "react-bootstrap";
+import { UtmKeyValue, UtmObj, UtmParams } from "../../types";
+import Checker from "../buttons/Checker";
+import { RootState } from "../../stores/store";
+import { useSelector, useDispatch } from "react-redux";
 import {
-  updateLabel,
-  updateValue,
-  updateAriaLabel,
-  updateError,
-  updateIsChooser,
-  updateShowName,
-  updateTooltip,
-  updateUseValue,
-} from '../../reducers/utm/utmCampaignSlice';
-import PillArea from '../pills/PillArea';
+  updateCampaignLabel,
+  updateCampaignValue,
+  updateCampaignAriaLabel,
+  updateCampaignError,
+  updateCampaignIsChooser,
+  updateCampaignShowName,
+  updateCampaignTooltip,
+  updateCampaignUseValue,
+  updateUTMCampaignSettings,
+} from "../../reducers/utm/utmSlice";
+import PillArea from "../pills/PillArea";
 
 export default function UTMCampaignAccordian(): JSX.Element {
   const dispatch = useDispatch();
   const dark = useSelector((state: RootState) => state.dark.dark);
-  const darkClass = dark ? 'header-stuff-dark' : 'header-stuff';
-  const valKind: string = 'utm_campaign';
-  const itemNo: string = '4';
-  const type: string = 'UTM Campaign';
+  const darkClass = dark ? "header-stuff-dark" : "header-stuff";
+  const valKind: string = "utm_campaign";
+  const itemNo: string = "4";
+  const type: string = "UTM Campaign";
   const accValue = useSelector(
-    (state: RootState) => state.utmCampaign.settings as UtmObj,
+    (state: RootState) => state.utmStuff as UtmParams
   );
-  const [kvValue, setKvValue] = useState<string>('');
+  const [kvValue, setKvValue] = useState<string>("");
   const [valValid, setValValid] = useState<boolean>(true);
 
   const [fieldValue, setFieldValue] = useState<string>(
-    accValue.showName ? `${accValue?.label} (${valKind})` : `${accValue.label}`,
+    accValue.utm_campaign.showName
+      ? `${accValue?.utm_campaign.label} (${valKind})`
+      : `${accValue.utm_campaign.label}`
   );
 
   const updateFieldValue = (eventKey: SyntheticEvent) => {
@@ -60,20 +63,20 @@ export default function UTMCampaignAccordian(): JSX.Element {
     const v = target.value;
     if (v.indexOf(`(${valKind})`) !== -1) {
       setFieldValue(v);
-    } else if (accValue.showName) {
+    } else if (accValue.utm_campaign.showName) {
       setFieldValue(`${v} (${valKind})`);
     } else {
       setFieldValue(v);
     }
-    const newV = v.replace(`(${valKind})`, '').trim();
-    dispatch(updateLabel(newV));
+    const newV = v.replace(`(${valKind})`, "").trim();
+    dispatch(updateCampaignLabel(newV));
   };
   /**
    * delete a pill value
    * @param value the value to delete
    * */
   const deletePillValue = (value: string) => {
-    const newT = Object.entries(accValue as UtmObj);
+    const newT = Object.entries(accValue.utm_campaign as UtmObj);
     const tLen = newT.length;
     const tEntries: UtmKeyValue[] = newT[tLen - 1][1] as UtmKeyValue[];
     for (let t = 0; t < tEntries.length; t += 1) {
@@ -81,7 +84,7 @@ export default function UTMCampaignAccordian(): JSX.Element {
         tEntries.splice(t, 1);
       }
     }
-    dispatch(updateValue(tEntries));
+    dispatch(updateUTMCampaignSettings(tEntries));
   };
 
   /**
@@ -90,21 +93,21 @@ export default function UTMCampaignAccordian(): JSX.Element {
   const addPill = (event: SyntheticEvent) => {
     const target = event.target as HTMLInputElement;
     setKvValue(target?.value);
-    if (!target?.value.includes(',')) {
+    if (!target?.value.includes(",")) {
       return;
     }
-    if (target?.value.indexOf('=') === -1) {
+    if (target?.value.indexOf("=") === -1) {
       setValValid(false);
       return;
     }
-    setKvValue('');
-    const newTrm = accValue?.value as UtmKeyValue[];
+    setKvValue("");
+    const newTrm = accValue?.utm_campaign.value as UtmKeyValue[];
     const newTrmPill = {
-      key: target?.value?.replace(/,/g, '').split('=')[1].trim(),
-      value: target?.value?.replace(/,/g, '').split('=')[0].trim(),
+      key: target?.value?.replace(/,/g, "").split("=")[1].trim(),
+      value: target?.value?.replace(/,/g, "").split("=")[0].trim(),
     };
     newTrm.push(newTrmPill);
-    dispatch(updateValue(newTrm));
+    dispatch(updateCampaignValue(newTrm));
   };
 
   return (
@@ -131,22 +134,22 @@ export default function UTMCampaignAccordian(): JSX.Element {
             </div>
             <div className="col10">
               <Checker
-                cState={accValue.useValue}
+                cState={accValue.utm_campaign.useValue}
                 disabled={false}
                 label=""
                 tooltip={
-                  accValue.useValue
+                  accValue.utm_campaign.useValue
                     ? `Uncheck to not the use the '${valKind}' value`
                     : `Check to use the '${valKind}' value`
                 }
                 callback={(value) => {
-                  dispatch(updateUseValue(value));
+                  dispatch(updateCampaignUseValue(value));
                 }}
               />
             </div>
             <div className="col60" />
           </div>
-          {accValue?.useValue && (
+          {accValue?.utm_campaign.useValue && (
             <>
               {/* item Label */}
               <div className="fullrow">
@@ -179,28 +182,34 @@ export default function UTMCampaignAccordian(): JSX.Element {
               <div className="fullrow">
                 <div className="col30">
                   <Form.Label className={darkClass}>
-                    {accValue.showName
+                    {accValue.utm_campaign.showName
                       ? `Hide '${type}' in Field Label?`
                       : `Show '${type}' in Field Label`}
                   </Form.Label>
                 </div>
                 <div className="col10">
                   <Checker
-                    cState={accValue.showName ? accValue.showName : false}
+                    cState={
+                      accValue.utm_campaign.showName
+                        ? accValue.utm_campaign.showName
+                        : false
+                    }
                     disabled={false}
                     label=""
                     tooltip={
-                      accValue.showName
-                        ? 'Uncheck to hide the field name in the field label'
-                        : 'Check to show the field name in the field label'
+                      accValue.utm_campaign.showName
+                        ? "Uncheck to hide the field name in the field label"
+                        : "Check to show the field name in the field label"
                     }
                     callback={(value) => {
                       if (value) {
-                        setFieldValue(`${accValue?.label} (${type})`);
+                        setFieldValue(
+                          `${accValue?.utm_campaign.label} (${type})`
+                        );
                       } else {
-                        setFieldValue(`${accValue?.label}`);
+                        setFieldValue(`${accValue?.utm_campaign.label}`);
                       }
-                      dispatch(updateShowName(value));
+                      dispatch(updateCampaignShowName(value));
                     }}
                   />
                 </div>
@@ -227,9 +236,13 @@ export default function UTMCampaignAccordian(): JSX.Element {
                     type="text"
                     id={`${valKind}-tooltip`}
                     placeholder={`Enter ${valKind} field tooltip`}
-                    value={accValue.tooltip ? accValue.tooltip : ''}
+                    value={
+                      accValue.utm_campaign.tooltip
+                        ? accValue.utm_campaign.tooltip
+                        : ""
+                    }
                     onChange={(e) => {
-                      dispatch(updateTooltip(e.target.value));
+                      dispatch(updateCampaignTooltip(e.target.value));
                     }}
                   />
                 </OverlayTrigger>
@@ -246,7 +259,7 @@ export default function UTMCampaignAccordian(): JSX.Element {
                   placement="auto"
                   overlay={
                     <Tooltip id={`${valKind}-aria-tooltip`}>
-                      Enter the ARIA (Accessibility) text for the {valKind}{' '}
+                      Enter the ARIA (Accessibility) text for the {valKind}{" "}
                       field
                     </Tooltip>
                   }
@@ -257,9 +270,9 @@ export default function UTMCampaignAccordian(): JSX.Element {
                     id={`${valKind}-aria`}
                     placeholder={`Enter ${valKind} field ARIA (Accessibility) label`}
                     required
-                    value={accValue.ariaLabel}
+                    value={accValue.utm_campaign.ariaLabel}
                     onChange={(e) => {
-                      dispatch(updateAriaLabel(e.target.value));
+                      dispatch(updateCampaignAriaLabel(e.target.value));
                     }}
                   />
                 </OverlayTrigger>
@@ -285,28 +298,28 @@ export default function UTMCampaignAccordian(): JSX.Element {
                     type="text"
                     id={`${valKind}-error`}
                     placeholder={`Enter ${valKind} field error text`}
-                    value={accValue.error}
+                    value={accValue.utm_campaign.error}
                     onChange={(e) => {
-                      dispatch(updateError(e.target.value));
+                      dispatch(updateCampaignError(e.target.value));
                     }}
                   />
                 </OverlayTrigger>
               </div>
               {/* use chooser or txt */}
               <div className="fullrow">
-                {accValue?.useValue ? (
+                {accValue?.utm_campaign.useValue ? (
                   <div className="fullrow">
                     <div className="col15">
                       <Form.Label className={darkClass}>Use Chooser</Form.Label>
                     </div>
                     <div className="col10">
                       <Checker
-                        cState={accValue.isChooser}
+                        cState={accValue.utm_campaign.isChooser}
                         disabled={false}
                         label=""
                         tooltip={`Use a chooser to create a pre-defined list of allowed values for ${valKind}`}
                         callback={(value) => {
-                          dispatch(updateIsChooser(value));
+                          dispatch(updateCampaignIsChooser(value));
                         }}
                       />
                     </div>
@@ -318,12 +331,12 @@ export default function UTMCampaignAccordian(): JSX.Element {
                     </div>
                     <div className="col10">
                       <Checker
-                        cState={!accValue.isChooser}
+                        cState={!accValue.utm_campaign.isChooser}
                         disabled={false}
                         label=""
                         tooltip={`Use a Text Field to allow the user to enter any value for ${valKind}`}
                         callback={(value) => {
-                          dispatch(updateIsChooser(!value));
+                          dispatch(updateCampaignIsChooser(!value));
                         }}
                       />
                     </div>
@@ -340,7 +353,7 @@ export default function UTMCampaignAccordian(): JSX.Element {
                 )} */}
               </div>
               {/* item Values */}
-              {accValue.isChooser && (
+              {accValue.utm_campaign.isChooser && (
                 <>
                   <div className="fullrow">
                     <Form.Label className={darkClass}>
@@ -352,7 +365,7 @@ export default function UTMCampaignAccordian(): JSX.Element {
                       placement="auto"
                       overlay={
                         <Tooltip id={`${valKind}-values-tooltip`}>
-                          Create a predefined list of values for the {valKind}{' '}
+                          Create a predefined list of values for the {valKind}{" "}
                           field
                         </Tooltip>
                       }
@@ -361,7 +374,7 @@ export default function UTMCampaignAccordian(): JSX.Element {
                         className={darkClass}
                         type="text"
                         placeholder="Enter comma-separated list of key=value pairs to use"
-                        value={kvValue || ''}
+                        value={kvValue || ""}
                         required
                         id={`${valKind}-values`}
                         isInvalid={!valValid}
@@ -377,8 +390,8 @@ export default function UTMCampaignAccordian(): JSX.Element {
                   <div className="fullrow">
                     <PillArea
                       pills={
-                        accValue.value
-                          ? (accValue.value as UtmKeyValue[])
+                        accValue.utm_campaign.value
+                          ? (accValue.utm_campaign.value as UtmKeyValue[])
                           : ([] as UtmKeyValue[])
                       }
                       type={valKind}

@@ -34,21 +34,21 @@ import UTMChoice from '../components/choosers/UTMChoice';
 export default function URLForm() {
   const dispatch = useDispatch();
   const mainConfig = useSelector((state: RootState) => state.main.settings);
-  const utmTarget = useSelector((state: RootState) => state.utmTarget.settings);
+  const utmTarget = useSelector((state: RootState) => state.utmStuff.utm_target);
   const utmCampaign = useSelector(
-    (state: RootState) => state.utmCampaign.settings,
+    (state: RootState) => state.utmStuff.utm_campaign,
   );
-  const utmSource = useSelector((state: RootState) => state.utmSource.settings);
-  const utmMedium = useSelector((state: RootState) => state.utmMedium.settings);
-  const utmTerm = useSelector((state: RootState) => state.utmTerm.settings);
+  const utmSource = useSelector((state: RootState) => state.utmStuff.utm_source);
+  const utmMedium = useSelector((state: RootState) => state.utmStuff.utm_medium);
+  const utmTerm = useSelector((state: RootState) => state.utmStuff.utm_term);
   const utmContent = useSelector(
-    (state: RootState) => state.utmContent.settings,
+    (state: RootState) => state.utmStuff.utm_content,
   );
   const activeLink = useSelector(
     (state: RootState) => state.history.activeLink,
   );
   const utmKeyword = useSelector(
-    (state: RootState) => state.utmKeyword.settings,
+    (state: RootState) => state.utmStuff.utm_keyword,
   );
   dispatch(
     updateQRValue(
@@ -134,9 +134,9 @@ export default function URLForm() {
       {mainConfig.formType === 'encoded' && (
         <div className="fullrow">
           {/* utm_source */}
-          {utmSource.useValue ? (
-            <div className={utmMedium.useValue ? 'col50' : 'col100'}>
-              {utmSource.isChooser ? (
+          {utmSource?.useValue ? (
+            <div className={utmMedium?.useValue ? 'col50' : 'col100'}>
+              {utmSource?.isChooser ? (
                 <InputGroup size="lg">
                   <UTMChoice
                     valueChanged={linkPartChanged}
@@ -159,8 +159,8 @@ export default function URLForm() {
             <></>
           )}
           {/* utm_medium */}
-          {utmMedium.useValue ? (
-            <div className={utmSource.useValue ? 'col50' : 'col100'}>
+          {utmMedium?.useValue ? (
+            <div className={utmSource?.useValue ? 'col50' : 'col100'}>
               <InputGroup size="lg">
                 {utmMedium.isChooser ? (
                   <UTMChoice
