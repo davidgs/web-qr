@@ -35,6 +35,8 @@ import { makeLongLink } from '../utils/LongLink';
 import { updateFormType } from '../reducers/main/mainSlice';
 import {
   setActiveLink,
+  setLinkHistory,
+  setUtmLinkHistory,
   setWifiLinkHistory,
 } from '../reducers/history/historySlice';
 import { updateQRValue } from '../reducers/qr/qrCodeSettingsSlice';
@@ -123,7 +125,8 @@ export default function LinkToolbar(): JSX.Element {
       wfLinks.push(wfl);
       const l = { ...linkHistory };
       l.wifi_link = wfLinks;
-      store.set('history', wfLinks);
+      const h = { ...l, wifi_link: wfLinks };
+      store.set('history', h);
       dispatch(setWifiLinkHistory(wfLinks));
     } else {
       // save a utm Link
@@ -147,10 +150,9 @@ export default function LinkToolbar(): JSX.Element {
       };
       const utmLinks = linkHistory.utm_link ? [...linkHistory.utm_link] : [];
       utmLinks.push(displayLink);
-      const l = { ...linkHistory };
-      l.utm_link = utmLinks;
+      const l = { ...linkHistory, utm_link: utmLinks };
       store.set('history', l);
-      dispatch(setWifiLinkHistory(utmLinks));
+      dispatch(setUtmLinkHistory(utmLinks));
     }
   }
 

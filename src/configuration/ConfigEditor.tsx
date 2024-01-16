@@ -166,7 +166,7 @@ function ConfigEditor(props: ConfigEditorProps): JSX.Element {
                 placement="auto"
                 overlay={
                   <Tooltip id="general-tooltip">
-                    Configuration settings for overall branding and Bit.ly
+                    Configuration settings for Bit.ly
                     integration
                   </Tooltip>
                 }
@@ -180,7 +180,7 @@ function ConfigEditor(props: ConfigEditorProps): JSX.Element {
                   {/* Bitly Configuration */}
                   <BitlyConfigurator eKey="0" />
                   {/* UI Images */}
-                  <MainValuesConfigurator targetValidated={targetValidated} />
+                  {/* <MainValuesConfigurator targetValidated={targetValidated} /> */}
                 </Accordion>
               </Accordion.Body>
             </Accordion.Item>

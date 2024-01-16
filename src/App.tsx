@@ -20,26 +20,20 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { MemoryRouter as Router, Routes, Route } from "react-router-dom";
 import "./css/App.css";
 import { useDispatch, useSelector } from "react-redux";
 import { ChevronDoubleDown, ChevronDoubleRight } from "react-bootstrap-icons";
 import { Row, OverlayTrigger, Tooltip } from "react-bootstrap";
 import {
-  MainSettings,
-  UtmParams,
   BitlyConfig,
   QRSettings,
   IProps,
   LinkData,
-  defaultMainSettings,
-  defaultUTMParams,
-  defaultQRSettings,
-  DefaultQRStyle,
-  defaultBitlyConfig,
 } from "./types";
 import store from "store2";
+import Userfront, { SignupForm } from "@userfront/toolkit";
 import { RootState } from "./stores/store";
 import { updateMainSettings } from "./reducers/main/mainSlice";
 import { updateQRSettings } from "./reducers/qr/qrSlice";
@@ -67,8 +61,12 @@ import LinkToolbar from "./components/LinkToolbar";
 
 export default function App() {
   const dispatch = useDispatch();
+  const [winWidth, setWinWidth] = useState(window.innerWidth);
   const dark = useSelector((state: RootState) => state.dark.dark);
   const mainSet = useSelector((state: RootState) => state.main.settings);
+
+Userfront.init("qbjrr47b");
+  // Userfront.init("qbjrr47b");
 
   useEffect(() => {
     const d = store.get("dark");
@@ -109,8 +107,9 @@ export default function App() {
       dispatch(setUtmLinkHistory(ht.utm_link));
       dispatch(setWifiLinkHistory(ht.wifi_link));
     }
-
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
   const toggleOpen = () => {
     const ms = { ...mainSet };
     ms.sidebar = mainSet.sidebar === "open" ? "closed" : "open";
@@ -118,77 +117,14 @@ export default function App() {
     store.set("main-config", ms);
   };
 
-  /**
-   * listen for UTM Field settings changes after a save
-   */
-  // useEffect(() => {
-  //   const uc = store.get('utm-config')
-  //   if (uc === null) {
-  //     store.set('utm-config', defaultUTMParams);
-  //   }
-
-  //   dispatch(updateUTMCampaignSettings(uc.utm_campaign));
-  //   dispatch(updateUTMMediumSettings(uc.utm_medium));
-  //   dispatch(updateUTMSourceSettings(uc.utm_source));
-  //   dispatch(updateUTMTermSettings(uc.utm_term));
-  //   dispatch(updateUTMContentSettings(uc.utm_content));
-  //   dispatch(updateUTMKeywordSettings(uc.utm_keyword));
-  //   dispatch(updateUTMTargetSettings(uc.utm_target));
-
-  //   /**
-  //    * listen for Main settings changes after a save
-  //    */
-  //   const mset = store.get('main-config')
-  //   if (mset === null) {
-  //     store.set('main-config', defaultMainSettings);
-  //   }
-  //   dispatch(updateMainSettings(mset));
-
-  //   /**
-  //    * listen for QR settings changes after a save
-  //    */
-  //   // window?.msgBus.ipcRenderer.on('qr-settings', (arg: unknown) => {
-  //   const qr: QRSettings = store.get('qr-config');
-  //   if (qr === null) {
-  //     store.set('qr-config', defaultQRSettings);
-  //   }
-  //   dispatch(updateQRSettings(qr));
-
-  //   /**
-  //    * listen for QR style changes after a save
-  //    */
-  //   // window?.msgBus.ipcRenderer.on('qr-style', (arg: unknown) => {
-  //   const qs: IProps = store.get('qr-style');
-  //   if (qs === null) {
-  //     store.set('qr-style', DefaultQRStyle);
-  //   }
-  //   dispatch(updateQRStyleSettings(qs));
-  //   // });
-
-  //   /**
-  //    * listen for Bitly settings changes after a save
-  //    */
-  //   // window?.msgBus.ipcRenderer.on('bitly-config', (arg: unknown) => {
-  //   const bc: BitlyConfig = store.get('bitly-config');
-  //   if (bc === null) {
-  //     store.set('bitly-config', defaultBitlyConfig);
-  //   }
-  //   dispatch(updateBitlySettings(bc));
-  //   // });
-
-  //   /**
-  //    * listen for History changes after a save
-  //    */
-  //   // window?.msgBus.ipcRenderer.on('history', (arg: unknown) => {
-  //   const ht: LinkData = store.get('history');
-  //   if (ht === null) {
-  //     store.set('history', { utm_link: [], wifi_link: [] });
-  //   }
-  //   dispatch(setLinkHistory(ht));
-  //   dispatch(setUtmLinkHistory(ht.utm_link));
-  //   dispatch(setWifiLinkHistory(ht.wifi_link));
-  // }, []);
-  // });
+  useEffect(() => {
+    if (winWidth < 768) {
+      mainSet.sidebar = "closed";
+      dispatch(updateMainSettings(mainSet));
+    }
+    console.log("v", winWidth);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [winWidth]);
 
   useEffect(() => {
     if (dark) {
@@ -202,6 +138,7 @@ export default function App() {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dark]);
+
   return (
     <Router>
       <Routes>
@@ -218,7 +155,7 @@ export default function App() {
                       : "aside-column-closed"
                   }
                   style={{
-                    width: mainSet.sidebar === "open" ? "200px" : "60px",
+                    width: mainSet.sidebar === "open" ? "270px" : "60px",
                   }}
                 >
                   <OverlayTrigger
@@ -264,12 +201,11 @@ export default function App() {
                   style={{
                     width:
                       mainSet.sidebar === "open"
-                        ? "calc(100% - 260px)"
+                        ? "calc(100% - 280px)"
                         : "calc(100% - 90px)",
                   }}
                 >
                   <div className="link-form">
-                    QR Code
                     <div className="fullrow">
                       <QCode />
                     </div>

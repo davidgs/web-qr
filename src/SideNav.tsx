@@ -63,6 +63,7 @@ export default function SideNav() {
     const d = { ...dark }
     d.dark = !d.dark;
     store.set('dark', d);
+    console.log(`Dark Mode: ${store.get('dark').dark}`)
     dispatch(setDark(d.dark));
   };
 
