@@ -32,6 +32,8 @@ import {
   ExclamationCircleFill,
   ExclamationTriangleFill,
   ExclamationOctagonFill,
+  InfoCircle,
+  InfoCircleFill,
 } from 'react-bootstrap-icons';
 import store from 'store2';
 import { useSelector, useDispatch } from 'react-redux';
@@ -41,12 +43,14 @@ import { RootState } from './stores/store';
 import spinner from './images/loading.png';
 import { setDark } from './reducers/dark/darkSlice';
 import ConfigEditor from './configuration/ConfigEditor';
+import AboutModal from './components/AboutModal';
 
 export default function SideNav() {
   const dark = useSelector((state: RootState) => state.dark);
   const dispatch = useDispatch();
   const [updateText, setUpdateText] = useState<string>('');
   const [editConfig, setEditConfig] = useState(false);
+  const [showAboutModal, setShowAboutModal] = useState(false);
   const mainSet = useSelector((state: RootState) => state.main.settings);
 
   const showConfig = () => {
@@ -58,6 +62,10 @@ export default function SideNav() {
     }
     setEditConfig(!editConfig);
   };
+
+  const showAbout = () => {
+    setShowAboutModal(!showAboutModal);
+  }
 
   const setSaveDark = () => {
     const d = { ...dark }
@@ -72,27 +80,27 @@ export default function SideNav() {
     <div id="side-nav">
       <div
         className={
-          mainSet.sidebar === 'open'
-            ? 'theme-base-09 sidebar'
-            : 'theme-base-09 sidebarClosed'
+          mainSet.sidebar === "open"
+            ? "theme-base-09 sidebar"
+            : "theme-base-09 sidebarClosed"
         }
       >
         <p />
         <p />
-        <div style={{ textAlign: 'center' }}>
+        <div style={{ textAlign: "center" }}>
           <a href="https://davidgs.com/" target="_blank" rel="noreferrer">
             {mainSet.brandImage !== undefined &&
             mainSet.brandImage !== null &&
-            mainSet.brandImage !== '' ? (
+            mainSet.brandImage !== "" ? (
               <ImgElement
                 byteString={mainSet.brandImage as string}
                 width={
-                  mainSet.sidebar === 'open'
+                  mainSet.sidebar === "open"
                     ? (mainSet.brandWidth as number)
                     : 40
                 }
                 height={
-                  mainSet.sidebar === 'open'
+                  mainSet.sidebar === "open"
                     ? (mainSet.brandHeight as number)
                     : 40
                 }
@@ -111,42 +119,42 @@ export default function SideNav() {
                   src={Logo}
                   alt="QR Builder Logo"
                   width={
-                    mainSet.sidebar === 'open'
+                    mainSet.sidebar === "open"
                       ? mainSet.brandWidth > 0
                         ? `${mainSet.brandWidth}px`
-                        : '75%'
-                      : '40px'
+                        : "75%"
+                      : "40px"
                   }
                   height={
-                    mainSet.sidebar === 'open'
+                    mainSet.sidebar === "open"
                       ? mainSet.brandHeight > 0
                         ? `${mainSet.brandHeight}px`
-                        : 'auto'
-                      : '40px'
+                        : "auto"
+                      : "40px"
                   }
                   style={{
-                    transition: '0.3s ease-in-out',
+                    transition: "0.3s ease-in-out",
                   }}
                 />
               </OverlayTrigger>
             )}
           </a>
         </div>
-        {mainSet.sidebar === 'open' && (
+        {mainSet.sidebar === "open" && (
           <article className="post">
             <p />
             <h5
               style={{
-                textAlign: 'center',
-                transition: '0.3s ease-in-out',
+                textAlign: "center",
+                transition: "0.3s ease-in-out",
               }}
             >
               QR Code Builder
             </h5>
             <p
               style={{
-                textAlign: 'center',
-                transition: '0.3s ease-in-out',
+                textAlign: "center",
+                transition: "0.3s ease-in-out",
               }}
             >
               Create trackable links.
@@ -158,26 +166,27 @@ export default function SideNav() {
         <p />
         <div
           className={
-            mainSet.sidebar === 'open'
-              ? 'sidebar-sticky'
-              : 'sidebar-sticky-closed'
+            mainSet.sidebar === "open"
+              ? "sidebar-sticky"
+              : "sidebar-sticky-closed"
           }
         >
           <Form>
             <div
               style={{
-                textAlign: 'center',
-                display: 'flex',
-                flexDirection: mainSet.sidebar === 'open' ? 'row' : 'column',
-                paddingLeft: mainSet.sidebar === 'open' ? '0px' : '10px',
-                transition: '0.3s ease-in-out',
+                textAlign: "center",
+                display: "flex",
+                flexDirection: mainSet.sidebar === "open" ? "row" : "column",
+                paddingLeft: mainSet.sidebar === "open" ? "0px" : "10px",
+                transition: "0.3s ease-in-out",
+                width: mainSet.sidebar === "open" ? "200px" : '',
               }}
             >
               <div
                 style={{
-                  textAlign: 'center',
-                  display: 'flex',
-                  flexDirection: 'column',
+                  textAlign: "center",
+                  display: "flex",
+                  flexDirection: "column",
                 }}
               >
                 <OverlayTrigger
@@ -185,7 +194,7 @@ export default function SideNav() {
                   delay={{ show: 250, hide: 300 }}
                   overlay={
                     <Tooltip id="config-tooltip">
-                      Turn {dark.dark ? 'off' : 'on'} Dark Mode
+                      Turn {dark.dark ? "off" : "on"} Dark Mode
                     </Tooltip>
                   }
                 >
@@ -197,8 +206,8 @@ export default function SideNav() {
                     }}
                     className="btn"
                     style={{
-                      backgroundColor: '#0A1C2E',
-                      borderColor: '#0A1C2E',
+                      backgroundColor: "#0A1C2E",
+                      borderColor: "#0A1C2E",
                     }}
                   >
                     {dark.dark ? (
@@ -211,45 +220,49 @@ export default function SideNav() {
               </div>
               <div
                 style={{
-                  width: '80%',
-                  textAlign: 'left',
-                  display: 'flex',
-                  flexDirection: 'column',
-                  overflow: 'hidden',
+                  textAlign: "center",
+                  display: "flex",
+                  flexDirection: "column",
+                  overflow: "hidden",
+                  width: mainSet.sidebar === "open" ? "80%" : "",
                 }}
               >
-                <div
-                  className="update-container"
-                  style={{
-                    marginTop: '10px',
-                    display: mainSet.sidebar === 'closed' ? 'none' : 'block',
-                    transition: '0.3s ease-in-out',
-                  }}
+                <OverlayTrigger
+                  placement="top"
+                  delay={{ show: 250, hide: 300 }}
+                  overlay={
+                    <Tooltip id="about-tooltip">
+                      About the QR Builder App
+                    </Tooltip>
+                  }
                 >
-                  {updateText !== '' && updateText.startsWith('Checking') ? (
-                    <div style={{ textAlign: 'left' }}>
-                      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                      <img
-                        src={spinner}
-                        alt="spinner"
-                        width="10px"
-                        className="glyphicon-refresh-animate"
-                        style={{ paddingTop: '-.25rem' }}
-                      />{' '}
-                      {updateText}
-                    </div>
-                  ) : (
-                    <div id={updateText.length > 25 ? 'update-text' : 'udt'}>
-                      {updateText}
-                    </div>
-                  )}
-                </div>
+                  <Button
+                    type="button"
+                    size="sm"
+                    onClick={() => {
+                      showAbout();
+                    }}
+                    className="btn"
+                    style={{
+                      backgroundColor: "#0A1C2E",
+                      borderColor: "#0A1C2E",
+                    }}
+                  >
+                    {dark.dark ? (
+                      <InfoCircleFill size={20} />
+                    ) : (
+                      <InfoCircle size={20} />
+                    )}
+                  </Button>
+                </OverlayTrigger>
               </div>
               <div
                 style={{
-                  textAlign: 'center',
-                  display: 'flex',
-                  flexDirection: 'column',
+                  textAlign: "right",
+                  float: "right",
+                  display: "flex",
+                  flexDirection: "column",
+                  border: '1px solid white',
                 }}
               >
                 <OverlayTrigger
@@ -277,10 +290,10 @@ export default function SideNav() {
                   </Button>
                 </OverlayTrigger>
               </div>
-              {mainSet.sidebar === 'closed' && (
+              {mainSet.sidebar === "closed" && (
                 <div>
-                  {updateText !== '' && updateText.startsWith('Checking') ? (
-                    <div style={{ textAlign: 'center' }}>
+                  {updateText !== "" && updateText.startsWith("Checking") ? (
+                    <div style={{ textAlign: "center" }}>
                       <OverlayTrigger
                         placement="auto"
                         delay={{ show: 250, hide: 300 }}
@@ -293,16 +306,16 @@ export default function SideNav() {
                           alt="spinner"
                           width="10px"
                           className="glyphicon-refresh-animate"
-                          style={{ paddingTop: '-.25rem' }}
+                          style={{ paddingTop: "-.25rem" }}
                         />
                       </OverlayTrigger>
                     </div>
                   ) : (
                     <div />
                   )}
-                  {updateText !== '' &&
-                  updateText.startsWith('There was a problem') ? (
-                    <div style={{ textAlign: 'center' }}>
+                  {updateText !== "" &&
+                  updateText.startsWith("There was a problem") ? (
+                    <div style={{ textAlign: "center" }}>
                       <OverlayTrigger
                         placement="auto"
                         delay={{ show: 250, hide: 300 }}
@@ -312,15 +325,15 @@ export default function SideNav() {
                       >
                         <ExclamationTriangleFill
                           size={20}
-                          style={{ color: 'red' }}
+                          style={{ color: "red" }}
                         />
                       </OverlayTrigger>
                     </div>
                   ) : (
                     <div />
                   )}
-                  {updateText !== '' && updateText.startsWith('Version') ? (
-                    <div style={{ textAlign: 'center' }}>
+                  {updateText !== "" && updateText.startsWith("Version") ? (
+                    <div style={{ textAlign: "center" }}>
                       <OverlayTrigger
                         placement="auto"
                         delay={{ show: 250, hide: 300 }}
@@ -330,16 +343,16 @@ export default function SideNav() {
                       >
                         <ExclamationCircleFill
                           size={20}
-                          style={{ color: 'green' }}
+                          style={{ color: "green" }}
                         />
                       </OverlayTrigger>
                     </div>
                   ) : (
                     <div />
                   )}
-                  {updateText !== '' &&
-                  updateText.startsWith('Update available') ? (
-                    <div style={{ textAlign: 'center' }}>
+                  {updateText !== "" &&
+                  updateText.startsWith("Update available") ? (
+                    <div style={{ textAlign: "center" }}>
                       <OverlayTrigger
                         placement="auto"
                         delay={{ show: 250, hide: 300 }}
@@ -349,7 +362,7 @@ export default function SideNav() {
                       >
                         <ExclamationOctagonFill
                           size={20}
-                          style={{ color: 'green' }}
+                          style={{ color: "green" }}
                         />
                       </OverlayTrigger>
                     </div>
@@ -363,15 +376,15 @@ export default function SideNav() {
         </div>
         <div
           className={
-            mainSet.sidebar === 'open'
-              ? 'copyright-sticky'
-              : 'copyright-sticky-closed'
+            mainSet.sidebar === "open"
+              ? "copyright-sticky"
+              : "copyright-sticky-closed"
           }
         >
           <p
             style={{
-              fontSize: '10px',
-              textAlign: 'center',
+              fontSize: "10px",
+              textAlign: "center",
             }}
           >
             &copy; <a href="https://davidgs.com/">David G. Simmons 2023</a>
@@ -380,6 +393,9 @@ export default function SideNav() {
           </p>
         </div>
         <ConfigEditor showMe={editConfig} callback={setEditConfig} />
+        {showAboutModal && (
+          <AboutModal showMe={showAboutModal} callback={setShowAboutModal} />
+        )}
       </div>
     </div>
   );
