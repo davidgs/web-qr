@@ -27,7 +27,7 @@ import store from 'store2';
 import { RootState } from '../../stores/store';
 import { setActiveLink } from '../../reducers/history/historySlice';
 import DireWarning from '../../configuration/DireWarning';
-import { LinkData, WiFiLink, utmLink } from '../../types';
+import { WiFiLink, utmLink } from '../../types';
 import ReactId from '../../utils/ReactId';
 
 export default function HistoryChooser(): JSX.Element {

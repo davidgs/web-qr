@@ -35,7 +35,6 @@ import { makeLongLink } from '../utils/LongLink';
 import { updateFormType } from '../reducers/main/mainSlice';
 import {
   setActiveLink,
-  setLinkHistory,
   setUtmLinkHistory,
   setWifiLinkHistory,
 } from '../reducers/history/historySlice';

@@ -179,7 +179,7 @@ export default function SideNav() {
                 flexDirection: mainSet.sidebar === "open" ? "row" : "column",
                 paddingLeft: mainSet.sidebar === "open" ? "0px" : "10px",
                 transition: "0.3s ease-in-out",
-                width: mainSet.sidebar === "open" ? "200px" : '',
+                width: mainSet.sidebar === "open" ? "200px" : "",
               }}
             >
               <div
@@ -258,11 +258,11 @@ export default function SideNav() {
               </div>
               <div
                 style={{
-                  textAlign: "right",
-                  float: "right",
+                  // textAlign: "right",
                   display: "flex",
                   flexDirection: "column",
-                  border: '1px solid white',
+                  width: mainSet.sidebar === "open" ? "100%;" : "",
+                  marginRight: mainSet.sidebar === "open" ? "-20px" : "0px",
                 }}
               >
                 <OverlayTrigger
@@ -387,12 +387,22 @@ export default function SideNav() {
               textAlign: "center",
             }}
           >
-            &copy; <a href="https://davidgs.com/">David G. Simmons 2023</a>
+            <span style={{ color: "rgba(255, 255, 255, .5)" }}>
+              &copy;{" "}
+              <a
+                href="https://davidgs.com/"
+                style={{ color: "rgba(255, 255, 255, .5)" }}
+              >
+                David G. Simmons 2023
+              </a>
+            </span>
             <br />
             All rights reserved
           </p>
         </div>
-        <ConfigEditor showMe={editConfig} callback={setEditConfig} />
+        {editConfig && (
+          <ConfigEditor showMe={editConfig} callback={setEditConfig} />
+        )}
         {showAboutModal && (
           <AboutModal showMe={showAboutModal} callback={setShowAboutModal} />
         )}

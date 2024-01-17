@@ -15,6 +15,17 @@
 # Enterprise
 - Custom domain name
 
+
+# TODO
+
+- [ ] Media Queries for display and use on phones (move sidebar to top and collapse)
+- [ ] Licensing for QR Codes
+- [ ] Welcome page, with links to docs, etc.
+- [ ] Docs
+- [ ] Purchase page
+- [ ] Clean up About Dialog
+
+
 docker run --rm -it -e SECRET_KEY_BASE="$(openssl rand -hex 64)" \
    -e ENCRYPTION_DETERMINISTIC_KEY="$(openssl rand -base64 32)" \
    -e ENCRYPTION_PRIMARY_KEY="$(openssl rand -base64 32)" \

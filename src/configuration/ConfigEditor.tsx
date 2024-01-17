@@ -30,7 +30,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import store from 'store2';
 import '../css/hyde.css';
 import BitlyConfigurator from './Configurators/BitlyConfigurator';
-import MainValuesConfigurator from './Configurators/MainValuesConfigurator';
+// import MainValuesConfigurator from './Configurators/MainValuesConfigurator';
 import UTMConfigurator from './Configurators/UTMConfigurator';
 import QRConfigurator from './Configurators/QRConfigurator';
 import { RootState } from '../stores/store';
