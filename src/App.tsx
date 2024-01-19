@@ -57,7 +57,7 @@ export default function App() {
   const mainSet = useSelector((state: RootState) => state.main.settings);
   const size = useWindowSize();
   const width = useDebounce(size.width, 300);
-  const version = process.env.REACT_APP_VERSION;
+  const version = '1.1.0';
   console.log("version", version);
   Userfront.init("qbjrr47b");
   // Userfront.init("qbjrr47b");
@@ -249,7 +249,7 @@ export default function App() {
           path="/"
           element={
             <>
-              <div className="fullrow" style={{paddingTop: '0px'}}>
+              <div className="fullrow" style={{paddingTop: '0px', height: '100vh'}}>
                 {/* <div className={`aside-column-${mainSet.sidebar}`}> */}
                   {mainSet.sidebar !== "top" && (
                     <OverlayTrigger
@@ -296,7 +296,8 @@ export default function App() {
                     {mainSet.formType === "wifi" && <WifiForm />}
                     {mainSet.sidebar !== 'top' ? <URLForm /> : <MobileURLForm /> }
                   </div>
-                  <div className={darkClass}><em>qr-builder v{version}</em></div>
+                  <div className={darkClass}
+                  style={{ position: 'absolute', bottom: '5px', right: '10px', marginTop: '10px'}}><em>qr-builder v{version}</em></div>
                 </div>
               </div>
               {/* W: {width} x H: {size.height} */}
