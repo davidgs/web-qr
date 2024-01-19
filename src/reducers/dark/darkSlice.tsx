@@ -23,7 +23,7 @@
 import { createSlice } from '@reduxjs/toolkit';
 import store from 'store2';
 
-const initialState = store.get('dark') || {
+const initialState = {
   dark: false,
 };
 

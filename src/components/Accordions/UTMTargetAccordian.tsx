@@ -46,7 +46,7 @@ export default function UTMTargetAccordian(): JSX.Element {
   const itemNo: string = '0';
   const type: string = 'UTM Target';
   const accValue = useSelector(
-    (state: RootState) => state.utmStuff.utm_target as UtmObj,
+    (state: RootState) => state.utmStuff.settings.utm_target as UtmObj,
   );
   const [kvValue, setKvValue] = useState<string>('');
   const [valValid, setValValid] = useState<boolean>(true);
@@ -111,6 +111,7 @@ export default function UTMTargetAccordian(): JSX.Element {
     <Accordion.Item eventKey={`"${itemNo}"`}>
       <OverlayTrigger
         placement="auto"
+        delay={{ show: 250, hide: 300 }}
         overlay={
           <Tooltip id={`${valKind}-accordion`}>
             Edit configuration for {type}
@@ -158,6 +159,7 @@ export default function UTMTargetAccordian(): JSX.Element {
               <div className="fullrow">
                 <OverlayTrigger
                   placement="auto"
+                  delay={{ show: 250, hide: 300 }}
                   overlay={
                     <Tooltip id={`${type}-label-tooltip`}>
                       Enter the label for the {type} field
@@ -216,6 +218,7 @@ export default function UTMTargetAccordian(): JSX.Element {
               <div className="fullrow">
                 <OverlayTrigger
                   placement="auto"
+                  delay={{ show: 250, hide: 300 }}
                   overlay={
                     <Tooltip id={`${valKind}-tooltip-tooltip`}>
                       Enter the tooltip text for the {valKind} field
@@ -244,6 +247,7 @@ export default function UTMTargetAccordian(): JSX.Element {
               <div className="fullrow">
                 <OverlayTrigger
                   placement="auto"
+                  delay={{ show: 250, hide: 300 }}
                   overlay={
                     <Tooltip id={`${valKind}-aria-tooltip`}>
                       Enter the ARIA (Accessibility) text for the {valKind}{" "}
@@ -274,6 +278,7 @@ export default function UTMTargetAccordian(): JSX.Element {
               <div className="fullrow">
                 <OverlayTrigger
                   placement="auto"
+                  delay={{ show: 250, hide: 300 }}
                   overlay={
                     <Tooltip id={`${valKind}-error-tooltip`}>
                       Enter the error text for the {valKind} field
@@ -350,6 +355,7 @@ export default function UTMTargetAccordian(): JSX.Element {
                   <div className="fullrow">
                     <OverlayTrigger
                       placement="auto"
+                      delay={{ show: 250, hide: 300 }}
                       overlay={
                         <Tooltip id={`${valKind}-values-tooltip`}>
                           Create a predefined list of values for the {valKind}{" "}

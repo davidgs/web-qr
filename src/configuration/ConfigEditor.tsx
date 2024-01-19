@@ -75,25 +75,25 @@ function ConfigEditor(props: ConfigEditorProps): JSX.Element {
     (state: RootState) => state.bitly.settings
   );
   const utmTarget: UtmObj = useSelector(
-    (state: RootState) => state.utmStuff.utm_target
+    (state: RootState) => state.utmStuff.settings.utm_target
   );
   const utmSource: UtmObj = useSelector(
-    (state: RootState) => state.utmStuff.utm_source
+    (state: RootState) => state.utmStuff.settings.utm_source
   );
   const utmCampaign: UtmObj = useSelector(
-    (state: RootState) => state.utmStuff.utm_campaign
+    (state: RootState) => state.utmStuff.settings.utm_campaign
   );
   const utmMedium: UtmObj = useSelector(
-    (state: RootState) => state.utmStuff.utm_medium
+    (state: RootState) => state.utmStuff.settings.utm_medium
   );
   const utmContent: UtmObj = useSelector(
-    (state: RootState) => state.utmStuff.utm_content
+    (state: RootState) => state.utmStuff.settings.utm_content
   );
   const utmTerm: UtmObj = useSelector(
-    (state: RootState) => state.utmStuff.utm_term
+    (state: RootState) => state.utmStuff.settings.utm_term
   );
   const utmKeyword: UtmObj = useSelector(
-    (state: RootState) => state.utmStuff.utm_keyword
+    (state: RootState) => state.utmStuff.settings.utm_keyword
   );
 
   console.log(`ConfigEditor: ${showMe}`);
@@ -175,10 +175,12 @@ function ConfigEditor(props: ConfigEditorProps): JSX.Element {
         </Modal.Header>
         <Modal.Body>
           <Accordion>
+            {/* Fence off for Basic/Enterprise license */}
             {/* General Config */}
             <Accordion.Item eventKey="0">
               <OverlayTrigger
                 placement="auto"
+                delay={{ show: 250, hide: 300 }}
                 overlay={
                   <Tooltip id="general-tooltip">
                     Configuration settings for Bit.ly integration
@@ -193,15 +195,20 @@ function ConfigEditor(props: ConfigEditorProps): JSX.Element {
                 <Accordion>
                   {/* Bitly Configuration */}
                   <BitlyConfigurator eKey="0" />
+                  {/* Fence off for Enterprise Licnse */}
                   {/* UI Images */}
-                  {/* <MainValuesConfigurator targetValidated={targetValidated} /> */}
+                  <MainValuesConfigurator targetValidated={targetValidated} />
+                  {/* End fence */}
                 </Accordion>
               </Accordion.Body>
             </Accordion.Item>
+            {/* End fence */}
+            {/* Fence off for Basic/Enterprise License */}
             {/* QR Code Configuration */}
             <Accordion.Item eventKey="1">
               <OverlayTrigger
                 placement="auto"
+                delay={{ show: 250, hide: 300 }}
                 overlay={
                   <Tooltip id="qr-tooltip">
                     Configuration settings for the QR Code
@@ -214,10 +221,12 @@ function ConfigEditor(props: ConfigEditorProps): JSX.Element {
               </OverlayTrigger>
               <QRConfigurator />
             </Accordion.Item>
+            {/* End fence */}
             {/* WiFi Form Configuration */}
             {/* <Accordion.Item eventKey="2">
               <OverlayTrigger
                 placement="auto"
+                delay={{ show: 250, hide: 300 }}
                 overlay={
                   <Tooltip id="wifi-tooltip">
                     Configuration settings for the WiFi Form
@@ -230,10 +239,12 @@ function ConfigEditor(props: ConfigEditorProps): JSX.Element {
               </OverlayTrigger>
               <WiFiConfigurator eKey="2" />
             </Accordion.Item> */}
+            {/* Fence off for Basic/Enterprise License */}
             {/* UTM Codes */}
             <Accordion.Item eventKey="2">
               <OverlayTrigger
                 placement="auto"
+                delay={{ show: 250, hide: 300 }}
                 overlay={
                   <Tooltip id="utm-tooltip">
                     Configuration settings for the UTM Codes and how they are
@@ -247,11 +258,13 @@ function ConfigEditor(props: ConfigEditorProps): JSX.Element {
               </OverlayTrigger>
               <UTMConfigurator />
             </Accordion.Item>
+            {/* End fence */}
           </Accordion>
         </Modal.Body>
         <Modal.Footer>
           <OverlayTrigger
             placement="auto"
+            delay={{ show: 250, hide: 300 }}
             overlay={
               <Tooltip id="cancel-tooltip">
                 Close the configuration editor without saving
@@ -264,6 +277,7 @@ function ConfigEditor(props: ConfigEditorProps): JSX.Element {
           </OverlayTrigger>
           <OverlayTrigger
             placement="auto"
+            delay={{ show: 250, hide: 300 }}
             overlay={
               <Tooltip id="save-tooltip">
                 Save the configuration settings

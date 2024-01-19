@@ -1,47 +1,28 @@
-import React from "react";
-import { Button, Modal } from "react-bootstrap";
-import Logo from "../images/NewLinkerLogo.png";
-import qCode1 from "../images/qcode1.png";
-import qCode2 from "../images/qcode2.png";
-import qCode3 from "../images/qcode3.png";
-import { RootState } from "../stores/store";
+import React from 'react';
+import { Button, Modal } from 'react-bootstrap';
+import Logo from '../images/NewLinkerLogo.png';
+import qCode1 from '../images/qcode1.png';
+import qCode2 from '../images/qcode2.png';
+import qCode3 from '../images/qcode3.png';
+import { Github, Envelope, Linkedin, Mastodon, Twitter } from 'react-bootstrap-icons';
+import { updateMainSettings } from '../reducers/main/mainSlice';
 import { useDispatch, useSelector } from "react-redux";
-import {
-  Github,
-  Envelope,
-  Linkedin,
-  Mastodon,
-  Twitter,
-} from "react-bootstrap-icons";
+import store from 'store2';
 
 
-/**
- *
- * @returns const options = {
-    applicationName: 'QR Code Builder',
-    applicationVersion: currentVersion,
-    copyright: '© 2023',
-    version: currentBuild,
-    credits: 'Credits:\n\t• David G. Simmons\n\t• Electron React Boilerplate',
-    authors: ['David G. Simmons'],
-    website: 'https://github.com/davidgs/link-maker',
-    iconPath: getAssetPath('icon.png'),
-  };
- */
-export default function AboutModal({
-  showMe,
-  callback,
-}: {
-  showMe: boolean;
-  callback: (res: boolean) => void;
-}): React.JSX.Element {
+export default function WelcomeModal({ showMe, callback }: { showMe: boolean, callback: (res: boolean) => void }): React.JSX.Element {
 
   const dispatch = useDispatch();
-  const dark = useSelector((state: RootState) => state.dark.dark);
+  const mainSet = useSelector((state: any) => state.main.settings);
+  const dark = useSelector((state: any) => state.dark.dark);
   const darkClass = dark ? "header-stuff-dark" : "header-stuff";
 
   const handleClose = () => {
     callback(false);
+    const ms = { ...mainSet };
+    ms.firstRun = false;
+    dispatch(updateMainSettings(ms));
+    store.set("main-config", ms);
   };
 
   return (
@@ -56,7 +37,7 @@ export default function AboutModal({
                 width={40}
                 height={40}
               ></img>{" "}
-              About to QR Builder
+              Welcome to QR Builder
             </h1>
           </div>
         </Modal.Title>
@@ -109,6 +90,7 @@ export default function AboutModal({
             <Button
               variant="success"
               size={"sm"}
+              disabled={true}
               onClick={() => callback(false)}
             >
               Purchase
@@ -128,7 +110,7 @@ export default function AboutModal({
             <Button
               variant="success"
               size={"sm"}
-              onClick={() => callback(false)}
+              disabled={true}
             >
               Contact us
             </Button>
@@ -143,7 +125,10 @@ export default function AboutModal({
           </a>
         </p>
         <p>
-          <strong>QR Builder</strong> is built by <a className={darkClass} href="https://davidgs.com/">David G. Simmons.</a>
+          <strong>QR Builder</strong> is built by{" "}
+          <a className={darkClass} href="https://davidgs.com/">
+            David G. Simmons.
+          </a>
         </p>
         <p>
           <a href="mailto:davidgs@qr-builder.io">

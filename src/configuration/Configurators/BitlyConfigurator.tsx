@@ -48,6 +48,7 @@ export default function BitlyConfigurator({ eKey }: { eKey: string }) {
     <Accordion.Item eventKey={eKey}>
       <OverlayTrigger
         placement="auto"
+        delay={{ show: 250, hide: 300 }}
         overlay={
           <Tooltip id={`${type}-accordion`}>
             Edit configuration for {settings.type}
@@ -100,7 +101,7 @@ export default function BitlyConfigurator({ eKey }: { eKey: string }) {
                     id={type}
                     disabled={false}
                     onChange={(eventKey) => {
-                      if (eventKey.target.value === 'Choose one ...') {
+                      if (eventKey.target.value === "Choose one ...") {
                         // returnVal('');
                         return;
                       }
@@ -131,6 +132,7 @@ export default function BitlyConfigurator({ eKey }: { eKey: string }) {
               <div className="fullrow">
                 <OverlayTrigger
                   placement="auto"
+                  delay={{ show: 250, hide: 300 }}
                   overlay={
                     <Tooltip id={`${settings.type}-error-tooltip`}>
                       Enter the URL for your link shortener
@@ -155,9 +157,11 @@ export default function BitlyConfigurator({ eKey }: { eKey: string }) {
                   <strong>Short Link Domain (if any)</strong>
                 </Form.Label>
               </div>
+              {/* Fence off for Enterprise License */}
               <div className="fullrow">
                 <OverlayTrigger
                   placement="auto"
+                  delay={{ show: 250, hide: 300 }}
                   overlay={
                     <Tooltip id={`${settings.type}-error-tooltip`}>
                       Enter the custom domain for your link shortener
@@ -176,6 +180,7 @@ export default function BitlyConfigurator({ eKey }: { eKey: string }) {
                   />
                 </OverlayTrigger>
               </div>
+              {/* end fence */}
               {/* Link Shortener token */}
               <div className="fullrow">
                 <Form.Label className={darkClass}>
@@ -185,6 +190,7 @@ export default function BitlyConfigurator({ eKey }: { eKey: string }) {
               <div className="fullrow">
                 <OverlayTrigger
                   placement="auto"
+                  delay={{ show: 250, hide: 300 }}
                   overlay={
                     <Tooltip id={`${settings.type}-error-tooltip`}>
                       Enter the API Token for your link shortener
@@ -213,6 +219,7 @@ export default function BitlyConfigurator({ eKey }: { eKey: string }) {
               <div className="fullrow">
                 <OverlayTrigger
                   placement="auto"
+                  delay={{ show: 250, hide: 300 }}
                   overlay={
                     <Tooltip id={`${settings.type}-label-tooltip`}>
                       Enter the label for the {settings.type} {type} field
@@ -242,6 +249,7 @@ export default function BitlyConfigurator({ eKey }: { eKey: string }) {
               <div className="fullrow">
                 <OverlayTrigger
                   placement="auto"
+                  delay={{ show: 250, hide: 300 }}
                   overlay={
                     <Tooltip id={`${type}-tooltip-tooltip`}>
                       Enter the tooltip text for the {settings.type} field
@@ -270,9 +278,10 @@ export default function BitlyConfigurator({ eKey }: { eKey: string }) {
               <div className="fullrow">
                 <OverlayTrigger
                   placement="auto"
+                  delay={{ show: 250, hide: 300 }}
                   overlay={
                     <Tooltip id={`${type}-aria-tooltip`}>
-                      Enter the ARIA (Accessibility) text for the{' '}
+                      Enter the ARIA (Accessibility) text for the{" "}
                       {settings.type}: {type} field
                     </Tooltip>
                   }
@@ -294,6 +303,7 @@ export default function BitlyConfigurator({ eKey }: { eKey: string }) {
               <div className="fullrow">
                 <OverlayTrigger
                   placement="auto"
+                  delay={{ show: 250, hide: 300 }}
                   overlay={
                     <Tooltip id={`${type}-aria-tooltip`}>
                       Enter the Error text for the {settings.type}: {type} field

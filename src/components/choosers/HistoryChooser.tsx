@@ -32,12 +32,12 @@ import ReactId from '../../utils/ReactId';
 
 export default function HistoryChooser(): JSX.Element {
   const dispatch = useDispatch();
-  const dark = useSelector((state: RootState) => state.dark.dark);
+  const dark = useSelector((state: RootState) => state.dark?.dark);
   const darkClass = dark ? 'header-stuff-dark' : 'header-stuff';
   const [displayValue, setDisplayValue] = useState<string>('History...');
   const [showDireWarning, setShowDireWarning] = useState(false);
   const links = useSelector((state: RootState) => state.history.linkHistory);
-  const main = useSelector((state: RootState) => state.main.settings);
+  const main = useSelector((state: RootState) => state.main?.settings);
   const activeLink = useSelector(
     (state: RootState) => state.history.activeLink,
   );
@@ -48,7 +48,7 @@ export default function HistoryChooser(): JSX.Element {
   const historyItems = useMemo<JSX.Element[]>(() => {
     const items: JSX.Element[] = [];
     const utH = links?.utm_link;
-    if (utH === undefined) {
+    if (utH === undefined || utH.length === 0) {
       return items;
     }
     // eslint-disable-next-line array-callback-return
@@ -111,8 +111,8 @@ export default function HistoryChooser(): JSX.Element {
     }
     setDisplayValue(target.value);
     const v = target.value;
-    if (main.formType === 'wifi') {
-      const wLinks: WiFiLink[] = { ...(links.wifi_link as WiFiLink[]) };
+    if (main?.formType === 'wifi') {
+      const wLinks: WiFiLink[] = { ...(links?.wifi_link as WiFiLink[]) };
       let i = 0;
       while (wLinks[i] !== undefined) {
         if (wLinks[i].uuid === v) {
@@ -130,7 +130,7 @@ export default function HistoryChooser(): JSX.Element {
         i += 1;
       }
     } else {
-      const uLinks: utmLink[] = { ...(links.utm_link as utmLink[]) };
+      const uLinks: utmLink[] = { ...(links?.utm_link as utmLink[]) };
       let i = 0;
       while (uLinks[i] !== undefined) {
         if (uLinks[i].uuid === v) {
@@ -161,7 +161,7 @@ export default function HistoryChooser(): JSX.Element {
         placement="auto"
         delay={{ show: 250, hide: 300 }}
         overlay={
-          links?.utm_link?.length > 0 || links.wifi_link?.length > 0 ? (
+          links?.utm_link?.length > 0 || links?.wifi_link?.length > 0 ? (
             <Tooltip id="history-tooltip">All of your saved links</Tooltip>
           ) : (
             <Tooltip id="history-empty-tooltip">No saved links</Tooltip>
@@ -172,7 +172,7 @@ export default function HistoryChooser(): JSX.Element {
           // variant={dark ? 'icon-only-dark' : 'icon-only'}
           size="sm"
           disabled={
-            links?.utm_link?.length === 0 && links.wifi_link?.length === 0
+            links?.utm_link?.length === 0 && links?.wifi_link?.length === 0
           }
           color={dark ? '#adb5bd' : '#0B3665'}
           className={darkClass}
@@ -189,7 +189,7 @@ export default function HistoryChooser(): JSX.Element {
             key={`clear-list-${ReactId()}`}
             value="clear-history"
           >
-            {main.formType === 'wifi' ? 'WiFi Network' : 'Link'} History
+            {main?.formType === 'wifi' ? 'WiFi Network' : 'Link'} History
           </option>
           <option
             style={{ color: 'red' }}
@@ -199,7 +199,7 @@ export default function HistoryChooser(): JSX.Element {
           >
             Clear History
           </option>
-          {main.formType === 'wifi' ? wifiItems : historyItems}
+          {main?.formType === 'wifi' ? wifiItems : historyItems}
         </Form.Select>
       </OverlayTrigger>
       <DireWarning

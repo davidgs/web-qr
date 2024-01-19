@@ -58,6 +58,7 @@ import Locked from '../../components/Locked';
 import OpacityAdjuster from '../../components/knobs/OpacityAdjuster';
 import UnLocked from '../../components/Unlocked';
 import { RootState } from '../../stores/store';
+import { useDebounce } from '@uidotdev/usehooks';
 
 export default function QRConfigurator() {
   const dark = useSelector((state: RootState) => state.dark.dark);
@@ -70,6 +71,9 @@ export default function QRConfigurator() {
   const maxQrHeight = qrSettings.size * 0.3;
   const maxQrWidth = qrSettings.size * 0.3;
   const logoWidth = Math.round(qrSettings.logoWidth + 10);
+  const lWidth = useDebounce(qrSettings.logoWidth, 100);
+  const height = useDebounce(qrSettings.logoHeight, 100);
+
 
   /**
    *  set the aspect ratio of the image
@@ -118,7 +122,7 @@ export default function QRConfigurator() {
    * @returns
    */
   const setImageSize = (height: number, width: number) => {
-    const imH = qrSettings.logoHeight;
+    const imH = height;  // qrSettings.logoHeight;
     const sc = height / imH;
     let newH = height;
     let newW = width;
@@ -218,11 +222,12 @@ export default function QRConfigurator() {
       </div>
       <div className="fullrow">
         {/* Foreground Colors */}
-        <div className="col10" style={{ marginTop: '.25rem' }}>
+        <div className="col10" style={{ marginTop: ".25rem" }}>
           <Form.Label className={darkClass}>Foreground:</Form.Label>
         </div>
         <OverlayTrigger
           placement="auto"
+          delay={{ show: 250, hide: 300 }}
           overlay={
             <Tooltip id="fg-tooltip">
               Click to select a color for the QR Code elements
@@ -240,11 +245,12 @@ export default function QRConfigurator() {
         <div className="col10" />
         <div className="col5" />
         {/* QR Code Background Color */}
-        <div className="col10" style={{ marginTop: '.25rem' }}>
+        <div className="col10" style={{ marginTop: ".25rem" }}>
           <Form.Label className={darkClass}>Background:</Form.Label>
         </div>
         <OverlayTrigger
           placement="auto"
+          delay={{ show: 250, hide: 300 }}
           overlay={
             <Tooltip id="bg-tooltip">
               Click to select a color for the QR Code background
@@ -262,11 +268,12 @@ export default function QRConfigurator() {
         <div className="col10" />
         <div className="col5" />
         {/* QR Code Eye Color */}
-        <div className="col10" style={{ marginTop: '.25rem' }}>
+        <div className="col10" style={{ marginTop: ".25rem" }}>
           <Form.Label className={darkClass}>Eye Color:</Form.Label>
         </div>
         <OverlayTrigger
           placement="auto"
+          delay={{ show: 250, hide: 300 }}
           overlay={
             <Tooltip id="eye-tooltip">
               Click to select a color for the QR Code eyes
@@ -288,13 +295,14 @@ export default function QRConfigurator() {
       {/* QR Code Style -- dots or bars */}
       <div className="fullrow">
         <div className="col15">
-          <Form.Label className={darkClass} style={{ marginTop: '0.5rem' }}>
+          <Form.Label className={darkClass} style={{ marginTop: "0.5rem" }}>
             <strong>QR Code Style</strong>
           </Form.Label>
         </div>
         <div className="col15">
           <OverlayTrigger
             placement="auto"
+            delay={{ show: 250, hide: 300 }}
             overlay={
               <Tooltip id="qr-style-tooltip">
                 Choose dots or squares for the QR Code data
@@ -304,9 +312,9 @@ export default function QRConfigurator() {
             <Form.Select
               className={darkClass}
               aria-label="Choose dots or squares for the code"
-              defaultValue={qrSettings.qrStyle as 'dots' | 'squares'}
+              defaultValue={qrSettings.qrStyle as "dots" | "squares"}
               onChange={(e) => {
-                const ds = e.target.value as 'dots' | 'squares';
+                const ds = e.target.value as "dots" | "squares";
                 dispatch(updateQrStyle(ds));
               }}
             >
@@ -319,13 +327,14 @@ export default function QRConfigurator() {
 
         {/* QR Code Error Correction Level */}
         <div className="col15">
-          <Form.Label className={darkClass} style={{ marginTop: '0.5rem' }}>
+          <Form.Label className={darkClass} style={{ marginTop: "0.5rem" }}>
             <strong>Error Correction: </strong>
           </Form.Label>
         </div>
         <div className="col15">
           <OverlayTrigger
             placement="auto"
+            delay={{ show: 250, hide: 300 }}
             overlay={
               <Tooltip id="ec-tooltip">
                 Choose the error correction level for the QR Code (H is
@@ -337,10 +346,10 @@ export default function QRConfigurator() {
               className={darkClass}
               aria-label="Error correction selection"
               onChange={(e) => {
-                const eq = e.target.value as 'L' | 'M' | 'Q' | 'H';
+                const eq = e.target.value as "L" | "M" | "Q" | "H";
                 dispatch(updateECLevel(eq));
               }}
-              defaultValue={qrSettings.ecLevel as 'L' | 'M' | 'Q' | 'H'}
+              defaultValue={qrSettings.ecLevel as "L" | "M" | "Q" | "H"}
             >
               <option value="L">L (7%)</option>
               <option value="M">M (15%)</option>
@@ -350,12 +359,12 @@ export default function QRConfigurator() {
           </OverlayTrigger>
         </div>
         <div className="col5" />
-        <div className="col15" style={{ marginTop: '.75rem' }}>
+        <div className="col15" style={{ marginTop: ".75rem" }}>
           <Form.Label className={darkClass}>
             <strong>Enable CORS</strong>
           </Form.Label>
         </div>
-        <div className="col15" style={{ marginTop: '.75rem' }}>
+        <div className="col15" style={{ marginTop: ".75rem" }}>
           <Checker
             cState={qrSettings.enableCORS}
             label=""
@@ -370,12 +379,13 @@ export default function QRConfigurator() {
       {/* QR Code Size and Quiet Zone */}
       <div className="fullrow">
         <div className="col25">
-          <Form.Label className={darkClass} style={{ marginTop: '1rem' }}>
+          <Form.Label className={darkClass} style={{ marginTop: "1rem" }}>
             <strong>QR Code Size:</strong>
           </Form.Label>
         </div>
         <OverlayTrigger
           placement="auto"
+          delay={{ show: 250, hide: 300 }}
           overlay={
             <Tooltip id="qr-size-tooltip">
               Set the size of the QR Code (the size of your QR Code Logo can
@@ -399,12 +409,13 @@ export default function QRConfigurator() {
         </OverlayTrigger>
         <div className="col15" />
         <div className="col25">
-          <Form.Label className={darkClass} style={{ marginTop: '1rem' }}>
+          <Form.Label className={darkClass} style={{ marginTop: "1rem" }}>
             <strong>Quiet Zone:</strong>
           </Form.Label>
         </div>
         <OverlayTrigger
           placement="auto"
+          delay={{ show: 250, hide: 300 }}
           overlay={
             <Tooltip id="quiet-zone-tooltip">
               Set the size of the quiet zone (white space) around the QR Code
@@ -438,15 +449,16 @@ export default function QRConfigurator() {
         {/* Dynamic QR Code preview */}
         <div
           style={{
-            display: 'flex',
-            flexDirection: 'column',
-            maxWidth: '59%',
-            margin: 'auto',
+            display: "flex",
+            flexDirection: "column",
+            maxWidth: "59%",
+            margin: "auto",
           }}
         >
           {/* QR Code */}
           <OverlayTrigger
             placement="auto"
+            delay={{ show: 250, hide: 300 }}
             overlay={
               <Tooltip id="qr-tooltip">
                 This is what your final QR Codes will look like
@@ -455,32 +467,32 @@ export default function QRConfigurator() {
           >
             <div
               style={{
-                marginTop: '2rem',
-                margin: 'auto',
-                display: 'flex',
+                marginTop: "2rem",
+                margin: "auto",
+                display: "flex",
               }}
             >
               <QRCode
                 id="react-qrcode-logo"
-                value={qrSettings.value as string | 'https://www.google.com'}
+                value={qrSettings.value as string | "https://www.google.com"}
                 size={qrSettings.size as number | 200}
-                bgColor={qrSettings.bgColor as string | '#FFFFFF'}
-                fgColor={qrSettings.fgColor as string | '#000000'}
-                logoImage={showLogo ? qrSettings.logoImage : ''}
-                qrStyle={qrSettings.qrStyle as 'dots' | 'squares'}
+                bgColor={qrSettings.bgColor as string | "#FFFFFF"}
+                fgColor={qrSettings.fgColor as string | "#000000"}
+                logoImage={showLogo ? qrSettings.logoImage : ""}
+                qrStyle={qrSettings.qrStyle as "dots" | "squares"}
                 logoWidth={qrSettings.logoWidth as number | 80}
                 logoHeight={qrSettings.logoHeight as number | 80}
                 logoOpacity={qrSettings.logoOpacity as number | 1}
-                eyeColor={qrSettings.eyeColor as string | '#000000'}
+                eyeColor={qrSettings.eyeColor as string | "#000000"}
                 eyeRadius={qrSettings.eyeRadius}
                 quietZone={qrSettings.quietZone as number | 0}
                 enableCORS={qrSettings.enableCORS as boolean | false}
-                ecLevel={qrSettings.ecLevel as 'L' | 'M' | 'Q' | 'H' | 'L'}
+                ecLevel={qrSettings.ecLevel as "L" | "M" | "Q" | "H" | "L"}
                 logoPadding={qrSettings.logoPadding as number | 0}
                 logoPaddingStyle={
-                  (qrSettings.logoPaddingStyle !== 'none'
+                  (qrSettings.logoPaddingStyle !== "none"
                     ? qrSettings.logoPaddingStyle
-                    : undefined) as 'circle' | 'square' | undefined
+                    : undefined) as "circle" | "square" | undefined
                 }
               />
             </div>
@@ -493,6 +505,7 @@ export default function QRConfigurator() {
         <EyeStylers />
       </div>
       <hr />
+      {/* Fence off for Enterprise license */}
       {/* QR Code Logo */}
       <div className="fullrow">
         <Form.Label className={darkClass}>
@@ -507,6 +520,7 @@ export default function QRConfigurator() {
           <div className="fullrow">
             <OverlayTrigger
               placement="auto"
+              delay={{ show: 250, hide: 300 }}
               overlay={
                 <Tooltip id="qr-logo-tooltip">
                   Select a logo to use in the QR Code
@@ -533,7 +547,7 @@ export default function QRConfigurator() {
             <div className="col10">
               <Checker
                 cState={showLogo}
-                disabled={qrSettings.logoImage === ''}
+                disabled={qrSettings.logoImage === ""}
                 label=""
                 tooltip="Show the logo"
                 callback={(value) => setShowLogo(value)}
@@ -547,7 +561,7 @@ export default function QRConfigurator() {
             <div className="col10">
               <Checker
                 cState={qrSettings.removeQrCodeBehindLogo}
-                disabled={qrSettings.logoImage === '' || !showLogo}
+                disabled={qrSettings.logoImage === "" || !showLogo}
                 label=""
                 tooltip="Hide QR Code behind the logo"
                 callback={(value) => {
@@ -555,7 +569,7 @@ export default function QRConfigurator() {
                 }}
               />
             </div>
-            {qrSettings.logoImage !== '' &&
+            {qrSettings.logoImage !== "" &&
             qrSettings.logoImage !== null &&
             qrSettings.logoImage !== undefined ? (
               <>
@@ -571,7 +585,7 @@ export default function QRConfigurator() {
                     label=""
                     tooltip="Delete QR Code Logo"
                     callback={() => {
-                      dispatch(updateLogoImage(''));
+                      dispatch(updateLogoImage(""));
                       setShowLogo(false);
                     }}
                   />
@@ -585,12 +599,13 @@ export default function QRConfigurator() {
           {/* QR Code Logo Size */}
           <div className="fullrow">
             <div className="col25">
-              <Form.Label className={darkClass} style={{ marginTop: '1rem' }}>
+              <Form.Label className={darkClass} style={{ marginTop: "1rem" }}>
                 Logo Height
               </Form.Label>
             </div>
             <OverlayTrigger
               placement="auto"
+              delay={{ show: 250, hide: 300 }}
               overlay={
                 <Tooltip id="qr-logo-height-tooltip">
                   Set the height of the QR Code Logo (The allowed size will
@@ -624,7 +639,7 @@ export default function QRConfigurator() {
               delay={{ show: 250, hide: 300 }}
               overlay={
                 <Tooltip id="qr-aspect-tooltip">
-                  {isAspectLocked ? 'Unlock' : 'Lock'} Aspect Ratio
+                  {isAspectLocked ? "Unlock" : "Lock"} Aspect Ratio
                 </Tooltip>
               }
             >
@@ -632,7 +647,7 @@ export default function QRConfigurator() {
                 <Button
                   className={darkClass}
                   variant="outline-secondary"
-                  style={{ width: '100%', fontSize: '0.6rem' }}
+                  style={{ width: "100%", fontSize: "0.6rem" }}
                   onClick={setLockAspectRatio}
                   disabled={!showLogo}
                 >
@@ -643,12 +658,13 @@ export default function QRConfigurator() {
             </OverlayTrigger>
             <div className="col5" />
             <div className="col25">
-              <Form.Label className={darkClass} style={{ marginTop: '1rem' }}>
+              <Form.Label className={darkClass} style={{ marginTop: "1rem" }}>
                 Logo Width
               </Form.Label>
             </div>
             <OverlayTrigger
               placement="auto"
+              delay={{ show: 250, hide: 300 }}
               overlay={
                 <Tooltip id="qr-logo-width-tooltip">
                   Set the width of the QR Code Logo (The allowed size will
@@ -681,12 +697,13 @@ export default function QRConfigurator() {
           <div className="fullrow">
             {/* Logo Opacity */}
             <div className="col25">
-              <Form.Label className={darkClass} style={{ marginTop: '1rem' }}>
+              <Form.Label className={darkClass} style={{ marginTop: "1rem" }}>
                 Logo Opacity
               </Form.Label>
             </div>
             <OverlayTrigger
               placement="auto"
+              delay={{ show: 250, hide: 300 }}
               overlay={
                 <Tooltip id="qr-logo-opacity-tooltip">
                   Set the opacity of the QR Code Logo
@@ -708,12 +725,13 @@ export default function QRConfigurator() {
             <div className="col5" />
             {/* Logo Padding */}
             <div className="col25">
-              <Form.Label className={darkClass} style={{ marginTop: '1rem' }}>
+              <Form.Label className={darkClass} style={{ marginTop: "1rem" }}>
                 Logo Padding
               </Form.Label>
             </div>
             <OverlayTrigger
               placement="auto"
+              delay={{ show: 250, hide: 300 }}
               overlay={
                 <Tooltip id="qr-logo-padding-tooltip">
                   Set the padding around the QR Code Logo
@@ -743,6 +761,7 @@ export default function QRConfigurator() {
             <div className="col25">
               <OverlayTrigger
                 placement="auto"
+                delay={{ show: 250, hide: 300 }}
                 overlay={
                   <Tooltip id="qr-logo-padding-style-tooltip">
                     Set the padding style around the QR Code Logo
@@ -754,7 +773,7 @@ export default function QRConfigurator() {
                   aria-label="Padding style (round or square) around the QR Code Logo"
                   onChange={(e) => {
                     let eq = e.target.value as string | undefined;
-                    if (eq === 'None') {
+                    if (eq === "None") {
                       eq = undefined;
                     }
                     dispatch(updateLogoPaddingStyle(eq));
@@ -767,7 +786,7 @@ export default function QRConfigurator() {
                   disabled={!showLogo}
                   defaultValue={
                     qrSettings.logoPaddingStyle === undefined
-                      ? 'None'
+                      ? "None"
                       : qrSettings.logoPaddingStyle
                   }
                 >
@@ -786,13 +805,14 @@ export default function QRConfigurator() {
           {showLogo ? (
             <OverlayTrigger
               placement="auto"
+              delay={{ show: 250, hide: 300 }}
               overlay={
                 <Tooltip id="qr-logo-preview-tooltip">
                   This is what your QR Code Logo will look like
                 </Tooltip>
               }
             >
-              <div style={{ width: `${logoWidth}px`, margin: 'auto' }}>
+              <div style={{ width: `${logoWidth}px`, margin: "auto" }}>
                 <img
                   src={qrSettings.logoImage as string}
                   alt="QR Code logo"
@@ -809,6 +829,7 @@ export default function QRConfigurator() {
           ) : null}
         </div>
       </div>
+      {/*End Fence */}
     </Accordion.Body>
   );
 }

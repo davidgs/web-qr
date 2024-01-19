@@ -65,12 +65,12 @@ export default function Checker(props: CheckerProps): JSX.Element {
       >
         <strong>{label}</strong>
       </div>
-      <div
+      <div className='darkClass'
         style={{
           display: 'flex',
           flexDirection: 'column',
           justifyContent: 'space-between',
-          width: 'auto',
+          width: '20px',
         }}
       />
       <div

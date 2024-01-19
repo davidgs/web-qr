@@ -33,7 +33,7 @@
 
 html {
   font-family: Mulish, "Helvetica Neue", "Arial Nova", sans-serif !important;
-  overflow: none;
+  overflow: hidden;
 }
 
 
@@ -69,25 +69,46 @@ body {
  * out above content in mobile and later moves to the side with wider viewports.
  */
 
-.sidebar {
+.sidebar-open {
   text-align: center;
-  /* width: 250px; */
+  width: 250px;
   transition: width 0.3s ease-in-out;
   padding: 2rem 1rem;
   color: rgba(255, 255, 255, .5);
-  background-color: rgb(10, 28, 46);;
+  background-color: rgb(10, 28, 46);
   font-size: .75rem;
   height: 100vh;
+  position:absolute;
+  top: 40px;
+  left: 0px;
 }
 
-.sidebarClosed {
+.sidebar-closed {
     color: rgba(255, 255, 255, .5);
-  background-color: rgb(10, 28, 46);;
+  background-color: rgb(10, 28, 46);
     transition: width 0.3s ease-in-out;
     width: 60px;
     height: 100vh;
 }
-
+.aside-column-top {
+  display: flex;
+  flex-direction: row;
+  height: 50px;
+  color: rgba(255, 255, 255, .5);
+  background-color: rgb(10, 28, 46);
+  transition: width 0.3s ease-in-out;
+  width: 100vw;
+  border-bottom-right-radius: 10px;
+  border-bottom-left-radius: 10px;
+  margin-top: -7px;
+}
+.sidebar-vertical {
+  width: 100vw;
+  height: 50px;
+  color: rgba(255, 255, 255, .5);
+  background-color: rgb(10, 28, 46);
+  transition: height 0.3s ease-in-out;
+}
 .menuBtn {
     align-self: center;
     align-self: flex-start;
@@ -101,6 +122,22 @@ body {
     float: left;
 }
 
+.post-open {
+  position: absolute;
+  top: 40%;
+  width: 220px;
+  text-align: center;
+  transition: 0.3s ease-in-out;
+}
+
+.post-closed {
+  display: none;
+}
+
+.post-top {
+  display: none;
+}
+
 @media (min-width: 38em) {
   .sidebar {
   text-align: center;
@@ -108,21 +145,71 @@ body {
   transition: width 0.3s ease-in-out;
   padding: 2rem 1rem;
   color: rgba(255, 255, 255, .5);
-  background-color: rgb(10, 28, 46);;
+  background-color: rgb(10, 28, 46);
   font-size: .75rem;
   height: 100vh;
 }
 
-.sidebarClosed {
-    color: rgba(255, 255, 255, .5);
-  background-color: rgb(10, 28, 46);;
-    transition: width 0.3s ease-in-out;
-    width: 10%;
-    height: 100vh;
-    padding-top: 25px;
+
 }
+.brand-image-open {
+  transition: width 0.3s ease-in-out;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  margin-left: 0px;
+  margin-right: 0px;
+  text-align: center;
+  position: absolute;
+  top: 40px;
 }
 
+
+.brand-image-closed {
+  transition: width 0.3s ease-in-out;
+  width: 60px;
+  height: 60px;
+  margin-left: 0px;
+  margin-right: 0px;
+  text-align: center;
+  position: absolute;
+  top: 40px;
+}
+
+.brand-image-top {
+  transition: height 0.3s ease-in-out;
+  position: absolute;
+  top: -7px;
+  /* margin-top: 10px;
+  margin-bottom: 10px; */
+  /* margin-left: 0px;
+  margin-right: 0px; */
+  text-align: center;
+  text-align: center;
+}
+
+.sidebar-top {
+  display: flex;
+  flex-direction: row;
+  height: 50px;
+  color: rgba(255, 255, 255, .5);
+  background-color: rgb(10, 28, 46);
+  transition: width 0.3s ease-in-out;
+  width: 100vw;
+  border-bottom-right-radius: 10px;
+  border-bottom-left-radius: 10px;
+}
+
+.sidebar-closed {
+  color: rgba(255, 255, 255, .5);
+  background-color: rgb(10, 28, 46);
+  transition: width 0.3s ease-in-out;
+  /* width: 10%; */
+  height: 100vh;
+  padding-top: 25px;
+  position: absolute;
+  top: 50px;
+  left: 0px;
+}
 /* Sidebar links */
 .sidebar a {
   color: #fff;
@@ -180,10 +267,10 @@ a.sidebar-nav-item:focus {
  */
 
 @media (min-width: 38em) {
-  .sidebar-sticky {
+  .sidebar-sticky-open {
     transition: rotate 0.3s ease-in-out;
     position: absolute;
-    bottom: 3.5rem;
+    bottom: 5.5rem;
     left: 10px;
     background-color: rgb(10, 28, 46);
     width: 230px;
@@ -193,20 +280,51 @@ a.sidebar-nav-item:focus {
 }
 
 .sidebar-sticky-closed {
+  display: flex;
+  flex-direction: column;
   position: absolute;
   transition: rotate 0.3s ease-in-out;
-  bottom: 2.5rem;
+  bottom: 4.5rem;
   background-color: rgb(10, 28, 46);
-  width: 60px;
+  width: 50px;
   /* margin-top: 250px; */
   /* border: 1px solid white; */
-  margin-left: -8px;
+  margin-left: 5px;
 }
 
-.copyright-sticky {
+.sidebar-sticky-closed-btn {
+  text-align: center;
+  display: flex;
+  flex-direction: row;
+  width: 35px;
+  /* border: 1px solid white; */
+}
+.sidebar-sticky-open-btn {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  width: 35px;
+  /* border: 1px solid white; */
+}
+
+.sidebar-sticky-top {
   position: absolute;
   transition: rotate 0.3s ease-in-out;
-  bottom: .25rem;
+  top: .5rem;
+  right: 0px;
+  background-color: rgb(10, 28, 46);
+  width: 130px;
+  height: 40px;
+  border-bottom-right-radius: 10px;
+  /* margin-top: 250px; */
+  /* border: 1px solid white; */
+  /* margin-left: -8px; */
+}
+
+.copyright-sticky-open {
+  position: absolute;
+  transition: rotate 0.3s ease-in-out;
+  bottom: 2rem;
   margin-top: 5px;
   left: 10px;
   width: 100%;
@@ -225,10 +343,22 @@ a.sidebar-nav-item:focus {
   width: 150px;
   height: 60px;
   padding-top: 20px;
-  top: 50%;
+  top: 40%;
   color: rgba(255, 255, 255, .5);
 }
 
+.copyright-sticky-top {
+  position: absolute;
+  transition: rotate 0.3s ease-in-out;
+  top: 1rem;
+  /* margin-left: -45px; */
+  background-color: rgb(10, 28, 46);
+  width: 150px;
+  height: 30px;
+  /* padding-top: 20px; */
+  left: 35%;
+  color: rgba(255, 255, 255, .5);
+}
 /* Container
  *
  * Align the contents of the site above the proper threshold with some margin-fu
@@ -251,12 +381,35 @@ a.sidebar-nav-item:focus {
   }
 }
 
+.sidebar-sticky-controls-open {
+  display: flex;
+  flex-direction: row !important;
+  padding-left: 0px;
+  transition: rotate 0.3s ease-in-out;
+  width: 200px
+}
+
+.sidebar-sticky-controls-closed {
+  flex-direction: column;
+  padding-left: 10px;
+  transition: rotate 0.3s ease-in-out;
+  /* width: 60px */
+}
+
+.sidebar-sticky-controls-top {
+  display: flex;
+  flex-direction: row;
+  padding-left: 10px;
+  transition: rotate 0.3s ease-in-out;
+  /* width: 60px */
+}
+
 @media (min-width: 64em) {
-  .sidebar-sticky {
-      transition: rotate 0.3s ease-in-out;
+  .sidebar-sticky-open {
+    transition: rotate 0.3s ease-in-out;
     position: absolute;
-    bottom: 3.5rem;
-    left: 10px;
+    bottom: 5.5rem;
+    left: 20px;
     background-color: rgb(10, 28, 46);
     /* max-width: 230px; */
   }
@@ -308,14 +461,14 @@ a.sidebar-nav-item:focus {
   transition: width 0.3s ease-in-out;
   padding: 2rem 1rem;
   color: rgba(255, 255, 255, .5);
-  background-color: rgb(10, 28, 46);;
+  background-color: rgb(10, 28, 46);
   font-size: .75rem;
   height: 100vh;
 }
 
 .sidebarClosed {
     color: rgba(255, 255, 255, .5);
-  background-color: rgb(10, 28, 46);;
+  background-color: rgb(10, 28, 46);
     transition: width 0.3s ease-in-out;
     width: 60px;
     height: 100vh;
@@ -566,6 +719,8 @@ a.sidebar-nav-item:focus {
 .link-form {
   width: 100%;
   height: 100vh;
+  padding-right: 10px;
+  padding-left: 10px;
 }
 .App {
   text-align: center;
@@ -579,30 +734,72 @@ a.sidebar-nav-item:focus {
   --bs-gutter-x: 0rem !important;
 }
 
-@media (min-width: 48em) {
-  .aside-column {
-    transition: width 0.3s ease-in-out;
-    padding-top: 10px;
-    float: left;
-    /* width: 25%; */
-    max-width: 250px;
-    margin-right: 10px;
-    border-top-right-radius: 10px;
-    background-color: rgb(10, 28, 46);;
-  }
+.side-nav-top {
+  display: flex;
+  flex-direction: row;
+  width: 100vw;
+}
 
-  .aside-column-closed {
+.side-nav-closed {
+  display: flex;
+  flex-direction: column;
+}
+
+.side-nav-open {
+  display: flex;
+  flex-direction: column;
+}
+.aside-column-open {
     transition: width 0.3s ease-in-out;
-    width: 72px;
+    width: 250x;
     padding-top: 10px;
     border-top-right-radius: 10px;
     height: 100vh;
     float: left;
     margin-right: 10px;
-    background-color: rgb(10, 28, 46);;
+    background-color: rgb(10, 28, 46);
+    margin-top: -7px;
   }
 
-  .main-column {
+  .main-column-top {
+    display: flex;
+    flex-direction: row;
+    transition: width 0.3s ease-in-out;
+    position: absolute;
+    top: 60px;
+    width: calc(100vw - 21px);
+    height: calc(100vh - 65px);
+    margin-left: 10px;
+    margin-right: 10px;
+    /* min-width: 500px; */
+    margin-top: 10px;
+  }
+@media (min-width: 48em) {
+  .aside-column {
+    transition: width 0.3s ease-in-out;
+    padding-top: 10px;
+    float: left;
+    width: 270px;
+    max-width: 250px;
+    margin-right: 10px;
+    border-top-right-radius: 10px;
+    background-color: rgb(10, 28, 46);
+    margin-top: -7px;
+  }
+
+  .aside-column-closed {
+    transition: width 0.3s ease-in-out;
+    width: 60x;
+    padding-top: 10px;
+    border-top-right-radius: 10px;
+    height: 100vh;
+    float: left;
+    margin-right: 10px;
+    background-color: rgb(10, 28, 46);
+    margin-top: -7px;
+  }
+
+  .main-column-open {
     transition: width 0.3s ease-in-out;
     float: right;
     padding-left: 50px;
@@ -610,7 +807,9 @@ a.sidebar-nav-item:focus {
     margin-right: 10px;
     /* min-width: 500px; */
     margin-top: 10px;
+    width: calc(100% - 280px)
   }
+
 
   .main-column-closed {
     transition: width 0.3s ease-in-out;
@@ -619,6 +818,7 @@ a.sidebar-nav-item:focus {
     margin-right: 10px;
     /* min-width: 500px; */
     margin-top: 10px;
+    width: calc(100% - 90px)
   }
 
   /* Stops the float property from affecting content after the columns */
@@ -630,16 +830,17 @@ a.sidebar-nav-item:focus {
 }
 
 @media (min-width: 64em) {
-  .aside-column {
+  .aside-column-open {
     transition: width 0.3s ease-in-out;
     float: left;
-    /* width: 25%; */
+    width: 270px;
     /* max-width: 230px; */
     margin-right: 10px;
+    margin-top: -7px;
     padding-right: 10px;
     padding-top: 10px;
     border-top-right-radius: 10px;
-    background-color: rgb(10, 28, 46);;
+    background-color: rgb(10, 28, 46);
   }
 
   .aside-column-closed {
@@ -650,8 +851,9 @@ a.sidebar-nav-item:focus {
     margin-right: 10px;
     padding-top: 10px;
     border-top-right-radius: 10px;
-    background-color: rgb(10, 28, 46);;
+    background-color: rgb(10, 28, 46);
   }
+
   .main-column {
     transition: width 0.3s ease-in-out;
     float: right;
@@ -660,6 +862,7 @@ a.sidebar-nav-item:focus {
     margin-right: 10px;
     /* min-width: 500px; */
     margin-top: 10px;
+    width: calc(100% - 280px)
   }
 
   .main-column-closed {
@@ -669,6 +872,7 @@ a.sidebar-nav-item:focus {
     margin-right: 10px;
     /* min-width: 500px; */
     margin-top: 10px;
+    width: calc(100% - 90px)
   }
 
   /* Stops the float property from affecting content after the columns */
@@ -1075,7 +1279,7 @@ a.sidebar-nav-item:focus {
   display: flex;
   flex-direction: column;
   /* border: 1px solid orange; */
-  padding-top: 7px;
+  padding: 7px;
 }
 
 .col40 {
@@ -1083,7 +1287,7 @@ a.sidebar-nav-item:focus {
   display: flex;
   flex-direction: column;
   /* border: 1px solid red; */
-  padding-top: 7px;
+  padding: 7px;
 }
 
 .col45 {
@@ -1091,7 +1295,14 @@ a.sidebar-nav-item:focus {
   display: flex;
   flex-direction: column;
   /* border: 1px solid orange; */
-  padding-top: 7px;
+  padding: 7px;
+}
+
+.urlCol {
+  width: 45%;
+  display: flex;
+  align-items: center;
+  height: 80px;
 }
 
 .col50 {
@@ -1099,7 +1310,7 @@ a.sidebar-nav-item:focus {
   display: flex;
   flex-direction: column;
   /* border: 1px solid blue; */
-  padding-top: 7px;
+  padding: 7px;
 }
 
 .col55 {

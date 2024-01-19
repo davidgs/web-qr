@@ -44,6 +44,8 @@ import spinner from './images/loading.png';
 import { setDark } from './reducers/dark/darkSlice';
 import ConfigEditor from './configuration/ConfigEditor';
 import AboutModal from './components/AboutModal';
+import WelcomeModal from './components/WelcomeModal';
+import { updateMainSettings } from './reducers/main/mainSlice';
 
 export default function SideNav() {
   const dark = useSelector((state: RootState) => state.dark);
@@ -52,6 +54,7 @@ export default function SideNav() {
   const [editConfig, setEditConfig] = useState(false);
   const [showAboutModal, setShowAboutModal] = useState(false);
   const mainSet = useSelector((state: RootState) => state.main.settings);
+  const sidebar = useSelector((state: RootState) => state.main.settings.sidebar);
 
   const showConfig = () => {
     const r = document.getElementById('root');
@@ -77,17 +80,9 @@ export default function SideNav() {
 
   return (
     // eslint-disable-next-line react/jsx-filename-extension
-    <div id="side-nav">
-      <div
-        className={
-          mainSet.sidebar === "open"
-            ? "theme-base-09 sidebar"
-            : "theme-base-09 sidebarClosed"
-        }
-      >
-        <p />
-        <p />
-        <div style={{ textAlign: "center" }}>
+    <div id="side-nav" className={`side-nav-${sidebar}`}>
+      <div className={`sidebar-${sidebar}`}>
+        <div className={`brand-image-${sidebar}`}>
           <a href="https://davidgs.com/" target="_blank" rel="noreferrer">
             {mainSet.brandImage !== undefined &&
             mainSet.brandImage !== null &&
@@ -95,26 +90,28 @@ export default function SideNav() {
               <ImgElement
                 byteString={mainSet.brandImage as string}
                 width={
-                  mainSet.sidebar === "open"
-                    ? (mainSet.brandWidth as number)
-                    : 40
+                  sidebar === "closed" || sidebar === "top"
+                    ? 40
+                    : (mainSet.brandWidth as number)
                 }
                 height={
-                  mainSet.sidebar === "open"
-                    ? (mainSet.brandHeight as number)
-                    : 40
+                  sidebar === "closed" || sidebar === "top"
+                    ? 40
+                    : (mainSet.brandHeight as number)
                 }
                 alt="Logo"
               />
             ) : (
               <OverlayTrigger
                 placement="auto"
+                delay={{ show: 250, hide: 300 }}
                 overlay={
                   <Tooltip id="brand-tooltip">
                     Click the <GearFill /> icon below to change this image.
                   </Tooltip>
                 }
               >
+                {/* TODO: Make this a class */}
                 <img
                   src={Logo}
                   alt="QR Builder Logo"
@@ -134,6 +131,9 @@ export default function SideNav() {
                   }
                   style={{
                     transition: "0.3s ease-in-out",
+                    position: "absolute",
+                    top: "13px",
+                    left: "10px",
                   }}
                 />
               </OverlayTrigger>
@@ -141,56 +141,21 @@ export default function SideNav() {
           </a>
         </div>
         {mainSet.sidebar === "open" && (
-          <article className="post">
-            <p />
-            <h5
-              style={{
-                textAlign: "center",
-                transition: "0.3s ease-in-out",
-              }}
-            >
-              QR Code Builder
-            </h5>
-            <p
-              style={{
-                textAlign: "center",
-                transition: "0.3s ease-in-out",
-              }}
-            >
+          <article className={`post post-${sidebar}`}>
+            <h5>QR Code Builder</h5>
+            <p>
               Create trackable links.
               <br />
               Design and add a custom QR Code to match your brand.
             </p>
           </article>
         )}
-        <p />
-        <div
-          className={
-            mainSet.sidebar === "open"
-              ? "sidebar-sticky"
-              : "sidebar-sticky-closed"
-          }
-        >
-          <Form>
-            <div
-              style={{
-                textAlign: "center",
-                display: "flex",
-                flexDirection: mainSet.sidebar === "open" ? "row" : "column",
-                paddingLeft: mainSet.sidebar === "open" ? "0px" : "10px",
-                transition: "0.3s ease-in-out",
-                width: mainSet.sidebar === "open" ? "200px" : "",
-              }}
-            >
-              <div
-                style={{
-                  textAlign: "center",
-                  display: "flex",
-                  flexDirection: "column",
-                }}
-              >
+        <div className={`sidebar-sticky-${sidebar}`}>
+          <Form style={{ display: "flex", flexDirection: "row" }}>
+            <div className={`sidebar-sticky-controls-${sidebar}`}>
+              <div className={`sidebar-sticky-${sidebar}-btn`}>
                 <OverlayTrigger
-                  placement="top"
+                  placement="auto"
                   delay={{ show: 250, hide: 300 }}
                   overlay={
                     <Tooltip id="config-tooltip">
@@ -220,15 +185,12 @@ export default function SideNav() {
               </div>
               <div
                 style={{
-                  textAlign: "center",
-                  display: "flex",
-                  flexDirection: "column",
-                  overflow: "hidden",
-                  width: mainSet.sidebar === "open" ? "80%" : "",
+                  width: sidebar === "open" ? "80%" : "",
                 }}
+                className={`sidebar-sticky-${sidebar}-btn`}
               >
                 <OverlayTrigger
-                  placement="top"
+                  placement="auto"
                   delay={{ show: 250, hide: 300 }}
                   overlay={
                     <Tooltip id="about-tooltip">
@@ -256,17 +218,9 @@ export default function SideNav() {
                   </Button>
                 </OverlayTrigger>
               </div>
-              <div
-                style={{
-                  // textAlign: "right",
-                  display: "flex",
-                  flexDirection: "column",
-                  width: mainSet.sidebar === "open" ? "100%;" : "",
-                  marginRight: mainSet.sidebar === "open" ? "-20px" : "0px",
-                }}
-              >
+              <div className={`sidebar-sticky-${sidebar}-btn`}>
                 <OverlayTrigger
-                  placement="top"
+                  placement="auto"
                   delay={{ show: 250, hide: 300 }}
                   overlay={
                     <Tooltip id="config-tooltip">
@@ -290,121 +244,128 @@ export default function SideNav() {
                   </Button>
                 </OverlayTrigger>
               </div>
-              {mainSet.sidebar === "closed" && (
-                <div>
-                  {updateText !== "" && updateText.startsWith("Checking") ? (
-                    <div style={{ textAlign: "center" }}>
-                      <OverlayTrigger
-                        placement="auto"
-                        delay={{ show: 250, hide: 300 }}
-                        overlay={
-                          <Tooltip id="update-tooltip">{updateText}</Tooltip>
-                        }
-                      >
-                        <img
-                          src={spinner}
-                          alt="spinner"
-                          width="10px"
-                          className="glyphicon-refresh-animate"
-                          style={{ paddingTop: "-.25rem" }}
-                        />
-                      </OverlayTrigger>
-                    </div>
-                  ) : (
-                    <div />
-                  )}
-                  {updateText !== "" &&
-                  updateText.startsWith("There was a problem") ? (
-                    <div style={{ textAlign: "center" }}>
-                      <OverlayTrigger
-                        placement="auto"
-                        delay={{ show: 250, hide: 300 }}
-                        overlay={
-                          <Tooltip id="update-tooltip">{updateText}</Tooltip>
-                        }
-                      >
-                        <ExclamationTriangleFill
-                          size={20}
-                          style={{ color: "red" }}
-                        />
-                      </OverlayTrigger>
-                    </div>
-                  ) : (
-                    <div />
-                  )}
-                  {updateText !== "" && updateText.startsWith("Version") ? (
-                    <div style={{ textAlign: "center" }}>
-                      <OverlayTrigger
-                        placement="auto"
-                        delay={{ show: 250, hide: 300 }}
-                        overlay={
-                          <Tooltip id="update-tooltip">{updateText}</Tooltip>
-                        }
-                      >
-                        <ExclamationCircleFill
-                          size={20}
-                          style={{ color: "green" }}
-                        />
-                      </OverlayTrigger>
-                    </div>
-                  ) : (
-                    <div />
-                  )}
-                  {updateText !== "" &&
-                  updateText.startsWith("Update available") ? (
-                    <div style={{ textAlign: "center" }}>
-                      <OverlayTrigger
-                        placement="auto"
-                        delay={{ show: 250, hide: 300 }}
-                        overlay={
-                          <Tooltip id="update-tooltip">{updateText}</Tooltip>
-                        }
-                      >
-                        <ExclamationOctagonFill
-                          size={20}
-                          style={{ color: "green" }}
-                        />
-                      </OverlayTrigger>
-                    </div>
-                  ) : (
-                    <div />
-                  )}
-                </div>
-              )}
+              {sidebar === "closed" ||
+                ("top" && (
+                  <div>
+                    {updateText !== "" && updateText.startsWith("Checking") ? (
+                      <div style={{ textAlign: "center" }}>
+                        <OverlayTrigger
+                          placement="auto"
+                          delay={{ show: 250, hide: 300 }}
+                          overlay={
+                            <Tooltip id="update-tooltip">{updateText}</Tooltip>
+                          }
+                        >
+                          <img
+                            src={spinner}
+                            alt="spinner"
+                            width="10px"
+                            className="glyphicon-refresh-animate"
+                            style={{ paddingTop: "-.25rem" }}
+                          />
+                        </OverlayTrigger>
+                      </div>
+                    ) : (
+                      <div />
+                    )}
+                    {updateText !== "" &&
+                    updateText.startsWith("There was a problem") ? (
+                      <div style={{ textAlign: "center" }}>
+                        <OverlayTrigger
+                          placement="auto"
+                          delay={{ show: 250, hide: 300 }}
+                          overlay={
+                            <Tooltip id="update-tooltip">{updateText}</Tooltip>
+                          }
+                        >
+                          <ExclamationTriangleFill
+                            size={20}
+                            style={{ color: "red" }}
+                          />
+                        </OverlayTrigger>
+                      </div>
+                    ) : (
+                      <div />
+                    )}
+                    {updateText !== "" && updateText.startsWith("Version") ? (
+                      <div style={{ textAlign: "center" }}>
+                        <OverlayTrigger
+                          placement="auto"
+                          delay={{ show: 250, hide: 300 }}
+                          overlay={
+                            <Tooltip id="update-tooltip">{updateText}</Tooltip>
+                          }
+                        >
+                          <ExclamationCircleFill
+                            size={20}
+                            style={{ color: "green" }}
+                          />
+                        </OverlayTrigger>
+                      </div>
+                    ) : (
+                      <div />
+                    )}
+                    {updateText !== "" &&
+                    updateText.startsWith("Update available") ? (
+                      <div style={{ textAlign: "center" }}>
+                        <OverlayTrigger
+                          placement="auto"
+                          delay={{ show: 250, hide: 300 }}
+                          overlay={
+                            <Tooltip id="update-tooltip">{updateText}</Tooltip>
+                          }
+                        >
+                          <ExclamationOctagonFill
+                            size={20}
+                            style={{ color: "green" }}
+                          />
+                        </OverlayTrigger>
+                      </div>
+                    ) : (
+                      <div />
+                    )}
+                  </div>
+                ))}
             </div>
           </Form>
         </div>
-        <div
-          className={
-            mainSet.sidebar === "open"
-              ? "copyright-sticky"
-              : "copyright-sticky-closed"
-          }
-        >
-          <p
-            style={{
-              fontSize: "10px",
-              textAlign: "center",
-            }}
-          >
-            <span style={{ color: "rgba(255, 255, 255, .5)" }}>
-              &copy;{" "}
-              <a
-                href="https://davidgs.com/"
-                style={{ color: "rgba(255, 255, 255, .5)" }}
-              >
-                David G. Simmons 2023
-              </a>
-            </span>
-            <br />
-            All rights reserved
-          </p>
-        </div>
+        {sidebar !== "top" && (
+          <div className={`copyright-sticky-${sidebar}`}>
+            <p
+              style={{
+                fontSize: "10px",
+                textAlign: "center",
+              }}
+            >
+              <span style={{ color: "rgba(255, 255, 255, .5)" }}>
+                &copy;{" "}
+                <a
+                  href="https://davidgs.com/"
+                  style={{ color: "rgba(255, 255, 255, .5)" }}
+                >
+                  David G. Simmons 2023
+                </a>
+              </span>
+              <br />
+              All rights reserved
+            </p>
+          </div>
+        )}
         {editConfig && (
           <ConfigEditor showMe={editConfig} callback={setEditConfig} />
         )}
         {showAboutModal && (
           <AboutModal showMe={showAboutModal} callback={setShowAboutModal} />
+        )}
+        {mainSet.firstRun && (
+          <WelcomeModal
+            showMe={mainSet.firstRun}
+            callback={(res: boolean) => {
+              const ms = { ...mainSet };
+              ms.firstRun = res;
+              dispatch(updateMainSettings(ms));
+            }}
+          />
         )}
       </div>
     </div>

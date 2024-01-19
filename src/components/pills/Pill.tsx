@@ -49,6 +49,7 @@ export default function Pill(props: PillProps): JSX.Element {
   return (
     <OverlayTrigger
       placement="auto"
+      delay={{ show: 250, hide: 300 }}
       overlay={
         <Tooltip id={ReactId()}>
           {/* eslint-disable-next-line react/no-danger */}
@@ -61,7 +62,7 @@ export default function Pill(props: PillProps): JSX.Element {
         id={id}
         key={`${id}-button`}
         className="pill"
-        style={{ cursor: 'default' }}
+        style={{ cursor: "default" }}
       >
         <img className="pillImage" key={`${id}-icon`} alt="icon" src={icon} />
         {value}

@@ -112,6 +112,7 @@ export default function WifiForm() {
         <div className="col30">
           <OverlayTrigger
             placement="auto"
+            delay={{ show: 250, hide: 300 }}
             overlay={
               <Tooltip id="wifi-values-tooltip">
                 {settings.encryption.tooltip}
@@ -125,7 +126,7 @@ export default function WifiForm() {
               aria-label={settings?.encryption.ariaLabel}
               id="wifi-encryption-choice"
               onChange={(eventKey) => {
-                if (eventKey.target.value === 'Choose one ...') {
+                if (eventKey.target.value === "Choose one ...") {
                   return;
                 }
                 // dispatch(updateEncryptionValue(eventKey.target.value));
@@ -133,7 +134,7 @@ export default function WifiForm() {
               }}
               value={
                 activeLink.encryption === undefined
-                  ? 'Choose one ...'
+                  ? "Choose one ..."
                   : activeLink.encryption
               }
             >
@@ -168,74 +169,70 @@ export default function WifiForm() {
       </div>
       <div className="fullrow">
         <InputGroup size="lg">
-          <Col sm={12}>
-            <OverlayTrigger
-              placement="auto"
-              overlay={
-                <Tooltip id="ssid-label-tooltip">
-                  Enter the SSID (Network Name) for the WiFi network
-                </Tooltip>
-              }
-            >
-              <FloatingLabel label={settings.ssid.label} className={darkClass}>
+          <OverlayTrigger
+            placement="auto"
+            delay={{ show: 250, hide: 300 }}
+            overlay={
+              <Tooltip id="ssid-label-tooltip">
+                Enter the SSID (Network Name) for the WiFi network
+              </Tooltip>
+            }
+          >
+            <FloatingLabel label={settings.ssid.label} className={darkClass}>
+              <FormControl
+                required
+                className={darkClass}
+                type="text"
+                size="sm"
+                id="wifi-ssid"
+                aria-label={settings.ssid.ariaLabel}
+                aria-describedby={settings.ssid.tooltip}
+                value={activeLink.ssid === undefined ? "" : activeLink.ssid}
+                onChange={(e) => {
+                  valueChanged(e);
+                }}
+              />
+            </FloatingLabel>
+          </OverlayTrigger>
+        </InputGroup>
+      </div>
+      <div className="fullrow input-group mb-3">
+        <InputGroup size="lg">
+          <OverlayTrigger
+            placement="auto"
+            delay={{ show: 250, hide: 300 }}
+            overlay={
+              <Tooltip id="ssid-label-tooltip">
+                Enter the WiFi Password for the WiFi network
+              </Tooltip>
+            }
+          >
+            <InputGroup>
+              <FloatingLabel
+                label={settings.password.label}
+                className={darkClass}
+              >
                 <FormControl
                   required
                   className={darkClass}
-                  type="text"
+                  type="password"
                   size="sm"
-                  id="wifi-ssid"
-                  aria-label={settings.ssid.ariaLabel}
-                  aria-describedby={settings.ssid.tooltip}
-                  value={activeLink.ssid === undefined ? '' : activeLink.ssid}
+                  id="wifi-passwd"
+                  aria-label={settings.password.ariaLabel}
+                  aria-describedby={settings.password.tooltip}
+                  value={
+                    activeLink.password === undefined ? "" : activeLink.password
+                  }
                   onChange={(e) => {
                     valueChanged(e);
                   }}
                 />
               </FloatingLabel>
-            </OverlayTrigger>
-          </Col>
-        </InputGroup>
-      </div>
-      <div className="fullrow input-group mb-3">
-        <InputGroup size="lg">
-          <Col sm={12}>
-            <OverlayTrigger
-              placement="auto"
-              overlay={
-                <Tooltip id="ssid-label-tooltip">
-                  Enter the WiFi Password for the WiFi network
-                </Tooltip>
-              }
-            >
-              <InputGroup>
-                <FloatingLabel
-                  label={settings.password.label}
-                  className={darkClass}
-                >
-                  <FormControl
-                    required
-                    className={darkClass}
-                    type="password"
-                    size="sm"
-                    id="wifi-passwd"
-                    aria-label={settings.password.ariaLabel}
-                    aria-describedby={settings.password.tooltip}
-                    value={
-                      activeLink.password === undefined
-                        ? ''
-                        : activeLink.password
-                    }
-                    onChange={(e) => {
-                      valueChanged(e);
-                    }}
-                  />
-                </FloatingLabel>
-                <InputGroup.Text onClick={toggle} style={{ cursor: 'pointer' }}>
-                  {!passwordShown ? <EyeSlashFill /> : <Eye />}
-                </InputGroup.Text>
-              </InputGroup>
-            </OverlayTrigger>
-          </Col>
+              <InputGroup.Text onClick={toggle} style={{ cursor: "pointer" }}>
+                {!passwordShown ? <EyeSlashFill /> : <Eye />}
+              </InputGroup.Text>
+            </InputGroup>
+          </OverlayTrigger>
         </InputGroup>
       </div>
     </>

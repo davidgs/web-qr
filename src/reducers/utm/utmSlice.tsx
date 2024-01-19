@@ -22,9 +22,8 @@
  */
 import { createSlice } from '@reduxjs/toolkit';
 import { defaultUTMParams } from '../../types';
-import store from 'store2';
 
-const initialState = store.get('utm-config') || {
+const initialState = {
   settings: defaultUTMParams,
 };
 

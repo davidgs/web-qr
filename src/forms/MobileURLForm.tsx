@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-import { InputGroup, Col } from 'react-bootstrap';
+import { InputGroup } from 'react-bootstrap';
 import { useEffect } from 'react';
 import { makeLongLink } from '../utils/LongLink';
 import { useSelector, useDispatch } from 'react-redux';
@@ -31,7 +31,7 @@ import { setActiveLink } from '../reducers/history/historySlice';
 import UTMTextField from '../components/UTMTextField';
 import UTMChoice from '../components/choosers/UTMChoice';
 
-export default function URLForm() {
+export default function MobileURLForm() {
   const dispatch = useDispatch();
   const mainConfig = useSelector((state: RootState) => state.main.settings);
   const utmTarget = useSelector((state: RootState) => state.utmStuff.settings.utm_target);
@@ -112,26 +112,25 @@ export default function URLForm() {
   return (
     <>
       {/* utm_target */}
-        <InputGroup size="lg">
-            <UTMTextField
-              valueChanged={linkPartChanged}
-              targetType="utm_target"
-              value={
-                activeLink?.utm_target &&
-                activeLink?.utm_target !== "https://www.example.com/"
-                  ? activeLink?.utm_target
-                  : ""
-              }
-              settings={utmTarget}
-            />
-        </InputGroup>
+      <InputGroup size="lg">
+        <UTMTextField
+          valueChanged={linkPartChanged}
+          targetType="utm_target"
+          value={
+            activeLink?.utm_target &&
+            activeLink?.utm_target !== "https://www.example.com/"
+              ? activeLink?.utm_target
+              : ""
+          }
+          settings={utmTarget}
+        />
+      </InputGroup>
       {/* </Row> */}
       {/* utm_source & utm_medium */}
       {mainConfig.formType === "encoded" && (
-        <div className="fullrow">
-          {/* utm_source */}
-          {utmSource?.useValue ? (
-            <div className={utmMedium?.useValue ? "col50" : "col100"}>
+        <>
+          {utmSource?.useValue && (
+            <>
               {utmSource?.isChooser ? (
                 <InputGroup size="lg">
                   <UTMChoice
@@ -150,13 +149,11 @@ export default function URLForm() {
                   />
                 </InputGroup>
               )}
-            </div>
-          ) : (
-            <></>
+            </>
           )}
           {/* utm_medium */}
-          {utmMedium?.useValue ? (
-            <div className={utmSource?.useValue ? "col50" : "col100"}>
+          {utmMedium?.useValue && (
+            <>
               <InputGroup size="lg">
                 {utmMedium.isChooser ? (
                   <UTMChoice
@@ -173,41 +170,32 @@ export default function URLForm() {
                   />
                 )}
               </InputGroup>
-            </div>
-          ) : (
-            <></>
+            </>
           )}
-        </div>
-      )}
-      {/*  utm_term, utm_campaign */}
-      {mainConfig?.formType === "encoded" && (
-        <div className="fullrow">
           {/* utm_campaign */}
-          {utmCampaign?.useValue ? (
-            <div className={utmTerm?.useValue ? "col50" : "col100"}>
-              {utmCampaign?.isChooser ? (
-                <UTMChoice
-                  valueChanged={linkPartChanged}
-                  targetType="utm_campaign"
-                  settings={utmCampaign}
-                />
-              ) : (
-                <UTMTextField
-                  valueChanged={linkPartChanged}
-                  targetType="utm_campaign"
-                  value={
-                    activeLink?.utm_campaign ? activeLink?.utm_campaign : ""
-                  }
-                  settings={utmCampaign}
-                />
-              )}
-            </div>
-          ) : (
-            <></>
+          {utmCampaign?.useValue && (
+            <>
+            {utmCampaign?.isChooser ? (
+              <UTMChoice
+                valueChanged={linkPartChanged}
+                targetType="utm_campaign"
+                settings={utmCampaign}
+              />
+            ) : (
+              <UTMTextField
+                valueChanged={linkPartChanged}
+                targetType="utm_campaign"
+                value={
+                  activeLink?.utm_campaign ? activeLink?.utm_campaign : ""
+                }
+                settings={utmCampaign}
+              />
+            )}
+            </>
           )}
           {/* utm_term */}
-          {utmTerm?.useValue ? (
-            <div className={utmCampaign?.useValue ? "col50" : "col100"}>
+          {utmTerm?.useValue && (
+            <>
               {utmTerm?.isChooser ? (
                 <UTMChoice
                   valueChanged={linkPartChanged}
@@ -222,18 +210,12 @@ export default function URLForm() {
                   settings={utmTerm}
                 />
               )}
-            </div>
-          ) : (
-            <></>
+            </>
           )}
-        </div>
-      )}
-      {/*  utm_content, utm_keyword */}
-      {mainConfig?.formType === "encoded" && (
-        <div className="fullrow">
+          {/*  utm_content, utm_keyword */}
           {/* utm_content */}
-          {utmContent?.useValue ? (
-            <div className={utmKeyword?.useValue ? "col50" : "col100"}>
+          {utmContent?.useValue && (
+            <>
               {utmContent?.isChooser ? (
                 <UTMChoice
                   valueChanged={linkPartChanged}
@@ -247,14 +229,12 @@ export default function URLForm() {
                   value={activeLink?.utm_content ? activeLink?.utm_content : ""}
                   settings={utmContent}
                 />
-              )}
-            </div>
-          ) : (
-            <></>
+            )}
+            </>
           )}
           {/* utm_keyword */}
-          {utmKeyword?.useValue ? (
-            <div className={utmContent?.useValue ? "col50" : "col100"}>
+          {utmKeyword?.useValue && (
+            <>
               {utmKeyword?.isChooser ? (
                 <UTMChoice
                   valueChanged={linkPartChanged}
@@ -269,12 +249,10 @@ export default function URLForm() {
                   settings={utmKeyword}
                 />
               )}
-            </div>
-          ) : (
-            <></>
+            </>
           )}
-        </div>
-      )}
+        </>
+       )}
     </>
   );
 }

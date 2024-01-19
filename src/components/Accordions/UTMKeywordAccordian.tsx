@@ -46,13 +46,13 @@ export default function UTMKeywordAccordian(): JSX.Element {
   const itemNo: string = '6';
   const type: string = 'UTM Keyword';
   const accValue = useSelector(
-    (state: RootState) => state.utmStuff as UtmParams,
+    (state: RootState) => state.utmStuff.settings.utm_keyword as UtmObj,
   );
   const [kvValue, setKvValue] = useState<string>('');
   const [valValid, setValValid] = useState<boolean>(true);
 
   const [fieldValue, setFieldValue] = useState<string>(
-    accValue.utm_keyword.showName ? `${accValue.utm_keyword.label} (${valKind})` : `${accValue.utm_keyword.label}`,
+    accValue.showName ? `${accValue.label} (${valKind})` : `${accValue.label}`,
   );
 
   const updateFieldValue = (eventKey: SyntheticEvent) => {
@@ -60,7 +60,7 @@ export default function UTMKeywordAccordian(): JSX.Element {
     const v = target.value;
     if (v.indexOf(`(${valKind})`) !== -1) {
       setFieldValue(v);
-    } else if (accValue.utm_keyword.showName) {
+    } else if (accValue.showName) {
       setFieldValue(`${v} (${valKind})`);
     } else {
       setFieldValue(v);
@@ -73,7 +73,7 @@ export default function UTMKeywordAccordian(): JSX.Element {
    * @param value the value to delete
    * */
   const deletePillValue = (value: string) => {
-    const newT = Object.entries(accValue.utm_keyword as UtmObj);
+    const newT = Object.entries(accValue as UtmObj);
     const tLen = newT.length;
     const tEntries: UtmKeyValue[] = newT[tLen - 1][1] as UtmKeyValue[];
     for (let t = 0; t < tEntries.length; t += 1) {
@@ -98,7 +98,7 @@ export default function UTMKeywordAccordian(): JSX.Element {
       return;
     }
     setKvValue('');
-    const newTrm = accValue.utm_keyword.value as UtmKeyValue[];
+    const newTrm = accValue.value as UtmKeyValue[];
     const newTrmPill = {
       key: target?.value?.replace(/,/g, '').split('=')[1].trim(),
       value: target?.value?.replace(/,/g, '').split('=')[0].trim(),
@@ -111,6 +111,7 @@ export default function UTMKeywordAccordian(): JSX.Element {
     <Accordion.Item eventKey={`"${itemNo}"`}>
       <OverlayTrigger
         placement="auto"
+        delay={{ show: 250, hide: 300 }}
         overlay={
           <Tooltip id={`${valKind}-accordion`}>
             Edit configuration for {type}
@@ -131,11 +132,11 @@ export default function UTMKeywordAccordian(): JSX.Element {
             </div>
             <div className="col10">
               <Checker
-                cState={accValue.utm_keyword.useValue}
+                cState={accValue.useValue}
                 disabled={false}
                 label=""
                 tooltip={
-                  accValue.utm_keyword.useValue
+                  accValue.useValue
                     ? `Uncheck to not the use the '${valKind}' value`
                     : `Check to use the '${valKind}' value`
                 }
@@ -146,7 +147,7 @@ export default function UTMKeywordAccordian(): JSX.Element {
             </div>
             <div className="col60" />
           </div>
-          {accValue.utm_keyword.useValue && (
+          {accValue.useValue && (
             <>
               {/* item Label */}
               <div className="fullrow">
@@ -158,6 +159,7 @@ export default function UTMKeywordAccordian(): JSX.Element {
               <div className="fullrow">
                 <OverlayTrigger
                   placement="auto"
+                  delay={{ show: 250, hide: 300 }}
                   overlay={
                     <Tooltip id={`${type}-label-tooltip`}>
                       Enter the label for the {type} field
@@ -179,26 +181,26 @@ export default function UTMKeywordAccordian(): JSX.Element {
               <div className="fullrow">
                 <div className="col30">
                   <Form.Label className={darkClass}>
-                    {accValue.utm_keyword.showName
+                    {accValue.showName
                       ? `Hide '${type}' in Field Label?`
                       : `Show '${type}' in Field Label`}
                   </Form.Label>
                 </div>
                 <div className="col10">
                   <Checker
-                    cState={accValue.utm_keyword.showName ? accValue.utm_keyword.showName : false}
+                    cState={accValue.showName ? accValue.showName : false}
                     disabled={false}
                     label=""
                     tooltip={
-                      accValue.utm_keyword.showName
-                        ? 'Uncheck to hide the field name in the field label'
-                        : 'Check to show the field name in the field label'
+                      accValue.showName
+                        ? "Uncheck to hide the field name in the field label"
+                        : "Check to show the field name in the field label"
                     }
                     callback={(value) => {
                       if (value) {
-                        setFieldValue(`${accValue.utm_keyword.label} (${type})`);
+                        setFieldValue(`${accValue.label} (${type})`);
                       } else {
-                        setFieldValue(`${accValue.utm_keyword.label}`);
+                        setFieldValue(`${accValue.label}`);
                       }
                       dispatch(updateKeywordShowName(value));
                     }}
@@ -216,6 +218,7 @@ export default function UTMKeywordAccordian(): JSX.Element {
               <div className="fullrow">
                 <OverlayTrigger
                   placement="auto"
+                  delay={{ show: 250, hide: 300 }}
                   overlay={
                     <Tooltip id={`${valKind}-tooltip-tooltip`}>
                       Enter the tooltip text for the {valKind} field
@@ -227,7 +230,7 @@ export default function UTMKeywordAccordian(): JSX.Element {
                     type="text"
                     id={`${valKind}-tooltip`}
                     placeholder={`Enter ${valKind} field tooltip`}
-                    value={accValue.utm_keyword.tooltip ? accValue.utm_keyword.tooltip : ''}
+                    value={accValue.tooltip ? accValue.tooltip : ""}
                     onChange={(e) => {
                       dispatch(updateKeywordTooltip(e.target.value));
                     }}
@@ -244,9 +247,10 @@ export default function UTMKeywordAccordian(): JSX.Element {
               <div className="fullrow">
                 <OverlayTrigger
                   placement="auto"
+                  delay={{ show: 250, hide: 300 }}
                   overlay={
                     <Tooltip id={`${valKind}-aria-tooltip`}>
-                      Enter the ARIA (Accessibility) text for the {valKind}{' '}
+                      Enter the ARIA (Accessibility) text for the {valKind}{" "}
                       field
                     </Tooltip>
                   }
@@ -257,7 +261,7 @@ export default function UTMKeywordAccordian(): JSX.Element {
                     id={`${valKind}-aria`}
                     placeholder={`Enter ${valKind} field ARIA (Accessibility) label`}
                     required
-                    value={accValue.utm_keyword.ariaLabel}
+                    value={accValue.ariaLabel}
                     onChange={(e) => {
                       dispatch(updateKeywordAriaLabel(e.target.value));
                     }}
@@ -274,6 +278,7 @@ export default function UTMKeywordAccordian(): JSX.Element {
               <div className="fullrow">
                 <OverlayTrigger
                   placement="auto"
+                  delay={{ show: 250, hide: 300 }}
                   overlay={
                     <Tooltip id={`${valKind}-error-tooltip`}>
                       Enter the error text for the {valKind} field
@@ -285,7 +290,7 @@ export default function UTMKeywordAccordian(): JSX.Element {
                     type="text"
                     id={`${valKind}-error`}
                     placeholder={`Enter ${valKind} field error text`}
-                    value={accValue.utm_keyword.error}
+                    value={accValue.error}
                     onChange={(e) => {
                       dispatch(updateKeywordError(e.target.value));
                     }}
@@ -294,14 +299,14 @@ export default function UTMKeywordAccordian(): JSX.Element {
               </div>
               {/* use chooser or txt */}
               <div className="fullrow">
-                {accValue.utm_keyword.useValue ? (
+                {accValue.useValue ? (
                   <div className="fullrow">
                     <div className="col15">
                       <Form.Label className={darkClass}>Use Chooser</Form.Label>
                     </div>
                     <div className="col10">
                       <Checker
-                        cState={accValue.utm_keyword.isChooser}
+                        cState={accValue.isChooser}
                         disabled={false}
                         label=""
                         tooltip={`Use a chooser to create a pre-defined list of allowed values for ${valKind}`}
@@ -318,7 +323,7 @@ export default function UTMKeywordAccordian(): JSX.Element {
                     </div>
                     <div className="col10">
                       <Checker
-                        cState={!accValue.utm_keyword.isChooser}
+                        cState={!accValue.isChooser}
                         disabled={false}
                         label=""
                         tooltip={`Use a Text Field to allow the user to enter any value for ${valKind}`}
@@ -340,7 +345,7 @@ export default function UTMKeywordAccordian(): JSX.Element {
                 )} */}
               </div>
               {/* item Values */}
-              {accValue.utm_keyword.isChooser && (
+              {accValue.isChooser && (
                 <>
                   <div className="fullrow">
                     <Form.Label className={darkClass}>
@@ -350,9 +355,10 @@ export default function UTMKeywordAccordian(): JSX.Element {
                   <div className="fullrow">
                     <OverlayTrigger
                       placement="auto"
+                      delay={{ show: 250, hide: 300 }}
                       overlay={
                         <Tooltip id={`${valKind}-values-tooltip`}>
-                          Create a predefined list of values for the {valKind}{' '}
+                          Create a predefined list of values for the {valKind}{" "}
                           field
                         </Tooltip>
                       }
@@ -361,7 +367,7 @@ export default function UTMKeywordAccordian(): JSX.Element {
                         className={darkClass}
                         type="text"
                         placeholder="Enter comma-separated list of key=value pairs to use"
-                        value={kvValue || ''}
+                        value={kvValue || ""}
                         required
                         id={`${valKind}-values`}
                         isInvalid={!valValid}
@@ -377,8 +383,8 @@ export default function UTMKeywordAccordian(): JSX.Element {
                   <div className="fullrow">
                     <PillArea
                       pills={
-                        accValue.utm_keyword.value
-                          ? (accValue.utm_keyword.value as UtmKeyValue[])
+                        accValue.value
+                          ? (accValue.value as UtmKeyValue[])
                           : ([] as UtmKeyValue[])
                       }
                       type={valKind}

@@ -76,18 +76,19 @@ export default function DownloadButton() {
   return (
     <OverlayTrigger
       placement="top"
+      delay={{ show: 250, hide: 300 }}
       overlay={
         <Tooltip id="download-qr-tooltip">Download your QR Code</Tooltip>
       }
     >
       <Button
-        variant={dark ? 'icon-only-dark' : 'icon-only'}
+        variant={dark ? "icon-only-dark" : "icon-only"}
         size="sm"
         onClick={onDownloadClick}
         className={darkClass}
-        style={{ float: 'right', alignItems: 'center' }}
+        style={{ float: "right", alignItems: "center" }}
       >
-        <Download className={darkClass} color={dark ? '#adb5bd' : '#0B263E'} />
+        <Download className={darkClass} color={dark ? "#adb5bd" : "#0B263E"} />
       </Button>
     </OverlayTrigger>
   );

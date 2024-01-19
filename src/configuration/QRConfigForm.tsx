@@ -54,48 +54,11 @@ export default function QRConfigForm({
 
   const handleSubmit = (event: SyntheticEvent) => {
     event.preventDefault();
-    // TODO: Fix for web
-    // window.electronAPI
-    //   .saveQRSettings(JSON.stringify(qSet))
-    //   .then(() => {
-    //     return '';
-    //   })
-    //   .catch((error: unknown) => {
-    //     // eslint-disable-next-line no-console
-    //     console.log(`Error: ${error}`);
-    //   });
-    // window.electronAPI
-    //   .saveQRStyle(JSON.stringify(qrConf))
-    //   .then(() => {
-    //     return '';
-    //   })
-    //   .catch((error: unknown) => {
-    //     console.log(`Error: ${error}`);
-    //   });
     setShowConfig(false);
     onHide();
   };
 
   const handleCancel = () => {
-    // TODO: Fix for web
-    // window.electronAPI
-    //   .reloadQRStyle()
-    //   .then(() => {
-    //     return '';
-    //   })
-    //   .catch((error: unknown) => {
-    //     console.log(`Error: ${error}`);
-    //   });
-    // window.electronAPI
-    //   .reloadQRSettings()
-    //   .then(() => {
-    //     return '';
-    //   })
-    //   .catch((error: unknown) => {
-    //     // eslint-disable-next-line no-console
-    //     console.log(`Error: ${error}`);
-    //   });
-
     setShowConfig(false);
     onHide();
   };
@@ -140,7 +103,7 @@ export default function QRConfigForm({
                   size="lg"
                   style={{ fontSize: '18pt' }}
                 >
-                  Size: {qrConf.size}
+                  Size: {qrConf?.size}
                 </Form.Label>
               </OverlayTrigger>
             </div>
@@ -157,7 +120,7 @@ export default function QRConfigForm({
               <div className="col15">
                 <AdjusterKnob
                   name="qr-adjust-size"
-                  value={qrConf.size ? qrConf.size : 220}
+                  value={qrConf?.size ? qrConf?.size : 220}
                   min={100}
                   max={500}
                   step={10}
@@ -184,15 +147,15 @@ export default function QRConfigForm({
             <div className={`col40 ${darkClass}`}>
               <FileTypeSelector
                 onSelectionChange={handleExtChange}
-                fileType={qSet.QRType}
+                fileType={qSet?.QRType}
               />
             </div>
           </div>
-          {qSet.QRType === 'svg' ? (
+          {qSet?.QRType === 'svg' ? (
             <Row
               style={{ paddingTop: '15px' }}
               className={
-                qSet.QRType === 'svg' ? 'fade-component in' : 'fade-component'
+                qSet?.QRType === 'svg' ? 'fade-component in' : 'fade-component'
               }
             >
               <div className="fullrow">
@@ -207,7 +170,7 @@ export default function QRConfigForm({
                 <div className="spacer" />
                 <div className="col10" style={{ marginTop: '.5rem' }}>
                   <Checker
-                    cState={qSet.XParent}
+                    cState={qSet?.XParent}
                     label=""
                     tooltip="Set the svg background to transparent"
                     disabled={false}
