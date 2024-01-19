@@ -180,6 +180,7 @@ export default function BrandingConfigurator({
     <Accordion.Item eventKey="1">
       <OverlayTrigger
         placement="auto"
+        delay={{ show: 250, hide: 300 }}
         overlay={
           <Tooltip id="brand-tooltip">
             Settings for overall branding, like the image in the left column,
@@ -199,6 +200,7 @@ export default function BrandingConfigurator({
               <div className="fullrow">
                 <OverlayTrigger
                   placement="auto"
+                  delay={{ show: 250, hide: 300 }}
                   overlay={
                     <Tooltip id="main-logo-tooltip">
                       Click to select a logo for the App
@@ -233,7 +235,7 @@ export default function BrandingConfigurator({
                 <div className="col20">
                   {settings.brandImage !== undefined &&
                   settings.brandImage !== null &&
-                  settings.brandImage !== '' ? (
+                  settings.brandImage !== "" ? (
                     <Form.Label className={darkClass}>
                       Remove Custom Logo?
                     </Form.Label>
@@ -245,7 +247,7 @@ export default function BrandingConfigurator({
                 <div className="col10">
                   {settings.brandImage !== undefined &&
                   settings.brandImage !== null &&
-                  settings.brandImage !== '' ? (
+                  settings.brandImage !== "" ? (
                     <Checker
                       cState={false}
                       disabled={false}
@@ -265,7 +267,7 @@ export default function BrandingConfigurator({
                 <div className="col25">
                   <Form.Label
                     className={darkClass}
-                    style={{ marginTop: '1rem' }}
+                    style={{ marginTop: "1rem" }}
                   >
                     Logo Height
                   </Form.Label>
@@ -300,7 +302,7 @@ export default function BrandingConfigurator({
                   delay={{ show: 250, hide: 300 }}
                   overlay={
                     <Tooltip id="qr-aspect-tooltip">
-                      {isMainAspectLocked ? 'Unlock' : 'Lock'} Image Aspect
+                      {isMainAspectLocked ? "Unlock" : "Lock"} Image Aspect
                       Ratio
                     </Tooltip>
                   }
@@ -308,7 +310,7 @@ export default function BrandingConfigurator({
                   <div className="col15">
                     <Button
                       variant="outline-secondary"
-                      style={{ width: '100%', fontSize: '0.6rem' }}
+                      style={{ width: "100%", fontSize: "0.6rem" }}
                       onClick={setLockMainAspectRatio}
                       disabled={!showMainLogo}
                     >
@@ -321,7 +323,7 @@ export default function BrandingConfigurator({
                 <div className="col25">
                   <Form.Label
                     className={darkClass}
-                    style={{ marginTop: '1rem' }}
+                    style={{ marginTop: "1rem" }}
                   >
                     Logo Width
                   </Form.Label>
@@ -354,17 +356,18 @@ export default function BrandingConfigurator({
             </div>
             <div
               style={{
-                display: 'flex',
-                flexDirection: 'column',
-                margin: 'auto',
+                display: "flex",
+                flexDirection: "column",
+                margin: "auto",
               }}
             >
               {settings.brandImage !== undefined &&
               settings.brandImage !== null &&
-              settings.brandImage !== '' &&
+              settings.brandImage !== "" &&
               showMainLogo ? (
                 <OverlayTrigger
                   placement="auto"
+                  delay={{ show: 250, hide: 300 }}
                   overlay={
                     <Tooltip id="brand-tooltip">
                       Preview of your branding image.

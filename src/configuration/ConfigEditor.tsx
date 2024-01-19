@@ -22,30 +22,33 @@
  * SOFTWARE.
  */
 /* eslint-disable no-case-declarations */
-import { JSX, useState, SyntheticEvent, memo } from 'react';
-import Button from 'react-bootstrap/Button';
-import { Accordion, Modal, OverlayTrigger, Tooltip } from 'react-bootstrap';
-import 'primereact/resources/primereact.min.css';
-import { useDispatch, useSelector } from 'react-redux';
-import store from 'store2';
-import '../css/hyde.css';
-import BitlyConfigurator from './Configurators/BitlyConfigurator';
-import MainValuesConfigurator from './Configurators/MainValuesConfigurator';
-import UTMConfigurator from './Configurators/UTMConfigurator';
-import QRConfigurator from './Configurators/QRConfigurator';
-import { RootState } from '../stores/store';
-import { BitlyConfig, MainSettings, QRSettings, UtmObj, UtmParams, WiFiSettings, IProps } from '../types';
-import { updateBitlySettings } from '../reducers/bitly/bitlySlice';
-import { updateMainSettings } from '../reducers/main/mainSlice';
-import { updateQRStyleSettings } from '../reducers/qr/qrCodeSettingsSlice';
-import { updateQRSettings } from '../reducers/qr/qrSlice';
-import { updateUTMCampaignSettings } from '../reducers/utm/utmCampaignSlice';
-import { updateUTMContentSettings } from '../reducers/utm/utmContentSlice';
-import { updateUTMKeywordSettings } from '../reducers/utm/utmKeywordSlice';
-import { updateUTMMediumSettings } from '../reducers/utm/utmMediumSlice';
-import { updateUTMSourceSettings } from '../reducers/utm/utmSourceSlice';
-import { updateUTMTargetSettings } from '../reducers/utm/utmTargetSlice';
-import { updateUTMTermSettings } from '../reducers/utm/utmTermSlice';
+import { JSX, useState, SyntheticEvent, memo } from "react";
+import Button from "react-bootstrap/Button";
+import { Accordion, Modal, OverlayTrigger, Tooltip } from "react-bootstrap";
+import "primereact/resources/primereact.min.css";
+import { useDispatch, useSelector } from "react-redux";
+import store from "store2";
+import "../css/hyde.css";
+import BitlyConfigurator from "./Configurators/BitlyConfigurator";
+import MainValuesConfigurator from "./Configurators/MainValuesConfigurator";
+import UTMConfigurator from "./Configurators/UTMConfigurator";
+import QRConfigurator from "./Configurators/QRConfigurator";
+import { RootState } from "../stores/store";
+import {
+  BitlyConfig,
+  MainSettings,
+  QRSettings,
+  UtmObj,
+  UtmParams,
+  WiFiSettings,
+  IProps,
+} from "../types";
+import { updateBitlySettings } from "../reducers/bitly/bitlySlice";
+import { updateMainSettings } from "../reducers/main/mainSlice";
+import { updateQRStyleSettings } from "../reducers/qr/qrCodeSettingsSlice";
+import { updateQRSettings } from "../reducers/qr/qrSlice";
+import { updateUTMCampaignSettings, updateUTMContentSettings, updateUTMKeywordSettings, updateUTMMediumSettings, updateUTMSourceSettings, updateUTMTargetSettings, updateUTMTermSettings } from "../reducers/utm/utmSlice";
+
 
 interface ConfigEditorProps {
   showMe: boolean;
@@ -57,31 +60,42 @@ function ConfigEditor(props: ConfigEditorProps): JSX.Element {
   const { showMe, callback } = props;
   const [targetValidated, setTargetValidated] = useState(false);
   const dark = useSelector((state: RootState) => state.dark.dark);
-  const darkClass = dark ? 'header-stuff-dark' : 'header-stuff';
-  const main: MainSettings = useSelector((state: RootState) => state.main.settings);
+  const darkClass = dark ? "header-stuff-dark" : "header-stuff";
+  const main: MainSettings = useSelector(
+    (state: RootState) => state.main.settings
+  );
   const qr: QRSettings = useSelector((state: RootState) => state.qr.settings);
-  const qrConf: IProps = useSelector((state: RootState) => state.qrCode.settings);
-  const wifi: WiFiSettings = useSelector((state: RootState) => state.wifi.settings);
-  const bitly: BitlyConfig = useSelector((state: RootState) => state.bitly.settings);
-  const utmTarget: UtmObj = useSelector((state: RootState) => state.utmTarget.settings);
-  const utmSource: UtmObj = useSelector((state: RootState) => state.utmSource.settings);
+  const qrConf: IProps = useSelector(
+    (state: RootState) => state.qrCode.settings
+  );
+  const wifi: WiFiSettings = useSelector(
+    (state: RootState) => state.wifi.settings
+  );
+  const bitly: BitlyConfig = useSelector(
+    (state: RootState) => state.bitly.settings
+  );
+  const utmTarget: UtmObj = useSelector(
+    (state: RootState) => state.utmStuff.settings.utm_target
+  );
+  const utmSource: UtmObj = useSelector(
+    (state: RootState) => state.utmStuff.settings.utm_source
+  );
   const utmCampaign: UtmObj = useSelector(
-    (state: RootState) => state.utmCampaign.settings
+    (state: RootState) => state.utmStuff.settings.utm_campaign
   );
   const utmMedium: UtmObj = useSelector(
-    (state: RootState) => state.utmMedium.settings
+    (state: RootState) => state.utmStuff.settings.utm_medium
   );
   const utmContent: UtmObj = useSelector(
-    (state: RootState) => state.utmContent.settings
+    (state: RootState) => state.utmStuff.settings.utm_content
   );
   const utmTerm: UtmObj = useSelector(
-    (state: RootState) => state.utmTerm.settings
+    (state: RootState) => state.utmStuff.settings.utm_term
   );
   const utmKeyword: UtmObj = useSelector(
-    (state: RootState) => state.utmKeyword.settings
+    (state: RootState) => state.utmStuff.settings.utm_keyword
   );
 
-  console.log(`ConfigEditor: ${showMe}`);
   /* handle closing without saving */
   const handleCancel = () => {
     const uc = store.get("utm-config");
@@ -127,11 +141,11 @@ function ConfigEditor(props: ConfigEditorProps): JSX.Element {
       event.preventDefault();
       event.stopPropagation();
     }
-    store.set('main-config', main);
-    store.set('qr-config', qr);
-    store.set('qr-style', qrConf);
-    store.set('wifi-config', wifi);
-    store.set('bitly-config', bitly);
+    store.set("main-config", main);
+    store.set("qr-config", qr);
+    store.set("qr-style", qrConf);
+    store.set("wifi-config", wifi);
+    store.set("bitly-config", bitly);
     const utmConfig = {
       utm_target: utmTarget,
       utm_source: utmSource,
@@ -141,7 +155,7 @@ function ConfigEditor(props: ConfigEditorProps): JSX.Element {
       utm_term: utmTerm,
       utm_keyword: utmKeyword,
     } as UtmParams;
-    store.set('utm-config', utmConfig);
+    store.set("utm-config", utmConfig);
     setTargetValidated(true);
     callDone();
   };
@@ -160,14 +174,15 @@ function ConfigEditor(props: ConfigEditorProps): JSX.Element {
         </Modal.Header>
         <Modal.Body>
           <Accordion>
+            {/* Fence off for Basic/Enterprise license */}
             {/* General Config */}
             <Accordion.Item eventKey="0">
               <OverlayTrigger
                 placement="auto"
+                delay={{ show: 250, hide: 300 }}
                 overlay={
                   <Tooltip id="general-tooltip">
-                    Configuration settings for Bit.ly
-                    integration
+                    Configuration settings for Bit.ly integration
                   </Tooltip>
                 }
               >
@@ -179,15 +194,20 @@ function ConfigEditor(props: ConfigEditorProps): JSX.Element {
                 <Accordion>
                   {/* Bitly Configuration */}
                   <BitlyConfigurator eKey="0" />
+                  {/* Fence off for Enterprise Licnse */}
                   {/* UI Images */}
-                  {/* <MainValuesConfigurator targetValidated={targetValidated} /> */}
+                  <MainValuesConfigurator targetValidated={targetValidated} />
+                  {/* End fence */}
                 </Accordion>
               </Accordion.Body>
             </Accordion.Item>
+            {/* End fence */}
+            {/* Fence off for Basic/Enterprise License */}
             {/* QR Code Configuration */}
             <Accordion.Item eventKey="1">
               <OverlayTrigger
                 placement="auto"
+                delay={{ show: 250, hide: 300 }}
                 overlay={
                   <Tooltip id="qr-tooltip">
                     Configuration settings for the QR Code
@@ -200,10 +220,12 @@ function ConfigEditor(props: ConfigEditorProps): JSX.Element {
               </OverlayTrigger>
               <QRConfigurator />
             </Accordion.Item>
+            {/* End fence */}
             {/* WiFi Form Configuration */}
             {/* <Accordion.Item eventKey="2">
               <OverlayTrigger
                 placement="auto"
+                delay={{ show: 250, hide: 300 }}
                 overlay={
                   <Tooltip id="wifi-tooltip">
                     Configuration settings for the WiFi Form
@@ -216,10 +238,12 @@ function ConfigEditor(props: ConfigEditorProps): JSX.Element {
               </OverlayTrigger>
               <WiFiConfigurator eKey="2" />
             </Accordion.Item> */}
+            {/* Fence off for Basic/Enterprise License */}
             {/* UTM Codes */}
             <Accordion.Item eventKey="2">
               <OverlayTrigger
                 placement="auto"
+                delay={{ show: 250, hide: 300 }}
                 overlay={
                   <Tooltip id="utm-tooltip">
                     Configuration settings for the UTM Codes and how they are
@@ -233,11 +257,13 @@ function ConfigEditor(props: ConfigEditorProps): JSX.Element {
               </OverlayTrigger>
               <UTMConfigurator />
             </Accordion.Item>
+            {/* End fence */}
           </Accordion>
         </Modal.Body>
         <Modal.Footer>
           <OverlayTrigger
             placement="auto"
+            delay={{ show: 250, hide: 300 }}
             overlay={
               <Tooltip id="cancel-tooltip">
                 Close the configuration editor without saving
@@ -250,6 +276,7 @@ function ConfigEditor(props: ConfigEditorProps): JSX.Element {
           </OverlayTrigger>
           <OverlayTrigger
             placement="auto"
+            delay={{ show: 250, hide: 300 }}
             overlay={
               <Tooltip id="save-tooltip">
                 Save the configuration settings

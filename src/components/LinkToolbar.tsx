@@ -35,7 +35,6 @@ import { makeLongLink } from '../utils/LongLink';
 import { updateFormType } from '../reducers/main/mainSlice';
 import {
   setActiveLink,
-  setLinkHistory,
   setUtmLinkHistory,
   setWifiLinkHistory,
 } from '../reducers/history/historySlice';
@@ -45,17 +44,18 @@ import DownloadButton from './buttons/DownloadButton';
 
 export default function LinkToolbar(): JSX.Element {
   const dispatch = useDispatch();
-  const dark = useSelector((state: RootState) => state.dark.dark);
+  const dark = useSelector((state: RootState) => state.dark?.dark);
   const darkClass = dark ? 'header-stuff-dark' : 'header-stuff';
-  const mainSet = useSelector((state: RootState) => state.main.settings);
+  const mainSet = useSelector((state: RootState) => state.main?.settings);
   const useBitly = useSelector(
-    (state: RootState) => state.bitly.settings.useValue,
+    (state: RootState) => state.bitly?.settings?.useValue,
   );
+  // fence for basic license
   const linkHistory = useSelector(
-    (state: RootState) => state.history.linkHistory,
+    (state: RootState) => state.history?.linkHistory,
   );
   const activeLink = useSelector(
-    (state: RootState) => state.history.activeLink,
+    (state: RootState) => state.history?.activeLink,
   );
 
   /**
@@ -63,7 +63,7 @@ export default function LinkToolbar(): JSX.Element {
    */
 
   const clearForm = () => {
-    switch (mainSet.formType) {
+    switch (mainSet?.formType) {
       case 'wifi':
         dispatch(
           setActiveLink({
@@ -111,14 +111,15 @@ export default function LinkToolbar(): JSX.Element {
     }
   };
 
+  /* Fence off for basic license */
   /* Save link to the main process */
   function saveLink(): void {
-    if (mainSet.formType === 'wifi') {
+    if (mainSet?.formType === 'wifi') {
       const wfl: WiFiLink = {
-        ssid: activeLink.ssid ? activeLink.ssid : '',
-        encryption: activeLink.encryption ? activeLink.encryption : 'nopass',
-        password: activeLink.password ? activeLink.password : '',
-        hidden: activeLink.hidden ? activeLink.hidden : false,
+        ssid: activeLink?.ssid ? activeLink?.ssid : '',
+        encryption: activeLink?.encryption ? activeLink?.encryption : 'nopass',
+        password: activeLink?.password ? activeLink?.password : '',
+        hidden: activeLink?.hidden ? activeLink?.hidden : false,
         uuid: ReactId(),
       };
       const wfLinks = linkHistory.wifi_link ? [...linkHistory.wifi_link] : [];
@@ -132,20 +133,20 @@ export default function LinkToolbar(): JSX.Element {
       // save a utm Link
       const displayLink = {
         long_link: makeLongLink(activeLink),
-        short_link: activeLink.short_link ? activeLink.short_link : '',
+        short_link: activeLink?.short_link ? activeLink?.short_link : '',
         uuid: ReactId(),
-        utm_target: activeLink.utm_target ? activeLink.utm_target : undefined,
-        utm_campaign: activeLink.utm_campaign
-          ? activeLink.utm_campaign
+        utm_target: activeLink?.utm_target ? activeLink?.utm_target : undefined,
+        utm_campaign: activeLink?.utm_campaign
+          ? activeLink?.utm_campaign
           : undefined,
-        utm_source: activeLink.utm_source ? activeLink.utm_source : undefined,
-        utm_medium: activeLink.utm_medium ? activeLink.utm_medium : undefined,
-        utm_term: activeLink.utm_term ? activeLink.utm_term : undefined,
-        utm_content: activeLink.utm_content
-          ? activeLink.utm_content
+        utm_source: activeLink?.utm_source ? activeLink?.utm_source : undefined,
+        utm_medium: activeLink?.utm_medium ? activeLink?.utm_medium : undefined,
+        utm_term: activeLink?.utm_term ? activeLink?.utm_term : undefined,
+        utm_content: activeLink?.utm_content
+          ? activeLink?.utm_content
           : undefined,
-        utm_keyword: activeLink.utm_keyword
-          ? activeLink.utm_keyword
+        utm_keyword: activeLink?.utm_keyword
+          ? activeLink?.utm_keyword
           : undefined,
       };
       const utmLinks = linkHistory.utm_link ? [...linkHistory.utm_link] : [];
@@ -155,6 +156,7 @@ export default function LinkToolbar(): JSX.Element {
       dispatch(setUtmLinkHistory(utmLinks));
     }
   }
+  /* End fence */
 
   /**
    *
@@ -169,23 +171,24 @@ export default function LinkToolbar(): JSX.Element {
 
   return (
     <div className="fullrow">
+      {/* fence for basic license */}
       {/* bitly enable */}
-      {useBitly && mainSet.formType !== 'wifi' ? (
-        <div className="col15">
+      {useBitly && mainSet?.formType !== 'wifi' ? (
+        <div className="col20">
           <BitlyCheck />
         </div>
       ) : null}
-
+      {/* end fence */}
       {/* QR Type selector */}
       <div
-        className={useBitly ? 'col85' : 'fullrow'}
+        className={useBitly ? 'col80' : 'fullrow'}
         style={{ paddingTop: '0px' }}
       >
         <div className="fullrow" style={{ paddingTop: '0px' }}>
-          <div className="col15">
+          <div className="col15" style={{marginTop: '2px'}}>
             <Form.Label className={darkClass}>Link Type</Form.Label>
           </div>
-          <div className="col25">
+          <div className="col25" style={{ fontSize: 14}}>
             <Form.Select
               className={darkClass}
               size="sm"
@@ -200,7 +203,7 @@ export default function LinkToolbar(): JSX.Element {
                 }
                 saveFormType(e.target.value);
               }}
-              value={mainSet.formType}
+              value={mainSet?.formType}
             >
               <option key="none" value="Choose one ...">
                 Choose One ...
@@ -215,18 +218,20 @@ export default function LinkToolbar(): JSX.Element {
                 WiFi QR Code
               </option>
             </Form.Select>
-          </div>
+              </div>
           {/* spacer */}
           <div className="spacer" />
+          {/* fence for Basic License */}
           {/* history button */}
           <div className="col25">
             <HistoryChooser />
           </div>
+          {/* end fence */}
           {/* Spacer */}
-          <div className={useBitly ? 'col15' : 'col10'} />
+          <div className='col10' />
           <div
-            className="col20"
-            style={{ paddingTop: '0px', paddingRight: '15px' }}
+            className="col30"
+            style={{ paddingTop: '0px', margin: 'auto' }}
           >
             <div className="fullrow">
               {/* download QR Code BUtton */}
@@ -241,6 +246,7 @@ export default function LinkToolbar(): JSX.Element {
               </div>
               {/* spacer */}
               <div className="col10px" />
+              {/* fence for basic license */}
               {/* save button */}
               <div className="colauto">
                 <OverlayTrigger
@@ -263,6 +269,7 @@ export default function LinkToolbar(): JSX.Element {
                   </Button>
                 </OverlayTrigger>
               </div>
+              {/* end fence */}
               {/* spacer */}
               <div className="col10px" />
               {/* clear button */}

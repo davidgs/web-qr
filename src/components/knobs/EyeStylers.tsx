@@ -66,11 +66,11 @@ export default function EyeStylers() {
     <div className="col40">
       {/* Top Left & right labels */}
       <div className="fullrow">
-        <div className="col40" style={{ margin: 'auto' }}>
+        <div className="col40" style={{ margin: "auto" }}>
           <Form.Label className={darkClass}>Top Left: </Form.Label>
         </div>
         <div className="col10" />
-        <div className="col40" style={{ margin: 'auto' }}>
+        <div className="col40" style={{ margin: "auto" }}>
           <Form.Label className={darkClass}>Top Right: </Form.Label>
         </div>
         <div className="col10" />
@@ -79,6 +79,7 @@ export default function EyeStylers() {
       <div className="fullrow">
         <OverlayTrigger
           placement="auto"
+          delay={{ show: 250, hide: 300 }}
           overlay={
             <Tooltip id="qr-tooltip">
               Adjust the shape of each corner of the upper-left eye component
@@ -154,6 +155,7 @@ export default function EyeStylers() {
         {/* Top Right knobs */}
         <OverlayTrigger
           placement="auto"
+          delay={{ show: 250, hide: 300 }}
           overlay={
             <Tooltip id="qr-tooltip">
               Adjust the shape of each corner of the upper-right eye component
@@ -223,16 +225,17 @@ export default function EyeStylers() {
         </OverlayTrigger>
       </div>
       <div className="fullrow">
-        <div className="col40" style={{ margin: 'auto' }}>
+        <div className="col40" style={{ margin: "auto" }}>
           <Form.Label className={darkClass}>Bottom Left:</Form.Label>
         </div>
         <div className="col10" />
-        <div className="col40" style={{ margin: 'auto' }} />
+        <div className="col40" style={{ margin: "auto" }} />
         <div className="col10" />
       </div>
       <div className="fullrow">
         <OverlayTrigger
           placement="auto"
+          delay={{ show: 250, hide: 300 }}
           overlay={
             <Tooltip id="qr-tooltip">
               Adjust the shape of each corner of the lower-left eye component

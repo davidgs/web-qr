@@ -27,15 +27,15 @@ import Checker from '../buttons/Checker';
 import { RootState } from '../../stores/store';
 import { useSelector, useDispatch } from 'react-redux';
 import {
-  updateLabel,
-  updateValue,
-  updateAriaLabel,
-  updateError,
-  updateIsChooser,
-  updateShowName,
-  updateTooltip,
-  updateUseValue,
-} from '../../reducers/utm/utmContentSlice';
+  updateContentLabel,
+  updateContentValue,
+  updateContentAriaLabel,
+  updateContentError,
+  updateContentIsChooser,
+  updateContentShowName,
+  updateContentTooltip,
+  updateContentUseValue,
+} from "../../reducers/utm/utmSlice";
 import PillArea from '../pills/PillArea';
 
 export default function UTMAccordianItem(): JSX.Element {
@@ -46,13 +46,15 @@ export default function UTMAccordianItem(): JSX.Element {
   const itemNo: string = '3';
   const type: string = 'UTM Content';
   const accValue = useSelector(
-    (state: RootState) => state.utmContent.settings as UtmObj,
+    (state: RootState) => state.utmStuff.settings.utm_content as UtmObj,
   );
   const [kvValue, setKvValue] = useState<string>('');
   const [valValid, setValValid] = useState<boolean>(true);
 
   const [fieldValue, setFieldValue] = useState<string>(
-    accValue.showName ? `${accValue?.label} (${valKind})` : `${accValue.label}`,
+    accValue.showName
+      ? `${accValue?.label} (${valKind})`
+      : `${accValue.label}`
   );
 
   const updateFieldValue = (eventKey: SyntheticEvent) => {
@@ -66,7 +68,7 @@ export default function UTMAccordianItem(): JSX.Element {
       setFieldValue(v);
     }
     const newV = v.replace(`(${valKind})`, '').trim();
-    dispatch(updateLabel(newV));
+    dispatch(updateContentLabel(newV));
   };
   /**
    * delete a pill value
@@ -81,7 +83,7 @@ export default function UTMAccordianItem(): JSX.Element {
         tEntries.splice(t, 1);
       }
     }
-    dispatch(updateValue(tEntries));
+    dispatch(updateContentValue(tEntries));
   };
 
   /**
@@ -104,13 +106,14 @@ export default function UTMAccordianItem(): JSX.Element {
       value: target?.value?.replace(/,/g, '').split('=')[0].trim(),
     };
     newTrm.push(newTrmPill);
-    dispatch(updateValue(newTrm));
+    dispatch(updateContentValue(newTrm));
   };
 
   return (
     <Accordion.Item eventKey={`"${itemNo}"`}>
       <OverlayTrigger
         placement="auto"
+        delay={{ show: 250, hide: 300 }}
         overlay={
           <Tooltip id={`${valKind}-accordion`}>
             Edit configuration for {type}
@@ -140,7 +143,7 @@ export default function UTMAccordianItem(): JSX.Element {
                     : `Check to use the '${valKind}' value`
                 }
                 callback={(value) => {
-                  dispatch(updateUseValue(value));
+                  dispatch(updateContentUseValue(value));
                 }}
               />
             </div>
@@ -158,6 +161,7 @@ export default function UTMAccordianItem(): JSX.Element {
               <div className="fullrow">
                 <OverlayTrigger
                   placement="auto"
+                  delay={{ show: 250, hide: 300 }}
                   overlay={
                     <Tooltip id={`${type}-label-tooltip`}>
                       Enter the label for the {type} field
@@ -191,8 +195,8 @@ export default function UTMAccordianItem(): JSX.Element {
                     label=""
                     tooltip={
                       accValue.showName
-                        ? 'Uncheck to hide the field name in the field label'
-                        : 'Check to show the field name in the field label'
+                        ? "Uncheck to hide the field name in the field label"
+                        : "Check to show the field name in the field label"
                     }
                     callback={(value) => {
                       if (value) {
@@ -200,7 +204,7 @@ export default function UTMAccordianItem(): JSX.Element {
                       } else {
                         setFieldValue(`${accValue?.label}`);
                       }
-                      dispatch(updateShowName(value));
+                      dispatch(updateContentShowName(value));
                     }}
                   />
                 </div>
@@ -216,6 +220,7 @@ export default function UTMAccordianItem(): JSX.Element {
               <div className="fullrow">
                 <OverlayTrigger
                   placement="auto"
+                  delay={{ show: 250, hide: 300 }}
                   overlay={
                     <Tooltip id={`${valKind}-tooltip-tooltip`}>
                       Enter the tooltip text for the {valKind} field
@@ -227,9 +232,9 @@ export default function UTMAccordianItem(): JSX.Element {
                     type="text"
                     id={`${valKind}-tooltip`}
                     placeholder={`Enter ${valKind} field tooltip`}
-                    value={accValue.tooltip ? accValue.tooltip : ''}
+                    value={accValue.tooltip ? accValue.tooltip : ""}
                     onChange={(e) => {
-                      dispatch(updateTooltip(e.target.value));
+                      dispatch(updateContentTooltip(e.target.value));
                     }}
                   />
                 </OverlayTrigger>
@@ -244,9 +249,10 @@ export default function UTMAccordianItem(): JSX.Element {
               <div className="fullrow">
                 <OverlayTrigger
                   placement="auto"
+                  delay={{ show: 250, hide: 300 }}
                   overlay={
                     <Tooltip id={`${valKind}-aria-tooltip`}>
-                      Enter the ARIA (Accessibility) text for the {valKind}{' '}
+                      Enter the ARIA (Accessibility) text for the {valKind}{" "}
                       field
                     </Tooltip>
                   }
@@ -259,7 +265,7 @@ export default function UTMAccordianItem(): JSX.Element {
                     required
                     value={accValue.ariaLabel}
                     onChange={(e) => {
-                      dispatch(updateAriaLabel(e.target.value));
+                      dispatch(updateContentAriaLabel(e.target.value));
                     }}
                   />
                 </OverlayTrigger>
@@ -274,6 +280,7 @@ export default function UTMAccordianItem(): JSX.Element {
               <div className="fullrow">
                 <OverlayTrigger
                   placement="auto"
+                  delay={{ show: 250, hide: 300 }}
                   overlay={
                     <Tooltip id={`${valKind}-error-tooltip`}>
                       Enter the error text for the {valKind} field
@@ -287,7 +294,7 @@ export default function UTMAccordianItem(): JSX.Element {
                     placeholder={`Enter ${valKind} field error text`}
                     value={accValue.error}
                     onChange={(e) => {
-                      dispatch(updateError(e.target.value));
+                      dispatch(updateContentError(e.target.value));
                     }}
                   />
                 </OverlayTrigger>
@@ -306,7 +313,7 @@ export default function UTMAccordianItem(): JSX.Element {
                         label=""
                         tooltip={`Use a chooser to create a pre-defined list of allowed values for ${valKind}`}
                         callback={(value) => {
-                          dispatch(updateIsChooser(value));
+                          dispatch(updateContentIsChooser(value));
                         }}
                       />
                     </div>
@@ -323,7 +330,7 @@ export default function UTMAccordianItem(): JSX.Element {
                         label=""
                         tooltip={`Use a Text Field to allow the user to enter any value for ${valKind}`}
                         callback={(value) => {
-                          dispatch(updateIsChooser(!value));
+                          dispatch(updateContentIsChooser(!value));
                         }}
                       />
                     </div>
@@ -350,9 +357,10 @@ export default function UTMAccordianItem(): JSX.Element {
                   <div className="fullrow">
                     <OverlayTrigger
                       placement="auto"
+                      delay={{ show: 250, hide: 300 }}
                       overlay={
                         <Tooltip id={`${valKind}-values-tooltip`}>
-                          Create a predefined list of values for the {valKind}{' '}
+                          Create a predefined list of values for the {valKind}{" "}
                           field
                         </Tooltip>
                       }
@@ -361,7 +369,7 @@ export default function UTMAccordianItem(): JSX.Element {
                         className={darkClass}
                         type="text"
                         placeholder="Enter comma-separated list of key=value pairs to use"
-                        value={kvValue || ''}
+                        value={kvValue || ""}
                         required
                         id={`${valKind}-values`}
                         isInvalid={!valValid}

@@ -23,14 +23,14 @@
  */
 import { useState, KeyboardEventHandler } from 'react';
 import { QRCode } from 'react-qrcode-logo';
-import { OverlayTrigger, Tooltip, Row } from 'react-bootstrap';
+import { OverlayTrigger, Tooltip } from 'react-bootstrap';
 import { ClipboardData, Clipboard2CheckFill } from 'react-bootstrap-icons';
 import potrace from 'potrace';
 import { useSelector } from 'react-redux';
 import { RootState } from '../stores/store';
 import ReactId from '../utils/ReactId';
 
-export default function QCode() {
+export default function MobileQCode() {
   const [copied, setCopied] = useState<boolean>(false);
   const qSet = useSelector((state: RootState) => state.qr.settings);
   const settings = useSelector((state: RootState) => state.main.settings);
@@ -98,142 +98,136 @@ export default function QCode() {
   }
 
   return (
-    <div>
-      <div
-        className="alert-columns"
-        style={{ display: "flex", flexDirection: "row" }}
-      >
-        {settings.formType !== "wifi" && (
-          <>
-            <div className="alert-column1">
-              {copied && (
-                <OverlayTrigger
-                  delay={{ show: 250, hide: 300 }}
-                  rootClose
-                  overlay={
-                    <Tooltip id="alert-tooltip">
-                      You have successfully copied the link!
-                    </Tooltip>
-                  }
-                >
-                  <Clipboard2CheckFill
-                    className={darkIconClass}
-                    style={{
-                      fontSize: "2rem",
-                    }}
-                  />
-                </OverlayTrigger>
-              )}
-              {!copied && (
-                <OverlayTrigger
-                  placement="auto"
-                  delay={{ show: 250, hide: 300 }}
-                  rootClose
-                  overlay={
-                    <Tooltip id="alert-copied-tooltip">
-                      Click here to copy your link!
-                    </Tooltip>
-                  }
-                >
-                  <ClipboardData
-                    className={darkIconClass}
-                    style={{
-                      fontSize: "2rem",
-                    }}
-                    tabIndex={0}
-                    cursor="pointer"
-                    role="button"
-                    // eslint-disable-next-line react/jsx-no-bind
-                    onClick={copyMe}
-                    // eslint-disable-next-line react/jsx-no-bind
-                    onKeyDown={null as unknown as KeyboardEventHandler}
-                    title="Click to copy your link!"
-                  />
-                </OverlayTrigger>
-              )}
+    <>
+      <div className='fullrow'>
+        <div id="qr-element" style={{ margin: "auto" }}>
+          <OverlayTrigger
+            placement="auto"
+            delay={{ show: 250, hide: 300 }}
+            rootClose
+            overlay={
+              <Tooltip id="qrcode-tooltip">
+                Click the QR Code or the &lsquo;Download&rsquo; button to save
+                the QR Code
+              </Tooltip>
+            }
+          >
+            <div
+              onClick={onDownloadClick}
+              onKeyDown={null as unknown as KeyboardEventHandler}
+              role="button"
+              tabIndex={-1}
+            aria-label="Download QR Code"
+            style={{ margin: 'auto' }}
+            >
+              <QRCode
+                id="react-qrcode-logo"
+                value={
+                  qrSettings?.value
+                    ? qrSettings?.value
+                    : "http://www.example.com/"
+                }
+                size={qrSettings?.size}
+                bgColor={qrSettings?.bgColor}
+                fgColor={qrSettings?.fgColor}
+                logoImage={qrSettings?.logoImage}
+                qrStyle={qrSettings?.qrStyle}
+                logoWidth={qrSettings?.logoWidth}
+                logoHeight={qrSettings?.logoHeight}
+                logoOpacity={qrSettings?.logoOpacity}
+                eyeColor={qrSettings?.eyeColor}
+                eyeRadius={qrSettings?.eyeRadius}
+                quietZone={qrSettings?.quietZone}
+                enableCORS={qrSettings?.enableCORS}
+                ecLevel={qrSettings?.ecLevel}
+                logoPadding={qrSettings?.logoPadding}
+                logoPaddingStyle={
+                  qrSettings?.logoPaddingStyle !== "none"
+                    ? qrSettings?.logoPaddingStyle
+                    : undefined
+                }
+              />
             </div>
-            <div className="alert-column2">
+          </OverlayTrigger>
+        </div>
+      </div>
+      {settings.formType !== "wifi" && (
+        <div className='fullrow' style={{height: '80px'}}>
+          <div className="col45">
+            {copied && (
+              <OverlayTrigger
+                delay={{ show: 250, hide: 300 }}
+                rootClose
+                overlay={
+                  <Tooltip id="alert-tooltip">
+                    You have successfully copied the link!
+                  </Tooltip>
+                }
+              >
+                <Clipboard2CheckFill
+                  className={darkIconClass}
+                  style={{
+                    fontSize: "2rem",
+                  }}
+                />
+              </OverlayTrigger>
+            )}
+            {!copied && (
               <OverlayTrigger
                 placement="auto"
                 delay={{ show: 250, hide: 300 }}
                 rootClose
                 overlay={
-                  <Tooltip id="alert-copy-link-tooltip">
-                    {qrState
-                      ? "This data is encoded in the QR Code"
-                      : "Click here to copy your link!"}
+                  <Tooltip id="alert-copied-tooltip">
+                    Click here to copy your link!
                   </Tooltip>
                 }
               >
-                <div
-                  onClick={copyMe}
-                  onKeyDown={null as unknown as KeyboardEventHandler}
-                  role="button"
+                <ClipboardData
+                  className={darkIconClass}
+                  style={{
+                    fontSize: "2rem",
+                  }}
                   tabIndex={0}
-                >
-                  <strong style={{ cursor: "pointer" }} className={darkClass}>
-                    {qrSettings?.value}
-                  </strong>
-                </div>
+                  cursor="pointer"
+                  role="button"
+                  // eslint-disable-next-line react/jsx-no-bind
+                  onClick={copyMe}
+                  // eslint-disable-next-line react/jsx-no-bind
+                  onKeyDown={null as unknown as KeyboardEventHandler}
+                  title="Click to copy your link!"
+                />
               </OverlayTrigger>
-            </div>
-          </>
-        )}
-        <div
-          id="qr-element"
-          style={{ margin: settings.formType === "wifi" ? "auto" : "" }}
-        >
-          <Row style={{ margin: "auto" }}>
+            )}
+          </div>
+          <div className='col5' />
+          <div className="urlCol" >
             <OverlayTrigger
               placement="auto"
               delay={{ show: 250, hide: 300 }}
               rootClose
               overlay={
-                <Tooltip id="qrcode-tooltip">
-                  Click the QR Code or the &lsquo;Download&rsquo; button to save
-                  the QR Code
+                <Tooltip id="alert-copy-link-tooltip">
+                  {qrState
+                    ? "This data is encoded in the QR Code"
+                    : "Click here to copy your link!"}
                 </Tooltip>
               }
             >
               <div
-                onClick={onDownloadClick}
+                onClick={copyMe}
                 onKeyDown={null as unknown as KeyboardEventHandler}
                 role="button"
-                tabIndex={-1}
-                aria-label="Download QR Code"
+                tabIndex={0}
               >
-                <QRCode
-                  id="react-qrcode-logo"
-                  value={
-                    qrSettings?.value
-                      ? qrSettings?.value
-                      : "http://www.example.com/"
-                  }
-                  size={qrSettings?.size}
-                  bgColor={qrSettings?.bgColor}
-                  fgColor={qrSettings?.fgColor}
-                  logoImage={qrSettings?.logoImage}
-                  qrStyle={qrSettings?.qrStyle}
-                  logoWidth={qrSettings?.logoWidth}
-                  logoHeight={qrSettings?.logoHeight}
-                  logoOpacity={qrSettings?.logoOpacity}
-                  eyeColor={qrSettings?.eyeColor}
-                  eyeRadius={qrSettings?.eyeRadius}
-                  quietZone={qrSettings?.quietZone}
-                  enableCORS={qrSettings?.enableCORS}
-                  ecLevel={qrSettings?.ecLevel}
-                  logoPadding={qrSettings?.logoPadding}
-                  logoPaddingStyle={
-                    qrSettings?.logoPaddingStyle !== "none"
-                      ? qrSettings?.logoPaddingStyle
-                      : undefined
-                  }
-                />
+                <strong style={{ cursor: "pointer" }} className={darkClass}>
+                  {qrSettings?.value}
+                </strong>
               </div>
             </OverlayTrigger>
-          </Row>
+          </div>
         </div>
-      </div>
-    </div>
+      )}
+    </>
   );
 }

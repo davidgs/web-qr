@@ -22,14 +22,8 @@
  */
 import { configureStore } from '@reduxjs/toolkit';
 import qrCodeReducer from '../reducers/qr/qrCodeSettingsSlice';
-import utmTargetReducer from '../reducers/utm/utmTargetSlice';
 import wifiReducer from '../reducers/wifi/wifiSlice';
-import utmCampaignReducer from '../reducers/utm/utmCampaignSlice';
-import utmMediumReducer from '../reducers/utm/utmMediumSlice';
-import utmSourceReducer from '../reducers/utm/utmSourceSlice';
-import utmTermReducer from '../reducers/utm/utmTermSlice';
-import utmKeywordReducer from '../reducers/utm/utmKeywordSlice';
-import utmContentReducer from '../reducers/utm/utmContentSlice';
+import utmReducer from '../reducers/utm/utmSlice';
 import darkReducer from '../reducers/dark/darkSlice';
 import historyReducer from '../reducers/history/historySlice';
 import bitlyReducer from '../reducers/bitly/bitlySlice';
@@ -42,13 +36,7 @@ export const mainStore = configureStore({
     main: mainReducer,
     qr: qrReducer,
     qrCode: qrCodeReducer,
-    utmTarget: utmTargetReducer,
-    utmCampaign: utmCampaignReducer,
-    utmMedium: utmMediumReducer,
-    utmSource: utmSourceReducer,
-    utmTerm: utmTermReducer,
-    utmKeyword: utmKeywordReducer,
-    utmContent: utmContentReducer,
+    utmStuff: utmReducer,
     wifi: wifiReducer,
     dark: darkReducer,
     history: historyReducer,

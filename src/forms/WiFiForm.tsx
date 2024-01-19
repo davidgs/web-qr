@@ -22,7 +22,6 @@
  */
 import { SyntheticEvent, useState } from 'react';
 import {
-  Col,
   FloatingLabel,
   Form,
   FormControl,
@@ -103,74 +102,78 @@ export default function WifiForm() {
 
   return (
     <>
-      <div className="fullrow">
-        <div className="col20">
-          <Form.Label className={darkClass}>
-            <strong>{settings.encryption.label}</strong>
-          </Form.Label>
-        </div>
-        <div className="col30">
-          <OverlayTrigger
-            placement="auto"
-            overlay={
-              <Tooltip id="wifi-values-tooltip">
-                {settings.encryption.tooltip}
-              </Tooltip>
-            }
-          >
-            <Form.Select
-              className={darkClass}
-              size="sm"
-              required
-              aria-label={settings?.encryption.ariaLabel}
-              id="wifi-encryption-choice"
-              onChange={(eventKey) => {
-                if (eventKey.target.value === 'Choose one ...') {
-                  return;
-                }
-                // dispatch(updateEncryptionValue(eventKey.target.value));
-                valueChanged(eventKey);
-              }}
-              value={
-                activeLink.encryption === undefined
-                  ? 'Choose one ...'
-                  : activeLink.encryption
-              }
-            >
-              <option key="none" value="Choose one ...">
-                Choose One ...
-              </option>
-              <option key="nopass" id="nopass" value="nopass">
-                No Password
-              </option>
-              <option key="wep" id="WEP" value="WEP">
-                WEP
-              </option>
-              <option key="wpa" id="WPA/WPA2" value="WPA/WPA2">
-                WPA/WPA2
-              </option>
-            </Form.Select>
-          </OverlayTrigger>
-        </div>
-        <div className="col20" />
-        <div className="col25">
-          <Checker
-            cState={activeLink.hidden === undefined ? false : activeLink.hidden}
-            label={settings.hidden.label}
-            tooltip={settings.hidden.tooltip}
-            disabled={false}
-            callback={(value) => {
-              checkChanged(value);
-              dispatch(updateQRValue(wifiString));
-            }}
-          />
-        </div>
-      </div>
-      <div className="fullrow">
-        <InputGroup size="lg">
-          <Col sm={12}>
+      <Form>
+        <div className="fullrow">
+          <div className="col20">
+            <Form.Label className={darkClass}>
+              <strong>{settings.encryption.label}</strong>
+            </Form.Label>
+          </div>
+          <div className="col30">
             <OverlayTrigger
               placement="auto"
+              delay={{ show: 250, hide: 300 }}
+              overlay={
+                <Tooltip id="wifi-values-tooltip">
+                  {settings.encryption.tooltip}
+                </Tooltip>
+              }
+            >
+              <Form.Select
+                className={darkClass}
+                size="sm"
+                required
+                aria-label={settings?.encryption.ariaLabel}
+                id="wifi-encryption-choice"
+                onChange={(eventKey) => {
+                  if (eventKey.target.value === "Choose one ...") {
+                    return;
+                  }
+                  // dispatch(updateEncryptionValue(eventKey.target.value));
+                  valueChanged(eventKey);
+                }}
+                value={
+                  activeLink.encryption === undefined
+                    ? "Choose one ..."
+                    : activeLink.encryption
+                }
+              >
+                <option key="none" value="Choose one ...">
+                  Choose One ...
+                </option>
+                <option key="nopass" id="nopass" value="nopass">
+                  No Password
+                </option>
+                <option key="wep" id="WEP" value="WEP">
+                  WEP
+                </option>
+                <option key="wpa" id="WPA/WPA2" value="WPA/WPA2">
+                  WPA/WPA2
+                </option>
+              </Form.Select>
+            </OverlayTrigger>
+          </div>
+          <div className="col20" />
+          <div className="col25">
+            <Checker
+              cState={
+                activeLink.hidden === undefined ? false : activeLink.hidden
+              }
+              label={settings.hidden.label}
+              tooltip={settings.hidden.tooltip}
+              disabled={false}
+              callback={(value) => {
+                checkChanged(value);
+                dispatch(updateQRValue(wifiString));
+              }}
+            />
+          </div>
+        </div>
+        <div className="fullrow">
+          <InputGroup size="lg">
+            <OverlayTrigger
+              placement="auto"
+              delay={{ show: 250, hide: 300 }}
               overlay={
                 <Tooltip id="ssid-label-tooltip">
                   Enter the SSID (Network Name) for the WiFi network
@@ -186,21 +189,20 @@ export default function WifiForm() {
                   id="wifi-ssid"
                   aria-label={settings.ssid.ariaLabel}
                   aria-describedby={settings.ssid.tooltip}
-                  value={activeLink.ssid === undefined ? '' : activeLink.ssid}
+                  value={activeLink.ssid === undefined ? "" : activeLink.ssid}
                   onChange={(e) => {
                     valueChanged(e);
                   }}
                 />
               </FloatingLabel>
             </OverlayTrigger>
-          </Col>
-        </InputGroup>
-      </div>
-      <div className="fullrow input-group mb-3">
-        <InputGroup size="lg">
-          <Col sm={12}>
+          </InputGroup>
+        </div>
+        <div className="fullrow input-group mb-3">
+          <InputGroup size="lg">
             <OverlayTrigger
               placement="auto"
+              delay={{ show: 250, hide: 300 }}
               overlay={
                 <Tooltip id="ssid-label-tooltip">
                   Enter the WiFi Password for the WiFi network
@@ -222,22 +224,23 @@ export default function WifiForm() {
                     aria-describedby={settings.password.tooltip}
                     value={
                       activeLink.password === undefined
-                        ? ''
+                        ? ""
                         : activeLink.password
                     }
+                    autoComplete='password'
                     onChange={(e) => {
                       valueChanged(e);
                     }}
                   />
                 </FloatingLabel>
-                <InputGroup.Text onClick={toggle} style={{ cursor: 'pointer' }}>
+                <InputGroup.Text onClick={toggle} style={{ cursor: "pointer" }}>
                   {!passwordShown ? <EyeSlashFill /> : <Eye />}
                 </InputGroup.Text>
               </InputGroup>
             </OverlayTrigger>
-          </Col>
-        </InputGroup>
-      </div>
+          </InputGroup>
+        </div>
+      </Form>
     </>
   );
 }

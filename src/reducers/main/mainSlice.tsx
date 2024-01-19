@@ -49,6 +49,9 @@ export const mainSlice = createSlice({
     updateSidebar: (state, action) => {
       state.settings.sidebar = action.payload as 'open' | 'closed';
     },
+    updateFirstRun: (state, action) => {
+      state.settings.firstRun = action.payload as boolean;
+    },
     updateMainSettings: (state, action) => {
       const mSet: MainSettings = action.payload;
       state.settings = mSet;
@@ -67,6 +70,7 @@ export const {
   updateFormType,
   updateSidebar,
   updateMainSettings,
+  updateFirstRun,
   returnMainSettings,
 } = mainSlice.actions;
 

@@ -43,10 +43,11 @@ export default function QRConfigButton(): React.JSX.Element {
     <div>
       <OverlayTrigger
         placement="top"
+        delay={{ show: 250, hide: 300 }}
         overlay={<Tooltip id="adjust-qr-tooltip">Adjust your QR Code</Tooltip>}
       >
         <Button
-          variant={dark ? 'icon-only-dark' : 'icon-only'}
+          variant={dark ? "icon-only-dark" : "icon-only"}
           size="sm"
           onClick={showConfigWindow}
           className={darkClass}

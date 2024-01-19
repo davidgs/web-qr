@@ -127,7 +127,7 @@ export const defaultUTMTarget: UtmObj = {
 
 export const defaultUTMKeyword: UtmObj = {
   useValue: true,
-  isChooser: true,
+  isChooser: false,
   showName: true,
   label: 'Keywords',
   tooltip: 'Additional keywords to append to the link',
@@ -138,7 +138,7 @@ export const defaultUTMKeyword: UtmObj = {
 
 export const defaultUTMContent: UtmObj = {
   useValue: true,
-  isChooser: true,
+  isChooser: false,
   showName: true,
   label: 'Content',
   tooltip: 'Additional content to append to the link',
@@ -149,7 +149,7 @@ export const defaultUTMContent: UtmObj = {
 
 export const defaultUTMTerm: UtmObj = {
   useValue: true,
-  isChooser: true,
+  isChooser: false,
   showName: true,
   label: 'Term',
   tooltip: `What's the Campaign Term?`,
@@ -253,7 +253,8 @@ export type MainSettings = {
   brandWidth: number;
   brandOpacity: number;
   formType: 'simple' | 'encoded' | 'wifi';
-  sidebar: 'open' | 'closed';
+  sidebar: 'open' | 'closed' | 'top';
+  firstRun: boolean;
 };
 
 export type WiFiSettings = {
@@ -381,14 +382,14 @@ export const DefaultQRStyle: IProps = {
   quietZone: 2,
   enableCORS: true,
   bgColor: 'rgba(255, 255, 255, 1)',
-  fgColor: 'rgba(0, 0, 0, 1)',
+  fgColor: 'rgba(10, 28, 46, 1)',
   logoImage: '',
   logoWidth: 60,
   logoHeight: 60,
   logoOpacity: 1,
   removeQrCodeBehindLogo: false,
-  qrStyle: 'dots',
-  eyeColor: 'rgba(0, 0, 0, 1)',
+  qrStyle: 'squares',
+  eyeColor: 'rgb(10, 28, 46, 1)',
   eyeRadius: [
     [0, 0, 0, 0],
     [0, 0, 0, 0],
@@ -412,6 +413,7 @@ export const defaultMainSettings: MainSettings = {
   brandOpacity: 1.0,
   formType: 'simple',
   sidebar: 'open',
+  firstRun: true,
 };
 
 export const knobConfig = {

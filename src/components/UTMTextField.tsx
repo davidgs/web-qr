@@ -59,19 +59,19 @@ export default function UTMTextField(props: UTMTextFieldProps): JSX.Element {
       >
         <FloatingLabel
           label={
-            settings.showName
-              ? `${settings.label} (${targetType})`
-              : `${settings.label}`
+            settings?.showName
+              ? `${settings?.label} (${targetType})`
+              : `${settings?.label}`
           }
           className={darkClass}
         >
           <FormControl
             required
             className={darkClass}
-            type="text"
+            type={targetType === 'utm_target' ? "url" : "text"}
             size="sm"
             id={`${targetType}`}
-            aria-label={settings.ariaLabel}
+            aria-label={settings?.ariaLabel}
             aria-describedby={settings?.tooltip}
             value={value}
             onChange={(eventKey) => {
@@ -81,7 +81,7 @@ export default function UTMTextField(props: UTMTextFieldProps): JSX.Element {
         </FloatingLabel>
       </OverlayTrigger>
       <Form.Control.Feedback type="invalid">
-        {settings.error}
+        {settings?.error}
       </Form.Control.Feedback>
     </>
   );

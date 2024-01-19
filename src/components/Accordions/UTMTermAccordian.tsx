@@ -28,15 +28,15 @@ import Checker from '../buttons/Checker';
 import { RootState } from '../../stores/store';
 import { useSelector, useDispatch } from 'react-redux';
 import {
-  updateLabel,
-  updateValue,
-  updateAriaLabel,
-  updateError,
-  updateIsChooser,
-  updateShowName,
-  updateTooltip,
-  updateUseValue,
-} from '../../reducers/utm/utmTermSlice';
+  updateTermLabel,
+  updateTermValue,
+  updateTermAriaLabel,
+  updateTermError,
+  updateTermIsChooser,
+  updateTermShowName,
+  updateTermTooltip,
+  updateTermUseValue,
+} from "../../reducers/utm/utmSlice";
 import PillArea from '../pills/PillArea';
 
 export default function UTMTermAccordian(): JSX.Element {
@@ -47,7 +47,7 @@ export default function UTMTermAccordian(): JSX.Element {
   const itemNo: string = '5';
   const type: string = 'UTM Term';
   const accValue = useSelector(
-    (state: RootState) => state.utmTerm.settings as UtmObj,
+    (state: RootState) => state.utmStuff.settings.utm_term as UtmObj,
   );
   const [kvValue, setKvValue] = useState<string>('');
   const [valValid, setValValid] = useState<boolean>(true);
@@ -67,7 +67,7 @@ export default function UTMTermAccordian(): JSX.Element {
       setFieldValue(v);
     }
     const newV = v.replace(`(${valKind})`, '').trim();
-    dispatch(updateLabel(newV));
+    dispatch(updateTermLabel(newV));
   };
   /**
    * delete a pill value
@@ -81,7 +81,7 @@ export default function UTMTermAccordian(): JSX.Element {
         newVal.push(item);
       }
     });
-    dispatch(updateValue(newVal));
+    dispatch(updateTermValue(newVal));
   };
 
   /**
@@ -110,13 +110,14 @@ export default function UTMTermAccordian(): JSX.Element {
       }
     });
     newVals.push(newTrmPill);
-    dispatch(updateValue(newVals));
+    dispatch(updateTermValue(newVals));
   };
 
   return (
     <Accordion.Item eventKey={`"${itemNo}"`}>
       <OverlayTrigger
         placement="auto"
+        delay={{ show: 250, hide: 300 }}
         overlay={
           <Tooltip id={`${valKind}-accordion`}>
             Edit configuration for {type}
@@ -146,7 +147,7 @@ export default function UTMTermAccordian(): JSX.Element {
                     : `Check to use the '${valKind}' value`
                 }
                 callback={(value) => {
-                  dispatch(updateUseValue(value));
+                  dispatch(updateTermUseValue(value));
                 }}
               />
             </div>
@@ -164,6 +165,7 @@ export default function UTMTermAccordian(): JSX.Element {
               <div className="fullrow">
                 <OverlayTrigger
                   placement="auto"
+                  delay={{ show: 250, hide: 300 }}
                   overlay={
                     <Tooltip id={`${type}-label-tooltip`}>
                       Enter the label for the {type} field
@@ -197,8 +199,8 @@ export default function UTMTermAccordian(): JSX.Element {
                     label=""
                     tooltip={
                       accValue.showName
-                        ? 'Uncheck to hide the field name in the field label'
-                        : 'Check to show the field name in the field label'
+                        ? "Uncheck to hide the field name in the field label"
+                        : "Check to show the field name in the field label"
                     }
                     callback={(value) => {
                       if (value) {
@@ -206,7 +208,7 @@ export default function UTMTermAccordian(): JSX.Element {
                       } else {
                         setFieldValue(`${accValue?.label}`);
                       }
-                      dispatch(updateShowName(value));
+                      dispatch(updateTermShowName(value));
                     }}
                   />
                 </div>
@@ -222,6 +224,7 @@ export default function UTMTermAccordian(): JSX.Element {
               <div className="fullrow">
                 <OverlayTrigger
                   placement="auto"
+                  delay={{ show: 250, hide: 300 }}
                   overlay={
                     <Tooltip id={`${valKind}-tooltip-tooltip`}>
                       Enter the tooltip text for the {valKind} field
@@ -233,9 +236,9 @@ export default function UTMTermAccordian(): JSX.Element {
                     type="text"
                     id={`${valKind}-tooltip`}
                     placeholder={`Enter ${valKind} field tooltip`}
-                    value={accValue.tooltip ? accValue.tooltip : ''}
+                    value={accValue.tooltip ? accValue.tooltip : ""}
                     onChange={(e) => {
-                      dispatch(updateTooltip(e.target.value));
+                      dispatch(updateTermTooltip(e.target.value));
                     }}
                   />
                 </OverlayTrigger>
@@ -250,9 +253,10 @@ export default function UTMTermAccordian(): JSX.Element {
               <div className="fullrow">
                 <OverlayTrigger
                   placement="auto"
+                  delay={{ show: 250, hide: 300 }}
                   overlay={
                     <Tooltip id={`${valKind}-aria-tooltip`}>
-                      Enter the ARIA (Accessibility) text for the {valKind}{' '}
+                      Enter the ARIA (Accessibility) text for the {valKind}{" "}
                       field
                     </Tooltip>
                   }
@@ -265,7 +269,7 @@ export default function UTMTermAccordian(): JSX.Element {
                     required
                     value={accValue.ariaLabel}
                     onChange={(e) => {
-                      dispatch(updateAriaLabel(e.target.value));
+                      dispatch(updateTermAriaLabel(e.target.value));
                     }}
                   />
                 </OverlayTrigger>
@@ -280,6 +284,7 @@ export default function UTMTermAccordian(): JSX.Element {
               <div className="fullrow">
                 <OverlayTrigger
                   placement="auto"
+                  delay={{ show: 250, hide: 300 }}
                   overlay={
                     <Tooltip id={`${valKind}-error-tooltip`}>
                       Enter the error text for the {valKind} field
@@ -293,7 +298,7 @@ export default function UTMTermAccordian(): JSX.Element {
                     placeholder={`Enter ${valKind} field error text`}
                     value={accValue.error}
                     onChange={(e) => {
-                      dispatch(updateError(e.target.value));
+                      dispatch(updateTermError(e.target.value));
                     }}
                   />
                 </OverlayTrigger>
@@ -312,7 +317,7 @@ export default function UTMTermAccordian(): JSX.Element {
                         label=""
                         tooltip={`Use a chooser to create a pre-defined list of allowed values for ${valKind}`}
                         callback={(value) => {
-                          dispatch(updateIsChooser(value));
+                          dispatch(updateTermIsChooser(value));
                         }}
                       />
                     </div>
@@ -329,7 +334,7 @@ export default function UTMTermAccordian(): JSX.Element {
                         label=""
                         tooltip={`Use a Text Field to allow the user to enter any value for ${valKind}`}
                         callback={(value) => {
-                          dispatch(updateIsChooser(!value));
+                          dispatch(updateTermIsChooser(!value));
                         }}
                       />
                     </div>
@@ -355,9 +360,10 @@ export default function UTMTermAccordian(): JSX.Element {
                   <div className="fullrow">
                     <OverlayTrigger
                       placement="auto"
+                      delay={{ show: 250, hide: 300 }}
                       overlay={
                         <Tooltip id={`${valKind}-values-tooltip`}>
-                          Create a predefined list of values for the {valKind}{' '}
+                          Create a predefined list of values for the {valKind}{" "}
                           field
                         </Tooltip>
                       }
@@ -366,7 +372,7 @@ export default function UTMTermAccordian(): JSX.Element {
                         className={darkClass}
                         type="text"
                         placeholder="Enter comma-separated list of key=value pairs to use"
-                        value={kvValue || ''}
+                        value={kvValue || ""}
                         required
                         id={`${valKind}-values`}
                         isInvalid={!valValid}

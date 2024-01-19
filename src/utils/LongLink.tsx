@@ -24,7 +24,7 @@ import { ActiveLink } from '../types';
 
 export function makeLongLink(linkParts: ActiveLink): string {
   let tempLink: string = 'https://www.example.com/';
-  tempLink = linkParts.utm_target?.endsWith('/')
+  tempLink = linkParts?.utm_target?.endsWith('/')
     ? linkParts?.utm_target
     : `${linkParts?.utm_target}/`;
   if (linkParts?.utm_campaign !== '' && linkParts?.utm_campaign !== undefined) {
@@ -61,5 +61,5 @@ export function makeLongLink(linkParts: ActiveLink): string {
 }
 
 export function makeWiFiLink(linkParts: ActiveLink): string {
-  return `WIFI:S:${linkParts.ssid};T:${linkParts.encryption};P:${linkParts.password};H:${linkParts.hidden};;`;
+  return `WIFI:S:${linkParts?.ssid};T:${linkParts?.encryption};P:${linkParts?.password};H:${linkParts?.hidden};;`;
 }

@@ -45,16 +45,10 @@ export default function DownloadButton() {
     // eslint-disable-next-line func-names
     potrace.trace(dataURL, params, function (err: any, svg: any) {
       if (err) throw err;
-      // // eslint-disable-next-line promise/no-promise-in-callback
-      // window.electronAPI
-      //   .saveSVG(svg)
-      //   .then(() => {
-      //     return '';
-      //   })
-      //   .catch((error: unknown) => {
-      //     // eslint-disable-next-line no-console
-      //     console.log(`Error: ${error}`);
-      //   });
+      const a = document.createElement('a');
+      a.href = `data:image/svg+xml;base64,${btoa(svg)}`;
+      a.download = `qrcode-${ReactId()}.svg`;
+      a.click();
     });
   };
 
@@ -76,18 +70,19 @@ export default function DownloadButton() {
   return (
     <OverlayTrigger
       placement="top"
+      delay={{ show: 250, hide: 300 }}
       overlay={
         <Tooltip id="download-qr-tooltip">Download your QR Code</Tooltip>
       }
     >
       <Button
-        variant={dark ? 'icon-only-dark' : 'icon-only'}
+        variant={dark ? "icon-only-dark" : "icon-only"}
         size="sm"
         onClick={onDownloadClick}
         className={darkClass}
-        style={{ float: 'right', alignItems: 'center' }}
+        style={{ float: "right", alignItems: "center" }}
       >
-        <Download className={darkClass} color={dark ? '#adb5bd' : '#0B263E'} />
+        <Download className={darkClass} color={dark ? "#adb5bd" : "#0B263E"} />
       </Button>
     </OverlayTrigger>
   );
