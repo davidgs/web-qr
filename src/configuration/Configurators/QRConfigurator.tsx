@@ -58,7 +58,6 @@ import Locked from '../../components/Locked';
 import OpacityAdjuster from '../../components/knobs/OpacityAdjuster';
 import UnLocked from '../../components/Unlocked';
 import { RootState } from '../../stores/store';
-import { useDebounce } from '@uidotdev/usehooks';
 
 export default function QRConfigurator() {
   const dark = useSelector((state: RootState) => state.dark.dark);
@@ -71,9 +70,6 @@ export default function QRConfigurator() {
   const maxQrHeight = qrSettings.size * 0.3;
   const maxQrWidth = qrSettings.size * 0.3;
   const logoWidth = Math.round(qrSettings.logoWidth + 10);
-  const lWidth = useDebounce(qrSettings.logoWidth, 100);
-  const height = useDebounce(qrSettings.logoHeight, 100);
-
 
   /**
    *  set the aspect ratio of the image

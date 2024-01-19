@@ -20,7 +20,9 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
+import { useEffect, useState } from 'react';
 import { Knob, KnobChangeEvent } from 'primereact/knob';
+import { useDebounce } from "@uidotdev/usehooks";
 import { knobConfig } from '../../types';
 import ReactId from '../../utils/ReactId';
 import { useSelector } from 'react-redux';
@@ -46,6 +48,13 @@ export default function AdjusterKnob({
 }) {
   const dark = useSelector((state: RootState) => state.dark.dark);
   const darkClass = dark ? 'header-stuff-dark' : 'header-stuff';
+  const [thisVal, setThisVal] = useState<number>(value);
+  const debouncedValue = useDebounce(thisVal, 100);
+
+  useEffect(() => {
+    callback(debouncedValue);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [debouncedValue]);
 
   return (
     <Knob
@@ -58,7 +67,7 @@ export default function AdjusterKnob({
         cursor: disabled ? 'not-allowed !important' : 'pointer',
       }}
       step={step}
-      value={value}
+      value={debouncedValue}
       min={min}
       max={max}
       strokeWidth={knobConfig.knobStroke}
@@ -75,7 +84,7 @@ export default function AdjusterKnob({
       valueColor="#0B3665"
       rangeColor="#21C6DC"
       onChange={(e: KnobChangeEvent) => {
-        callback(e.value);
+        setThisVal(e.value);
       }}
       disabled={disabled}
     />

@@ -71,10 +71,9 @@ export default function SideNav() {
   }
 
   const setSaveDark = () => {
-    const d = { ...dark }
-    d.dark = !d.dark;
-    dispatch(setDark(d.dark));
+    const d = { ...dark, dark: !dark.dark }
     store.set('dark', d);
+    dispatch(setDark(d.dark));
     console.log(`Dark Mode: ${store.get('dark').dark}`)
   };
 
@@ -361,8 +360,8 @@ export default function SideNav() {
           <WelcomeModal
             showMe={mainSet.firstRun}
             callback={(res: boolean) => {
-              const ms = { ...mainSet };
-              ms.firstRun = res;
+              const ms = { ...mainSet, firstRun: false };
+              store.set("main", ms);
               dispatch(updateMainSettings(ms));
             }}
           />

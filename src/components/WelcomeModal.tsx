@@ -19,8 +19,7 @@ export default function WelcomeModal({ showMe, callback }: { showMe: boolean, ca
 
   const handleClose = () => {
     callback(false);
-    const ms = { ...mainSet };
-    ms.firstRun = false;
+    const ms = { ...mainSet, firstRun: false };
     dispatch(updateMainSettings(ms));
     store.set("main-config", ms);
   };

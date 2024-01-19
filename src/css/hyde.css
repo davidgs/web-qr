@@ -73,14 +73,15 @@ body {
   text-align: center;
   width: 250px;
   transition: width 0.3s ease-in-out;
-  padding: 2rem 1rem;
+  /* padding: 2rem 1rem; */
   color: rgba(255, 255, 255, .5);
   background-color: rgb(10, 28, 46);
   font-size: .75rem;
   height: 100vh;
   position:absolute;
-  top: 40px;
   left: 0px;
+  border-bottom-right-radius: 10px;
+  border-top-right-radius: 10px;
 }
 
 .sidebar-closed {
@@ -89,6 +90,7 @@ body {
     transition: width 0.3s ease-in-out;
     width: 60px;
     height: 100vh;
+    border-top-right-radius: 10px;
 }
 .aside-column-top {
   display: flex;
@@ -118,8 +120,15 @@ body {
     border: none;
     cursor: pointer;
     padding-left: 15px;
-    padding-top: 5px;
-    float: left;
+    padding-top: 10px;
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    border-top-right-radius: 10px;
+    background-color: rgb(10, 28, 46);
+    z-index: 100;
+    /* padding-top: 5px; */
+    /* float: left; */
 }
 
 .post-open {
@@ -172,7 +181,7 @@ body {
   margin-right: 0px;
   text-align: center;
   position: absolute;
-  top: 40px;
+  top: 35px;
 }
 
 .brand-image-top {
@@ -203,12 +212,14 @@ body {
   color: rgba(255, 255, 255, .5);
   background-color: rgb(10, 28, 46);
   transition: width 0.3s ease-in-out;
-  /* width: 10%; */
+  width: 60px;
   height: 100vh;
-  padding-top: 25px;
+  /* padding-top: 25px; */
   position: absolute;
-  top: 50px;
-  left: 0px;
+  /* top: 50px; */
+  left: -7px;
+  border-top-right-radius: 10px;
+  border-bottom-right-radius: 10px;
 }
 /* Sidebar links */
 .sidebar a {
@@ -270,7 +281,7 @@ a.sidebar-nav-item:focus {
   .sidebar-sticky-open {
     transition: rotate 0.3s ease-in-out;
     position: absolute;
-    bottom: 5.5rem;
+    bottom: 3.5rem;
     left: 10px;
     background-color: rgb(10, 28, 46);
     width: 230px;
@@ -284,7 +295,7 @@ a.sidebar-nav-item:focus {
   flex-direction: column;
   position: absolute;
   transition: rotate 0.3s ease-in-out;
-  bottom: 4.5rem;
+  bottom: 1rem;
   background-color: rgb(10, 28, 46);
   width: 50px;
   /* margin-top: 250px; */
@@ -324,7 +335,7 @@ a.sidebar-nav-item:focus {
 .copyright-sticky-open {
   position: absolute;
   transition: rotate 0.3s ease-in-out;
-  bottom: 2rem;
+  bottom: .25rem;
   margin-top: 5px;
   left: 10px;
   width: 100%;
@@ -408,7 +419,7 @@ a.sidebar-nav-item:focus {
   .sidebar-sticky-open {
     transition: rotate 0.3s ease-in-out;
     position: absolute;
-    bottom: 5.5rem;
+    bottom: 3.5rem;
     left: 20px;
     background-color: rgb(10, 28, 46);
     /* max-width: 230px; */
@@ -718,9 +729,11 @@ a.sidebar-nav-item:focus {
 
 .link-form {
   width: 100%;
-  height: 100vh;
+  height: 100%;
   padding-right: 10px;
   padding-left: 10px;
+  padding-bottom: 20px;
+
 }
 .App {
   text-align: center;
@@ -748,6 +761,11 @@ a.sidebar-nav-item:focus {
 .side-nav-open {
   display: flex;
   flex-direction: column;
+  width: 250px;
+  background-color: rgb(10, 28, 46);
+  border-top-right-radius: 10px;
+  border-bottom-right-radius: 10px;
+  height: 100%;
 }
 .aside-column-open {
     transition: width 0.3s ease-in-out;
@@ -773,6 +791,7 @@ a.sidebar-nav-item:focus {
     margin-right: 10px;
     /* min-width: 500px; */
     margin-top: 10px;
+    overflow-y: auto;
   }
 @media (min-width: 48em) {
   .aside-column {
@@ -818,7 +837,10 @@ a.sidebar-nav-item:focus {
     margin-right: 10px;
     /* min-width: 500px; */
     margin-top: 10px;
-    width: calc(100% - 90px)
+    width: calc(100% - 90px);
+    position: absolute;
+    left: 60px;
+    overflow-y: auto;
   }
 
   /* Stops the float property from affecting content after the columns */
@@ -845,13 +867,14 @@ a.sidebar-nav-item:focus {
 
   .aside-column-closed {
     transition: width 0.3s ease-in-out;
-    width: 72px;
+    width: 60px;
+    padding-top: 10px;
+    border-top-right-radius: 10px;
     height: 100vh;
     float: left;
     margin-right: 10px;
-    padding-top: 10px;
-    border-top-right-radius: 10px;
     background-color: rgb(10, 28, 46);
+    margin-top: -7px;
   }
 
   .main-column {
@@ -872,7 +895,8 @@ a.sidebar-nav-item:focus {
     margin-right: 10px;
     /* min-width: 500px; */
     margin-top: 10px;
-    width: calc(100% - 90px)
+    width: calc(100% - 90px);
+    overflow-y: auto;
   }
 
   /* Stops the float property from affecting content after the columns */

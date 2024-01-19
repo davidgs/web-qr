@@ -45,28 +45,22 @@ export default function QCode() {
    * Saving as an SVZG is a pain in the ass, so we do (most)
    * of that here but it requires Node.js to actually accomplish it, for unknown reasons.
    */
-  const saveSVG = (): void => {
-    const background = qSet.XParent ? 'none' : qrSettings?.bgColor;
+  const saveSVG = () => {
     const canvas = document.getElementById(
-      'react-qrcode-logo',
+      "react-qrcode-logo"
     ) as HTMLCanvasElement;
     const params = {
-      background,
-      color: qrSettings?.fgColor,
+      background: qSet.XParent ? "none" : qrSettings.bgColor,
+      color: qrSettings.fgColor,
     };
     const dataURL = canvas?.toDataURL(`image/${qSet.QRType}`);
     // eslint-disable-next-line func-names
     potrace.trace(dataURL, params, function (err: any, svg: any) {
       if (err) throw err;
-      // // eslint-disable-next-line promise/no-promise-in-callback
-      // window.electronAPI
-      //   .saveSVG(svg)
-      //   .then(() => {
-      //     return '';
-      //   })
-      //   .catch((error: unknown) => {
-      //     console.log(`Error: ${error}`);
-      //   });
+      const a = document.createElement("a");
+      a.href = `data:image/svg+xml;base64,${btoa(svg)}`;
+      a.download = `qrcode-${ReactId()}.svg`;
+      a.click();
     });
   };
 

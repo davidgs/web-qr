@@ -22,7 +22,6 @@
  */
 import { createSlice } from '@reduxjs/toolkit';
 import { WiFiLink, defaultActiveLink, utmLink } from '../../types';
-import store from 'store2';
 
 const initialState = {
   linkHistory: {

@@ -5,7 +5,7 @@ import qCode1 from "../images/qcode1.png";
 import qCode2 from "../images/qcode2.png";
 import qCode3 from "../images/qcode3.png";
 import { RootState } from "../stores/store";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import {
   Github,
   Envelope,
@@ -36,7 +36,6 @@ export default function AboutModal({
   callback: (res: boolean) => void;
 }): React.JSX.Element {
 
-  const dispatch = useDispatch();
   const dark = useSelector((state: RootState) => state.dark.dark);
   const darkClass = dark ? "header-stuff-dark" : "header-stuff";
 

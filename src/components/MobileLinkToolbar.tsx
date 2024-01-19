@@ -22,7 +22,7 @@
  * SOFTWARE.
  */
 import { JSX } from "react";
-import { OverlayTrigger, Tooltip, Button, Form } from "react-bootstrap";
+import { OverlayTrigger, Tooltip, Button } from "react-bootstrap";
 import { useSelector, useDispatch } from "react-redux";
 import { SaveFill, Save, XCircleFill, XCircle } from "react-bootstrap-icons";
 import store from "store2";
@@ -32,7 +32,6 @@ import { WiFiLink } from "../types";
 import ReactId from "../utils/ReactId";
 import { RootState } from "../stores/store";
 import { makeLongLink } from "../utils/LongLink";
-import { updateFormType } from "../reducers/main/mainSlice";
 import {
   setActiveLink,
   setUtmLinkHistory,

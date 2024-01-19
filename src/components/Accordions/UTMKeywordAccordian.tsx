@@ -22,7 +22,7 @@
  */
 import { JSX, useState, SyntheticEvent } from 'react';
 import { Accordion, Form, OverlayTrigger, Tooltip } from 'react-bootstrap';
-import { UtmKeyValue, UtmObj, UtmParams } from '../../types';
+import { UtmKeyValue, UtmObj } from '../../types';
 import Checker from '../buttons/Checker';
 import { RootState } from '../../stores/store';
 import { useSelector, useDispatch } from 'react-redux';

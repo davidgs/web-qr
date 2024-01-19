@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-import { InputGroup, Col } from 'react-bootstrap';
+import { InputGroup } from 'react-bootstrap';
 import { useEffect } from 'react';
 import { makeLongLink } from '../utils/LongLink';
 import { useSelector, useDispatch } from 'react-redux';

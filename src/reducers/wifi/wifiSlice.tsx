@@ -22,7 +22,6 @@
  */
 import { createSlice } from '@reduxjs/toolkit';
 import { defaultWiFiSettings } from '../../types';
-import store from 'store2';
 
 const initialState = {
   settings: defaultWiFiSettings,

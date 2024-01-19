@@ -52,11 +52,13 @@ import MobileURLForm from "./forms/MobileURLForm";
 export default function App() {
   const dispatch = useDispatch();
   const [winWidth, ] = useState(window.innerWidth);
-  const dark = useSelector((state: RootState) => state.dark.dark);
+  const dark = useSelector((state: RootState) => state.dark);
+  const darkClass = dark ? "header-stuff-dark" : "header-stuff";
   const mainSet = useSelector((state: RootState) => state.main.settings);
   const size = useWindowSize();
   const width = useDebounce(size.width, 300);
-
+  const version = process.env.REACT_APP_VERSION;
+  console.log("version", version);
   Userfront.init("qbjrr47b");
   // Userfront.init("qbjrr47b");
 
@@ -90,8 +92,6 @@ export default function App() {
         console.log(`winWidth: ${winWidth} <= 780 Sidebar: closed`);
         return;
       } else {
-        console.log("width", width);
-        console.log(`winWidth: ${winWidth} > 780 Sidebar: ${mainSet.sidebar}`);
         return;
       }
     }
@@ -128,9 +128,21 @@ export default function App() {
   useEffect(() => {
     const d = store.get("dark");
     if (d !== null) {
-      dispatch(setDark(d));
+      dispatch(setDark(d.dark));
+      if (d.dark) {
+        window.document
+          .getElementsByTagName("html")[0]
+          .setAttribute("data-bs-theme", "dark");
+      } else {
+        window.document
+          .getElementsByTagName("html")[0]
+          .setAttribute("data-bs-theme", "light");
+      }
     } else {
       dispatch(setDark(false));
+        window.document
+          .getElementsByTagName("html")[0]
+          .setAttribute("data-bs-theme", "light");
     }
     const uc = store.get("utm-config");
     if (uc !== null) {
@@ -216,20 +228,9 @@ export default function App() {
     store.set("main-config", ms);
   };
 
-  // useEffect(() => {
-  //   if (winWidth < 650) {
-  //     dispatch(updateSidebar("top"));
-  //     return;
-  //   }
-  //   if (winWidth <= 780) {
-  //     dispatch(updateSidebar("closed"));
-  //     return;
-  //   }
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, [winWidth]);
-
   useEffect(() => {
-    if (dark) {
+    store.set("dark", dark);
+    if (dark.dark) {
       window.document
         .getElementsByTagName("html")[0]
         .setAttribute("data-bs-theme", "dark");
@@ -248,8 +249,8 @@ export default function App() {
           path="/"
           element={
             <>
-              <div className="fullrow">
-                <div className={`aside-column-${mainSet.sidebar}`}>
+              <div className="fullrow" style={{paddingTop: '0px'}}>
+                {/* <div className={`aside-column-${mainSet.sidebar}`}> */}
                   {mainSet.sidebar !== "top" && (
                     <OverlayTrigger
                       placement="right"
@@ -285,7 +286,7 @@ export default function App() {
                     </OverlayTrigger>
                   )}
                   <SideNav />
-                </div>
+                {/* </div> */}
                 <div className={`main-column-${mainSet.sidebar}`}>
                   <div className="link-form">
                     {mainSet.sidebar !== 'top' ? <QCode /> : <MobileQCode />}
@@ -295,6 +296,7 @@ export default function App() {
                     {mainSet.formType === "wifi" && <WifiForm />}
                     {mainSet.sidebar !== 'top' ? <URLForm /> : <MobileURLForm /> }
                   </div>
+                  <div className={darkClass}><em>qr-builder v{version}</em></div>
                 </div>
               </div>
               {/* W: {width} x H: {size.height} */}

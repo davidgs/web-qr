@@ -68,7 +68,7 @@ export default function UTMTextField(props: UTMTextFieldProps): JSX.Element {
           <FormControl
             required
             className={darkClass}
-            type="text"
+            type={targetType === 'utm_target' ? "url" : "text"}
             size="sm"
             id={`${targetType}`}
             aria-label={settings?.ariaLabel}

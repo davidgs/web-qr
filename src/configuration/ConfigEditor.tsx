@@ -47,7 +47,7 @@ import { updateBitlySettings } from "../reducers/bitly/bitlySlice";
 import { updateMainSettings } from "../reducers/main/mainSlice";
 import { updateQRStyleSettings } from "../reducers/qr/qrCodeSettingsSlice";
 import { updateQRSettings } from "../reducers/qr/qrSlice";
-import { updateUTMCampaignSettings, updateUTMContentSettings, updateUTMKeywordSettings, updateUTMMediumSettings, updateUTMSourceSettings, updateUTMTargetSettings, updateUTMTermSettings, updateUTMSettings } from "../reducers/utm/utmSlice";
+import { updateUTMCampaignSettings, updateUTMContentSettings, updateUTMKeywordSettings, updateUTMMediumSettings, updateUTMSourceSettings, updateUTMTargetSettings, updateUTMTermSettings } from "../reducers/utm/utmSlice";
 
 
 interface ConfigEditorProps {
@@ -96,7 +96,6 @@ function ConfigEditor(props: ConfigEditorProps): JSX.Element {
     (state: RootState) => state.utmStuff.settings.utm_keyword
   );
 
-  console.log(`ConfigEditor: ${showMe}`);
   /* handle closing without saving */
   const handleCancel = () => {
     const uc = store.get("utm-config");

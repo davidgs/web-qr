@@ -22,7 +22,6 @@
  */
 import { createSlice } from '@reduxjs/toolkit';
 import { defaultBitlyConfig } from '../../types';
-import store from 'store2';
 
 const initialState = {
   settings: defaultBitlyConfig,

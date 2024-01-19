@@ -45,16 +45,10 @@ export default function DownloadButton() {
     // eslint-disable-next-line func-names
     potrace.trace(dataURL, params, function (err: any, svg: any) {
       if (err) throw err;
-      // // eslint-disable-next-line promise/no-promise-in-callback
-      // window.electronAPI
-      //   .saveSVG(svg)
-      //   .then(() => {
-      //     return '';
-      //   })
-      //   .catch((error: unknown) => {
-      //     // eslint-disable-next-line no-console
-      //     console.log(`Error: ${error}`);
-      //   });
+      const a = document.createElement('a');
+      a.href = `data:image/svg+xml;base64,${btoa(svg)}`;
+      a.download = `qrcode-${ReactId()}.svg`;
+      a.click();
     });
   };
 
