@@ -23,6 +23,8 @@
 import React, { JSX, useState } from 'react';
 import { OverlayTrigger, Tooltip } from 'react-bootstrap';
 import { FiletypeSvg, FiletypeJpg, FiletypePng } from 'react-bootstrap-icons';
+import { useSelector } from 'react-redux';
+import { RootState } from '../stores/store';
 
 interface FileTypeProps {
   // eslint-disable-next-line no-unused-vars
@@ -34,6 +36,8 @@ interface FileTypeProps {
 function FileTypeSelector(props: FileTypeProps): JSX.Element {
   const { onSelectionChange, fileType } = props;
   const [selectedFileType, setSelectedFileType] = useState(fileType);
+  const dark = useSelector((state: RootState) => state.dark.dark);
+  const darkClass = dark ? 'header-stuff-dark' : 'header-stuff';
 
   const handleSelectionChange = (event: React.MouseEvent<SVGSVGElement>) => {
     const selectedFileTypeValue = event.currentTarget.getAttribute(
@@ -58,16 +62,14 @@ function FileTypeSelector(props: FileTypeProps): JSX.Element {
         <FiletypeSvg
           onClick={handleSelectionChange}
           data-value="svg"
-          size={40}
+          size={30}
           className={
             selectedFileType === 'svg'
-              ? 'custom-radio selected'
-              : 'custom-radio'
+              ? `${darkClass} custom-radio selected`
+              : `${darkClass} custom-radio`
           }
           style={{
-            cursor: 'pointer',
-            marginRight: 10,
-          }}
+            cursor: 'pointer'          }}
         />
       </OverlayTrigger>
       <OverlayTrigger
@@ -83,7 +85,7 @@ function FileTypeSelector(props: FileTypeProps): JSX.Element {
         <FiletypeJpg
           onClick={handleSelectionChange}
           data-value="jpg"
-          size={40}
+          size={30}
           className={
             selectedFileType === 'jpg'
               ? 'custom-radio selected'
@@ -91,7 +93,6 @@ function FileTypeSelector(props: FileTypeProps): JSX.Element {
           }
           style={{
             cursor: 'pointer',
-            marginRight: 10,
           }}
         />
       </OverlayTrigger>
@@ -108,7 +109,7 @@ function FileTypeSelector(props: FileTypeProps): JSX.Element {
         <FiletypePng
           onClick={handleSelectionChange}
           data-value="png"
-          size={40}
+          size={30}
           className={
             selectedFileType === 'png'
               ? 'custom-radio selected'

@@ -1,47 +1,26 @@
-import React from 'react';
-import { Button, Modal } from 'react-bootstrap';
+import { Button } from 'react-bootstrap';
+import { useNavigate } from 'react-router-dom';
+import { Github, Envelope, Twitter, Linkedin, Mastodon } from 'react-bootstrap-icons';
 import Logo from '../images/NewLinkerLogo.png';
-import qCode1 from '../images/qcode1.png';
-import qCode2 from '../images/qcode2.png';
-import qCode3 from '../images/qcode3.png';
-import { Github, Envelope, Linkedin, Mastodon, Twitter } from 'react-bootstrap-icons';
-import { updateMainSettings } from '../reducers/main/mainSlice';
-import { useDispatch, useSelector } from "react-redux";
-import store from 'store2';
+import qCode1 from "../images/qcode1.png";
+import qCode2 from "../images/qcode2.png";
+import qCode3 from "../images/qcode3.png";
+import { useSelector } from 'react-redux';
+import { RootState } from '../stores/store';
 
-
-export default function WelcomeModal({ showMe, callback }: { showMe: boolean, callback: (res: boolean) => void }): React.JSX.Element {
-
-  const dispatch = useDispatch();
-  const mainSet = useSelector((state: any) => state.main.settings);
+export default function WelcomePage() {
+  const navigate = useNavigate();
   const dark = useSelector((state: any) => state.dark.dark);
+  const mainSet = useSelector((state: RootState) => state.main.settings);
+
   const darkClass = dark ? "header-stuff-dark" : "header-stuff";
 
-  const handleClose = () => {
-    callback(false);
-    const ms = { ...mainSet, firstRun: false };
-    dispatch(updateMainSettings(ms));
-    store.set("main-config", ms);
+  const go = () => {
+    navigate('/build');
   };
-
   return (
-    <Modal size="xl" show={showMe} onHide={handleClose}>
-      <Modal.Header closeButton>
-        <Modal.Title>
-          <div style={{ margin: "auto" }}>
-            <h1>
-              <img
-                src={Logo}
-                alt="QR Builder Logo"
-                width={40}
-                height={40}
-              ></img>{" "}
-              Welcome to QR Builder
-            </h1>
-          </div>
-        </Modal.Title>
-      </Modal.Header>
-      <Modal.Body>
+    <div className={`main-column-${mainSet.sidebar}`}>
+      <>
         <div className="fullrow">
           <div style={{ margin: "auto", textAlign: "center" }}>
             <h1>
@@ -92,7 +71,11 @@ export default function WelcomeModal({ showMe, callback }: { showMe: boolean, ca
           </ul>
         </div>
         <div className="fullrow">
-          <Button variant="success" size={"sm"} >
+          <Button
+            variant="success"
+            size={"sm"}
+            onClick={go}
+          >
             Start Using
           </Button>
         </div>
@@ -245,12 +228,7 @@ export default function WelcomeModal({ showMe, callback }: { showMe: boolean, ca
             />
           </a>
         </div>
-      </Modal.Body>
-      <Modal.Footer>
-        <Button variant="secondary" onClick={handleClose}>
-          Close
-        </Button>
-      </Modal.Footer>
-    </Modal>
+      </>
+    </div>
   );
 }

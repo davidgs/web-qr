@@ -21,43 +21,85 @@
  * SOFTWARE.
  */
 import { useEffect, useState } from "react";
-import { MemoryRouter as Router, Routes, Route } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import "./css/App.css";
 import { useDispatch, useSelector } from "react-redux";
 import store from "store2";
 import Userfront from "@userfront/toolkit";
+import type { ActionFunctionArgs, LoaderFunctionArgs } from "react-router-dom";
+import {
+  Await,
+  createBrowserRouter,
+  defer,
+  Form,
+  Link,
+  Outlet,
+  RouterProvider,
+  useAsyncError,
+  useAsyncValue,
+  useFetcher,
+  useFetchers,
+  useLoaderData,
+  useNavigation,
+  useParams,
+  useRevalidator,
+  useRouteError,
+} from "react-router-dom";
+
 import { RootState } from "./stores/store";
 import { updateMainSettings, updateSidebar } from "./reducers/main/mainSlice";
 import SideNav from "./SideNav";
 // import LinkToolbar from './components/LinkToolbar';
-import QCode from "./forms/QRCodeForm";
-import URLForm from "./forms/URLForm";
-import WifiForm from "./forms/WiFiForm";
-import LinkToolbar from "./components/LinkToolbar";
 import { IProps } from "react-qrcode-logo";
 import { updateBitlySettings } from "./reducers/bitly/bitlySlice";
 import { setDark } from "./reducers/dark/darkSlice";
-import { setLinkHistory, setUtmLinkHistory, setWifiLinkHistory } from "./reducers/history/historySlice";
+import {
+  setLinkHistory,
+  setUtmLinkHistory,
+  setWifiLinkHistory,
+} from "./reducers/history/historySlice";
 import { updateQRStyleSettings } from "./reducers/qr/qrCodeSettingsSlice";
 import { updateQRSettings } from "./reducers/qr/qrSlice";
-import { updateUTMCampaignSettings, updateUTMMediumSettings, updateUTMSourceSettings, updateUTMTermSettings, updateUTMContentSettings, updateUTMKeywordSettings, updateUTMTargetSettings, updateUTMSettings } from "./reducers/utm/utmSlice";
-import { QRSettings, BitlyConfig, LinkData, defaultUTMCampaign, defaultUTMMedium, defaultUTMSource, defaultUTMTerm, defaultUTMContent, defaultUTMKeyword, defaultUTMTarget, defaultUTMParams, defaultMainSettings, defaultQRSettings, DefaultQRStyle, defaultBitlyConfig } from "./types";
+import {
+  updateUTMCampaignSettings,
+  updateUTMMediumSettings,
+  updateUTMSourceSettings,
+  updateUTMTermSettings,
+  updateUTMContentSettings,
+  updateUTMKeywordSettings,
+  updateUTMTargetSettings,
+  updateUTMSettings,
+} from "./reducers/utm/utmSlice";
+import {
+  QRSettings,
+  BitlyConfig,
+  LinkData,
+  defaultUTMCampaign,
+  defaultUTMMedium,
+  defaultUTMSource,
+  defaultUTMTerm,
+  defaultUTMContent,
+  defaultUTMKeyword,
+  defaultUTMTarget,
+  defaultUTMParams,
+  defaultMainSettings,
+  defaultQRSettings,
+  DefaultQRStyle,
+  defaultBitlyConfig,
+} from "./types";
 import { useWindowSize, useDebounce } from "@uidotdev/usehooks";
-import { OverlayTrigger, Tooltip } from "react-bootstrap";
-import { ChevronDoubleDown, ChevronDoubleRight } from "react-bootstrap-icons";
-import MobileLinkToolbar from "./components/MobileLinkToolbar";
-import MobileQCode from "./forms/MobileQRCodeForm";
-import MobileURLForm from "./forms/MobileURLForm";
+import MainPage from "./pages/MainPage";
+import WelcomePage from "./pages/WelcomePage";
 
 export default function App() {
   const dispatch = useDispatch();
-  const [winWidth, ] = useState(window.innerWidth);
+  const [winWidth] = useState(window.innerWidth);
   const dark = useSelector((state: RootState) => state.dark);
   const darkClass = dark ? "header-stuff-dark" : "header-stuff";
   const mainSet = useSelector((state: RootState) => state.main.settings);
   const size = useWindowSize();
   const width = useDebounce(size.width, 300);
-  const version = '1.1.0';
+  const version = "1.1.0";
   console.log("version", version);
   Userfront.init("qbjrr47b");
   // Userfront.init("qbjrr47b");
@@ -95,7 +137,7 @@ export default function App() {
         return;
       }
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [width, winWidth]);
 
   useEffect(() => {
@@ -122,9 +164,12 @@ export default function App() {
         return;
       }
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [width]);
 
+  /**
+   * get/set all default values from local storage
+   */
   useEffect(() => {
     const d = store.get("dark");
     if (d !== null) {
@@ -140,9 +185,9 @@ export default function App() {
       }
     } else {
       dispatch(setDark(false));
-        window.document
-          .getElementsByTagName("html")[0]
-          .setAttribute("data-bs-theme", "light");
+      window.document
+        .getElementsByTagName("html")[0]
+        .setAttribute("data-bs-theme", "light");
     }
     const uc = store.get("utm-config");
     if (uc !== null) {
@@ -221,13 +266,11 @@ export default function App() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const toggleOpen = () => {
-    const ms = { ...mainSet };
-    ms.sidebar = mainSet.sidebar === "open" ? "closed" : "open";
-    dispatch(updateMainSettings(ms));
-    store.set("main-config", ms);
-  };
 
+
+  /**
+   * set the dark mode
+   */
   useEffect(() => {
     store.set("dark", dark);
     if (dark.dark) {
@@ -242,70 +285,40 @@ export default function App() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dark]);
 
+  const router = createBrowserRouter([
+    {
+      path: "/",
+      element: <WelcomePage />,
+    },
+    {
+      path: "build",
+      element: <MainPage />,
+    },
+  ]);
   return (
-    <Router>
-      <Routes>
-        <Route
-          path="/"
-          element={
-            <>
-              <div className="fullrow" style={{paddingTop: '0px', height: '100vh'}}>
-                {/* <div className={`aside-column-${mainSet.sidebar}`}> */}
-                  {mainSet.sidebar !== "top" && (
-                    <OverlayTrigger
-                      placement="right"
-                      delay={{ show: 250, hide: 300 }}
-                      overlay={
-                        mainSet.sidebar === "open" ? (
-                          <Tooltip id="sidebar-tooltip">
-                            Collapse the Sidebar
-                          </Tooltip>
-                        ) : (
-                          <Tooltip id="sidebar-collapse-tooltip">
-                            Expand the Sidebar
-                          </Tooltip>
-                        )
-                      }
-                    >
-                      <button
-                        type="button"
-                        className="menuBtn"
-                        style={{ float: "left" }}
-                        onClick={toggleOpen}
-                      >
-                        {mainSet.sidebar === "open" ? (
-                          <ChevronDoubleDown
-                            style={{ width: "32px", height: "26px" }}
-                          />
-                        ) : (
-                          <ChevronDoubleRight
-                            style={{ width: "32px", height: "26px" }}
-                          />
-                        )}
-                      </button>
-                    </OverlayTrigger>
-                  )}
-                  <SideNav />
-                {/* </div> */}
-                <div className={`main-column-${mainSet.sidebar}`}>
-                  <div className="link-form">
-                    {mainSet.sidebar !== 'top' ? <QCode /> : <MobileQCode />}
-                    <hr />
-                    {mainSet.sidebar !== 'top' ? (<LinkToolbar />) : (<MobileLinkToolbar />)}
-                      <hr />
-                    {mainSet.formType === "wifi" && <WifiForm />}
-                    {mainSet.sidebar !== 'top' ? <URLForm /> : <MobileURLForm /> }
-                  </div>
-                  <div className={darkClass}
-                  style={{ position: 'absolute', bottom: '5px', right: '10px', marginTop: '10px'}}><em>qr-builder v{version}</em></div>
-                </div>
-              </div>
-              {/* W: {width} x H: {size.height} */}
-              {/* <Analytics /> */}
-            </>
-          }
-        />
-      </Routes>
-    </Router>
+    <>
+      <div className="fullrow">
+        <SideNav />
+        <RouterProvider router={router} />
+        {/* <Router>
+          <Routes>
+            <Route path="/" element={<WelcomePage />} />
+            <Route path="/build" element={<MainPage />} />
+          </Routes>
+        </Router> */}
+        <p></p>
+        <div
+          className={darkClass}
+          style={{
+            position: "absolute",
+            bottom: "5px",
+            right: "10px",
+            marginTop: "10px",
+          }}
+        >
+          <em>qr-builder v{version}</em>
+        </div>
+      </div>
+    </>
   );
 }

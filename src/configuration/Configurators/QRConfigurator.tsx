@@ -27,6 +27,7 @@ import {
   Tooltip,
   Button,
   Form,
+  Row,
 } from 'react-bootstrap';
 import { QRCode } from 'react-qrcode-logo';
 import { brandImageSettings } from '../../types';
@@ -49,7 +50,7 @@ import {
 } from '../../reducers/qr/qrCodeSettingsSlice';
 import { ColorResult, RGBColor } from 'react-color';
 import { useSelector, useDispatch } from 'react-redux';
-import { updateQRType } from '../../reducers/qr/qrSlice';
+import { updateQRType, updateXParent } from '../../reducers/qr/qrSlice';
 import AdjusterKnob from '../../components/knobs/AdjusterKnob';
 import Checker from '../../components/buttons/Checker';
 import ColorPicker from '../../components/choosers/ColorPicker';
@@ -58,6 +59,7 @@ import Locked from '../../components/Locked';
 import OpacityAdjuster from '../../components/knobs/OpacityAdjuster';
 import UnLocked from '../../components/Unlocked';
 import { RootState } from '../../stores/store';
+import FileTypeSelector from '../../components/FileTypeSelector';
 
 export default function QRConfigurator() {
   const dark = useSelector((state: RootState) => state.dark.dark);
@@ -65,6 +67,7 @@ export default function QRConfigurator() {
   const [imgAspect, setImgAspec] = useState(1);
   const dispatch = useDispatch();
   const qrSettings = useSelector((state: RootState) => state.qrCode.settings);
+  const qSet = useSelector((state: RootState) => state.qr.settings);
   const [isAspectLocked, setIsAspectLocked] = useState(false);
   const [showLogo, setShowLogo] = useState(qrSettings.logoImage !== '');
   const maxQrHeight = qrSettings.size * 0.3;
@@ -211,6 +214,51 @@ export default function QRConfigurator() {
   return (
     <Accordion.Body id="qr">
       {/* QR Colors */}
+      <div className="fullrow">
+        <Form.Label className={darkClass}>
+          <strong>File Type:</strong>
+        </Form.Label>
+      </div>
+      <div className="fullrow">
+        <div className="col10" style={{ marginTop: "1rem" }}>
+          <Form.Label className={darkClass}>File Extension: </Form.Label>
+        </div>
+        <div className="spacer" />
+        <div className="spacer" />
+        <div className={`col15 ${darkClass}`}>
+          <FileTypeSelector
+            onSelectionChange={(val) => {
+              dispatch(updateQRType(val));
+            }}
+            fileType={qSet.QRType}
+          />
+        </div>
+        <div className="spacer" />
+        <div className="col5" />
+
+        {qSet?.QRType === "svg" ? (
+          <>
+            <div className="col20" style={{ paddingTop: "20px" }}>
+              <Form.Label className={darkClass}>
+                Transparent Background
+              </Form.Label>
+            </div>
+            <div className="col5" style={{ paddingTop: "20px" }}>
+              <Checker
+                cState={qSet?.XParent}
+                label=""
+                tooltip="Set the svg background to transparent"
+                disabled={false}
+                callback={(value) => {
+                  dispatch(updateXParent(value));
+                }}
+              />
+            </div>
+          </>
+        ) : (
+          <div className="col35" />
+        )}
+      </div>
       <div className="fullrow">
         <Form.Label className={darkClass}>
           <strong>Colors:</strong>

@@ -26,17 +26,12 @@ import {
   Form,
   Button,
   Modal,
-  Row,
-  OverlayTrigger,
-  Tooltip,
+  Accordion,
 } from 'react-bootstrap';
-import FileTypeSelector from '../components/FileTypeSelector';
 import { RootState } from '../stores/store';
 import { useSelector, useDispatch } from 'react-redux';
-import { updateQRType, updateXParent } from '../reducers/qr/qrSlice';
-import { updateSize } from '../reducers/qr/qrCodeSettingsSlice';
-import AdjusterKnob from '../components/knobs/AdjusterKnob';
-import Checker from '../components/buttons/Checker';
+import { updateQRType } from '../reducers/qr/qrSlice';
+import QRConfigurator from './Configurators/QRConfigurator';
 
 export default function QRConfigForm({
   show,
@@ -75,9 +70,7 @@ export default function QRConfigForm({
     <Modal
       show={show}
       onHide={handleCancel}
-      size="lg"
-      dialogClassName="modal-90w"
-      width="90vw"
+      size="xl"
       backdrop="static"
     >
       <Modal.Header closeButton>
@@ -85,104 +78,14 @@ export default function QRConfigForm({
       </Modal.Header>
       <Modal.Body>
         <Form>
-          {/* QR Code Size */}
-          <div className="fullrow">
-            <div className="col60" style={{ marginTop: '1.5rem' }}>
-              <OverlayTrigger
-                placement="auto"
-                delay={{ show: 250, hide: 300 }}
-                rootClose
-                overlay={
-                  <Tooltip id="qrcode-tooltip">
-                    Current size of the QR Code.
-                  </Tooltip>
-                }
-              >
-                <Form.Label
-                  className={darkClass}
-                  size="lg"
-                  style={{ fontSize: '18pt' }}
-                >
-                  Size: {qrConf?.size}
-                </Form.Label>
-              </OverlayTrigger>
-            </div>
-            <OverlayTrigger
-              placement="auto"
-              delay={{ show: 250, hide: 400 }}
-              rootClose
-              overlay={
-                <Tooltip id="qrcode-tooltip">
-                  Adjust the size of your QR Code.
-                </Tooltip>
-              }
-            >
-              <div className="col15">
-                <AdjusterKnob
-                  name="qr-adjust-size"
-                  value={qrConf?.size ? qrConf?.size : 220}
-                  min={100}
-                  max={500}
-                  step={10}
-                  disabled={false}
-                  callback={(value) => {
-                    dispatch(updateSize(value));
-                  }}
-                />
-              </div>
-            </OverlayTrigger>
-
-            <div className="col25" />
-          </div>
-          <div className="fullrow">
-            <div className="col60" style={{ marginTop: '1rem' }}>
-              <Form.Label
-                size="lg"
-                style={{ fontSize: '18pt' }}
-                className={darkClass}
-              >
-                File Extension:{' '}
-              </Form.Label>
-            </div>
-            <div className={`col40 ${darkClass}`}>
-              <FileTypeSelector
-                onSelectionChange={handleExtChange}
-                fileType={qSet?.QRType}
-              />
-            </div>
-          </div>
-          {qSet?.QRType === 'svg' ? (
-            <Row
-              style={{ paddingTop: '15px' }}
-              className={
-                qSet?.QRType === 'svg' ? 'fade-component in' : 'fade-component'
-              }
-            >
-              <div className="fullrow">
-                <div className="col60">
-                  <Form.Label
-                    style={{ fontSize: '18pt' }}
-                    className={darkClass}
-                  >
-                    Transparent Background
-                  </Form.Label>
-                </div>
-                <div className="spacer" />
-                <div className="col10" style={{ marginTop: '.5rem' }}>
-                  <Checker
-                    cState={qSet?.XParent}
-                    label=""
-                    tooltip="Set the svg background to transparent"
-                    disabled={false}
-                    callback={(value) => {
-                      dispatch(updateXParent(value));
-                    }}
-                  />
-                </div>
-                <div className="col10" />
-              </div>
-            </Row>
-          ) : null}
+          <Accordion>
+            <Accordion.Item eventKey="0">
+              <Accordion.Header className={darkClass}>
+                <strong>QR Code Configuration</strong>
+              </Accordion.Header>
+                <QRConfigurator />
+            </Accordion.Item>
+          </Accordion>
           <div className="fullrow">
             <div className="col60" />
             <div className="col20">
