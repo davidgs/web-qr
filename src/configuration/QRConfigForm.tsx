@@ -45,6 +45,7 @@ export default function QRConfigForm({
   const qSet = useSelector((state: RootState) => state.qr.settings);
   const qrConf = useSelector((state: RootState) => state.qrCode.settings);
   const dark = useSelector((state: RootState) => state.dark.dark);
+  const session = useSelector((state: RootState) => state.session.settings);
   const darkClass = dark ? 'header-stuff-dark' : 'header-stuff';
 
   const handleSubmit = (event: SyntheticEvent) => {

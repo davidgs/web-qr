@@ -21,29 +21,12 @@
  * SOFTWARE.
  */
 import { useEffect, useState } from "react";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import "./css/App.css";
 import { useDispatch, useSelector } from "react-redux";
 import store from "store2";
-import Userfront from "@userfront/toolkit";
-import type { ActionFunctionArgs, LoaderFunctionArgs } from "react-router-dom";
 import {
-  Await,
   createBrowserRouter,
-  defer,
-  Form,
-  Link,
-  Outlet,
   RouterProvider,
-  useAsyncError,
-  useAsyncValue,
-  useFetcher,
-  useFetchers,
-  useLoaderData,
-  useNavigation,
-  useParams,
-  useRevalidator,
-  useRouteError,
 } from "react-router-dom";
 
 import { RootState } from "./stores/store";
@@ -90,6 +73,9 @@ import {
 import { useWindowSize, useDebounce } from "@uidotdev/usehooks";
 import MainPage from "./pages/MainPage";
 import WelcomePage from "./pages/WelcomePage";
+import BuyPage from "./pages/BuyPage";
+import RegisterPage from "./pages/RegisterPage";
+import ConfigPage from "./pages/ConfigPage";
 
 export default function App() {
   const dispatch = useDispatch();
@@ -101,7 +87,7 @@ export default function App() {
   const width = useDebounce(size.width, 300);
   const version = "1.1.0";
   console.log("version", version);
-  Userfront.init("qbjrr47b");
+  // Userfront.init("qbjrr47b");
   // Userfront.init("qbjrr47b");
 
   useEffect(() => {
@@ -294,6 +280,22 @@ export default function App() {
       path: "build",
       element: <MainPage />,
     },
+    {
+      path: "buy",
+      element: <BuyPage />,
+    },
+    {
+      path: "config",
+      element: <ConfigPage />,
+    },
+    {
+      path: "register",
+      element: <RegisterPage />,
+    },
+    {
+      path: "welcome",
+      element: <WelcomePage />,
+    }
   ]);
   return (
     <>

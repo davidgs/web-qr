@@ -14,7 +14,7 @@ export default function MainPage()  {
 
   return (
     <>
-      <div className={`main-column-${mainSet.sidebar}`}>
+      <div className={`main-column-closed`}>
         <div className="link-form">
           {mainSet.sidebar !== "top" ? <QCode /> : <MobileQCode />}
           <hr />

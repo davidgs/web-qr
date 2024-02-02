@@ -50,6 +50,7 @@ export default function LinkToolbar(): JSX.Element {
   const useBitly = useSelector(
     (state: RootState) => state.bitly?.settings?.useValue,
   );
+  const session = useSelector((state: RootState) => state.session?.settings);
   // fence for basic license
   const linkHistory = useSelector(
     (state: RootState) => state.history?.linkHistory,
@@ -173,11 +174,11 @@ export default function LinkToolbar(): JSX.Element {
     <div className="fullrow">
       {/* fence for basic license */}
       {/* bitly enable */}
-      {useBitly && mainSet?.formType !== 'wifi' ? (
-        <div className="col20">
-          <BitlyCheck />
-        </div>
-      ) : null}
+        {session.license_type !== 'basic' && useBitly && mainSet?.formType !== 'wifi' ? (
+          <div className="col20">
+            <BitlyCheck />
+          </div>
+          ) : null}
       {/* end fence */}
       {/* QR Type selector */}
       <div
@@ -224,7 +225,9 @@ export default function LinkToolbar(): JSX.Element {
           {/* fence for Basic License */}
           {/* history button */}
           <div className="col25">
-            <HistoryChooser />
+            {session.license_type !== 'free' && (
+              <HistoryChooser />
+            )}
           </div>
           {/* end fence */}
           {/* Spacer */}
@@ -242,12 +245,15 @@ export default function LinkToolbar(): JSX.Element {
               <div className="col10px" />
               {/* config button */}
               <div className="colauto">
-                <QRConfigButton />
+
+                  <QRConfigButton />
+
               </div>
               {/* spacer */}
               <div className="col10px" />
               {/* fence for basic license */}
               {/* save button */}
+              { (session.license_type !== 'free') && (
               <div className="colauto">
                 <OverlayTrigger
                   placement="top"
@@ -268,7 +274,8 @@ export default function LinkToolbar(): JSX.Element {
                     {dark ? <Save /> : <SaveFill />}
                   </Button>
                 </OverlayTrigger>
-              </div>
+                </div>
+              )}
               {/* end fence */}
               {/* spacer */}
               <div className="col10px" />

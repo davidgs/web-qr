@@ -129,6 +129,7 @@ export default function WelcomeModal({ showMe, callback }: { showMe: boolean, ca
               custom links
             </li>
           </ul>
+          <h4>Cost: $10/month or $100/year</h4>
         </div>
         <div className="fullrow">
           <Button

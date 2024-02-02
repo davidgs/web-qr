@@ -29,6 +29,7 @@ import historyReducer from '../reducers/history/historySlice';
 import bitlyReducer from '../reducers/bitly/bitlySlice';
 import mainReducer from '../reducers/main/mainSlice';
 import qrReducer from '../reducers/qr/qrSlice';
+import sessionReducer from '../reducers/session/sessionSlice';
 
 export const mainStore = configureStore({
   reducer: {
@@ -40,6 +41,7 @@ export const mainStore = configureStore({
     wifi: wifiReducer,
     dark: darkReducer,
     history: historyReducer,
+    session: sessionReducer,
   },
 });
 

@@ -18,8 +18,13 @@ export default function WelcomePage() {
   const go = () => {
     navigate('/build');
   };
+
+  const gobuy = () => {
+    navigate('/buy');
+  };
+
   return (
-    <div className={`main-column-${mainSet.sidebar}`}>
+    <div className={`main-column-closed`}>
       <>
         <div className="fullrow">
           <div style={{ margin: "auto", textAlign: "center" }}>
@@ -51,7 +56,7 @@ export default function WelcomePage() {
             <li>WiFi codes to allow for automatic signon to your networks</li>
             <li>Simple URL Codes</li>
             <li>
-              Save your QR Codes in <code>jpg</code>, <code>png</code>, or
+              Download your QR Codes in <code>jpg</code>, <code>png</code>, or
               &nbsp;
               <code>svg</code> format
             </li>
@@ -71,11 +76,7 @@ export default function WelcomePage() {
           </ul>
         </div>
         <div className="fullrow">
-          <Button
-            variant="success"
-            size={"sm"}
-            onClick={go}
-          >
+          <Button variant="success" size={"sm"} onClick={go}>
             Start Using
           </Button>
         </div>
@@ -111,15 +112,18 @@ export default function WelcomePage() {
               <a href="https://Bit.ly/">Bit.ly</a> integration to shorten your
               custom links
             </li>
+            <li>
+              <code>svg</code> QR Codes can be saved with a transparent
+              background
+            </li>
+
+            <li>
+              <h5>Cost: $10/month or $100/year</h5>
+            </li>
           </ul>
         </div>
         <div className="fullrow">
-          <Button
-            variant="success"
-            size={"sm"}
-            disabled={true}
-            onClick={() => {}}
-          >
+          <Button variant="success" size={"sm"} onClick={gobuy}>
             Purchase
           </Button>
         </div>
@@ -131,13 +135,16 @@ export default function WelcomePage() {
         </div>
         <div className="fullrow">
           <ul>
-            <li>Use on up to 3 devices</li>
+            <li>Use on up to 5 devices</li>
             <li> Add your logo to your QR Codes</li>
             <img src={qCode3} width="100px" height="100px" alt="QR Code" />
             <li>Add your custom bit.ly short-domain</li>
             <li>
               Customize whether you want to enter codes free-form, or use a
               pre-defined list of choices for each one
+            </li>
+            <li>
+              <h5>Cost: $19.99/month or $200/year</h5>
             </li>
           </ul>
         </div>
@@ -165,6 +172,7 @@ export default function WelcomePage() {
               sub-domain)
             </li>
             <li>Custom branding logo for the app</li>
+            <li>Customize all field labels, tooltips, etc.</li>
           </ul>
         </div>
         <div className="fullrow">
@@ -188,7 +196,7 @@ export default function WelcomePage() {
         </div>
         <div className="fullrow">
           <strong>QR Builder</strong>&nbsp; is built by &nbsp;
-          <a className={darkClass} href="https://davidgs.com/">
+          <a className={darkClass} href="https://qr-builder.io/">
             David G. Simmons.
           </a>
         </div>
