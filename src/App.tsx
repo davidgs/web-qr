@@ -76,6 +76,7 @@ import WelcomePage from "./pages/WelcomePage";
 import BuyPage from "./pages/BuyPage";
 import RegisterPage from "./pages/RegisterPage";
 import ConfigPage from "./pages/ConfigPage";
+import PricingPage from "./pages/PricingPage";
 
 export default function App() {
   const dispatch = useDispatch();
@@ -287,6 +288,10 @@ export default function App() {
     {
       path: "config",
       element: <ConfigPage />,
+    },
+    {
+      path: "pricing",
+      element: <PricingPage />,
     },
     {
       path: "register",

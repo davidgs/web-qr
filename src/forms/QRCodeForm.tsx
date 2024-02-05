@@ -42,7 +42,7 @@ export default function QCode() {
     ? 'copy-icon header-stuff-dark'
     : 'copy-icon header-stuff';
   /**
-   * Saving as an SVZG is a pain in the ass, so we do (most)
+   * Saving as an SVG is a pain in the ass, so we do (most)
    * of that here but it requires Node.js to actually accomplish it, for unknown reasons.
    */
   const saveSVG = () => {

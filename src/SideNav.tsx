@@ -146,7 +146,7 @@ export default function SideNav() {
             </a>
           </li>
           <li> {/* className="has-subnav"> */}
-            <a href="">
+            <a href="pricing">
               <i className="bi bi-bag bi-2x"></i>
               <span className="nav-text">Purchase</span>
             </a>
