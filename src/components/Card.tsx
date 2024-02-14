@@ -1,5 +1,16 @@
 import React from "react";
-function Card(props) {
+
+interface CardProps {
+  data: {
+    plan: string;
+    price: string;
+    features: {
+      name: string;
+      isEnabled: boolean;
+    }[];
+  };
+}
+function Card(props: CardProps) {
   return (
     <>
       <div className="col-lg-4">
@@ -33,7 +44,6 @@ function Card(props) {
               })}
             </ul>
             <button
-              href="#"
               className="btn btn-block btn-primary text-uppercase"
             >
               Button

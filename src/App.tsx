@@ -34,6 +34,7 @@ import { updateMainSettings, updateSidebar } from "./reducers/main/mainSlice";
 import SideNav from "./SideNav";
 // import LinkToolbar from './components/LinkToolbar';
 import { IProps } from "react-qrcode-logo";
+import { DeviceUUID } from "device-uuid";
 import { updateBitlySettings } from "./reducers/bitly/bitlySlice";
 import { setDark } from "./reducers/dark/darkSlice";
 import {
@@ -77,6 +78,10 @@ import BuyPage from "./pages/BuyPage";
 import RegisterPage from "./pages/RegisterPage";
 import ConfigPage from "./pages/ConfigPage";
 import PricingPage from "./pages/PricingPage";
+import TermsOfService from "./pages/TermsOfService";
+import "./css/sidebar.css";
+import Account from "./pages/Account";
+import Privacy from "./pages/Privacy";
 
 export default function App() {
   const dispatch = useDispatch();
@@ -92,67 +97,12 @@ export default function App() {
   // Userfront.init("qbjrr47b");
 
   useEffect(() => {
-    if (!width) {
-      if (winWidth < 650) {
-        const f = { ...mainSet, sidebar: "top" };
-        store.set("main-config", f);
-        dispatch(updateSidebar("top"));
-        console.log(`winWidth: ${winWidth} < 650 Sidebar: top`);
-      } else if (winWidth <= 780) {
-        const f = { ...mainSet, sidebar: "closed" };
-        store.set("main-config", f);
-        dispatch(updateSidebar("closed"));
-        console.log(`winWidth: ${winWidth} <= 780 Sidebar: closed`);
-      } else {
-        return;
-      }
-      return;
-    } else {
-      if (width < 650) {
-        const f = { ...mainSet, sidebar: "top" };
-        store.set("main-config", f);
-        dispatch(updateSidebar("top"));
-        console.log(`winWidth: ${winWidth} < 650 Sidebar: top`);
-        return;
-      } else if (width <= 780) {
-        const f = { ...mainSet, sidebar: "closed" };
-        store.set("main-config", f);
-        dispatch(updateSidebar("closed"));
-        console.log(`winWidth: ${winWidth} <= 780 Sidebar: closed`);
-        return;
-      } else {
-        return;
-      }
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [width, winWidth]);
+    const deviceUUID = new DeviceUUID().get();
+    const did = new DeviceUUID().parse();
+    console.log(`did`, did);
+    console.log("deviceUUID", deviceUUID);
+  }, []);
 
-  useEffect(() => {
-    console.log("sidebar", mainSet.sidebar);
-  }, [mainSet.sidebar]);
-
-  useEffect(() => {
-    if (width && width < 650) {
-      const f = { ...mainSet, sidebar: "top" };
-      store.set("main-config", f);
-      dispatch(updateSidebar("top"));
-      return;
-    } else if (width && width <= 780) {
-      const f = { ...mainSet, sidebar: "closed" };
-      store.set("main-config", f);
-      dispatch(updateSidebar("closed"));
-      return;
-    } else {
-      const s = mainSet.sidebar;
-      if (s === "top") {
-        const f = { ...mainSet, sidebar: "closed" };
-        store.set("main-config", f);
-        dispatch(updateSidebar("closed"));
-        return;
-      }
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [width]);
 
   /**
    * get/set all default values from local storage
@@ -274,6 +224,10 @@ export default function App() {
 
   const router = createBrowserRouter([
     {
+      path: "account",
+      element: <Account />,
+    },
+    {
       path: "/",
       element: <WelcomePage />,
     },
@@ -294,8 +248,16 @@ export default function App() {
       element: <PricingPage />,
     },
     {
+      path: "privacy",
+      element: <Privacy />,
+    },
+    {
       path: "register",
       element: <RegisterPage />,
+    },
+    {
+      path: "tos",
+      element: <TermsOfService />,
     },
     {
       path: "welcome",
@@ -304,7 +266,7 @@ export default function App() {
   ]);
   return (
     <>
-      <div className="fullrow">
+      {/* <div className="fullrow"> */}
         <SideNav />
         <RouterProvider router={router} />
         {/* <Router>
@@ -315,17 +277,12 @@ export default function App() {
         </Router> */}
         <p></p>
         <div
-          className={darkClass}
-          style={{
-            position: "absolute",
-            bottom: "5px",
-            right: "10px",
-            marginTop: "10px",
-          }}
+          className={`${darkClass} version-div`}
+
         >
           <em>qr-builder v{version}</em>
         </div>
-      </div>
+      {/* </div> */}
     </>
   );
 }

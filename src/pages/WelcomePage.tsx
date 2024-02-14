@@ -1,12 +1,18 @@
-import { Button } from 'react-bootstrap';
-import { useNavigate } from 'react-router-dom';
-import { Github, Envelope, Twitter, Linkedin, Mastodon } from 'react-bootstrap-icons';
-import Logo from '../images/NewLinkerLogo.png';
+import { Button } from "react-bootstrap";
+import { useNavigate } from "react-router-dom";
+import {
+  Github,
+  Envelope,
+  Twitter,
+  Linkedin,
+  Mastodon,
+} from "react-bootstrap-icons";
+import Logo from "../images/NewLinkerLogo.png";
 import qCode1 from "../images/qcode1.png";
 import qCode2 from "../images/qcode2.png";
 import qCode3 from "../images/qcode3.png";
-import { useSelector } from 'react-redux';
-import { RootState } from '../stores/store';
+import { useSelector } from "react-redux";
+import { RootState } from "../stores/store";
 
 export default function WelcomePage() {
   const navigate = useNavigate();
@@ -16,15 +22,15 @@ export default function WelcomePage() {
   const darkClass = dark ? "header-stuff-dark" : "header-stuff";
 
   const go = () => {
-    navigate('/build');
+    navigate("/build");
   };
 
   const gobuy = () => {
-    navigate('/buy');
+    navigate("/buy");
   };
 
   return (
-    <div className={`main-column-closed`}>
+    <div className={`main-column`}>
       <>
         <div className="fullrow">
           <div style={{ margin: "auto", textAlign: "center" }}>

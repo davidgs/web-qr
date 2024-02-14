@@ -170,19 +170,28 @@ function ConfigPage(): JSX.Element {
 
   return (
     <>
-      <div className="main-column-closed">
-        <div className="fullrow" style={{ textAlign: "center", paddingBottom: "10px" }}>
-          <h2 style={{ margin: "auto"}} >Configuration Editor</h2>
+      <div className="main-column">
+        <div
+          className="fullrow"
+          style={{ textAlign: "center", paddingBottom: "10px" }}
+        >
+          <h2 style={{ margin: "auto" }}>Configuration Editor</h2>
         </div>
         {session.license_type === "free" && (
-          <div className="fullrow" style={{ textAlign: "center", paddingBottom: "10px" }}>
-          <h2 style={{ margin: "auto"}} >No Changeable settings for Free version</h2>
-        </div>
+          <div
+            className="fullrow"
+            style={{ textAlign: "center", paddingBottom: "10px" }}
+          >
+            <h2 style={{ margin: "auto" }}>
+              No Changeable settings for Free version
+            </h2>
+          </div>
         )}
-          <Accordion>
-            {/* Fence off for Basic/Enterprise license */}
+        <Accordion>
+          {/* Fence off for Basic/Enterprise license */}
           {/* General Config */}
-          {(session.license_type !== "free" && session.license_type === "enterprise") && (
+          {session.license_type !== "free" &&
+            session.license_type === "enterprise" && (
               <Accordion.Item eventKey="0">
                 <OverlayTrigger
                   placement="auto"
@@ -207,16 +216,17 @@ function ConfigPage(): JSX.Element {
                   </Accordion>
                 </Accordion.Body>
               </Accordion.Item>
-          )}
-          {(session.license_type === "basic" || session.license_type === "pro") && (
+            )}
+          {(session.license_type === "basic" ||
+            session.license_type === "pro") && (
             <Accordion>
               <BitlyConfigurator eKey="0" />
             </Accordion>
-              )}
-            {/* End fence */}
-            {/* Fence off for Basic/Enterprise License */}
+          )}
+          {/* End fence */}
+          {/* Fence off for Basic/Enterprise License */}
           {/* QR Code Configuration */}
-          { session.license_type !== "free" && (
+          {session.license_type !== "free" && (
             <Accordion.Item eventKey="1">
               <OverlayTrigger
                 placement="auto"
@@ -234,9 +244,9 @@ function ConfigPage(): JSX.Element {
               <QRConfigurator />
             </Accordion.Item>
           )}
-            {/* End fence */}
+          {/* End fence */}
           {/* UTM Codes */}
-          { session.license_type !== "free" && (
+          {session.license_type !== "free" && (
             <Accordion.Item eventKey="2">
               <OverlayTrigger
                 placement="auto"
@@ -255,8 +265,8 @@ function ConfigPage(): JSX.Element {
               <UTMConfigurator />
             </Accordion.Item>
           )}
-            {/* End fence */}
-          </Accordion>
+          {/* End fence */}
+        </Accordion>
         {/* <Modal.Footer>
           <OverlayTrigger
             placement="auto"

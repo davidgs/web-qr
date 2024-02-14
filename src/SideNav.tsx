@@ -22,7 +22,7 @@
  * SOFTWARE.
  */
 import './css/hyde.css';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Form, OverlayTrigger, Tooltip, Button } from 'react-bootstrap';
 import {
   Lightbulb,
@@ -45,6 +45,8 @@ import ConfigEditor from './configuration/ConfigEditor';
 import AboutModal from './components/AboutModal';
 import WelcomeModal from './components/WelcomeModal';
 import { updateMainSettings } from './reducers/main/mainSlice';
+import { SessionResponse } from '@userfront/core';
+import Userfront from '@userfront/toolkit';
 
 export default function SideNav() {
   const dark = useSelector((state: RootState) => state.dark);
@@ -53,23 +55,24 @@ export default function SideNav() {
   const [editConfig, setEditConfig] = useState(false);
   const [showAboutModal, setShowAboutModal] = useState(false);
   const mainSet = useSelector((state: RootState) => state.main.settings);
-  const sidebar = useSelector(
-    (state: RootState) => state.main.settings.sidebar
-  );
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
-  const showConfig = () => {
-    const r = document.getElementById("root");
-    if (!editConfig) {
-      r?.setAttribute("class", "backdrop");
-    } else {
-      r?.setAttribute("class", "");
-    }
-    setEditConfig(!editConfig);
-  };
-
-  const showAbout = () => {
-    setShowAboutModal(!showAboutModal);
-  };
+  useEffect(() => {
+    Userfront.getSession()
+      .then((session: SessionResponse) => {
+        if (session) {
+          console.log(`session`, session.isLoggedIn);
+          setIsLoggedIn(session.isLoggedIn);
+          return true;
+        } else {
+          return false;
+        }
+      })
+      .catch((err) => {
+        console.log(`err`, err);
+        return false;
+      });
+  }, []);
   /**
    * toggle the sidebar open or closed
    */
@@ -98,20 +101,6 @@ export default function SideNav() {
           <img
             src={Logo}
             alt="QR Builder Logo"
-            // width={
-            //   mainSet.sidebar === "open"
-            //     ? mainSet.brandWidth > 0
-            //       ? `${mainSet.brandWidth}px`
-            //       : "75%"
-            //     : "40px"
-            // }
-            // height={
-            //   mainSet.sidebar === "open"
-            //     ? mainSet.brandHeight > 0
-            //       ? `${mainSet.brandHeight}px`
-            //       : "auto"
-            //     : "40px"
-            // }
             style={{
               transition: "0.3s ease-in-out",
               position: "absolute",
@@ -121,6 +110,11 @@ export default function SideNav() {
           />
         </a>
         <ul>
+          <li className="hamburger">
+            <a href="#" onClick={toggleOpen}>
+              <i className="bi bi-justify-left bi-4x"></i>
+            </a>
+          </li>
           <li>
             <a href="/build">
               <i className="bi bi-qr-code bi-2x"></i>
@@ -135,54 +129,24 @@ export default function SideNav() {
                 }
               ></i>
               <span className="nav-text">
-                {dark.dark ? "Set Light Mode" : "Set Dark Mode"}
+                {dark.dark ? "Light Mode" : "Dark Mode"}
               </span>
             </a>
           </li>
-          <li className="has-subnav">
+          {/* <li className="has-subnav">
             <a href="/register">
               <i className="bi bi-person-add bi-2x"></i>
               <span className="nav-text">Create Account</span>
             </a>
-          </li>
-          <li> {/* className="has-subnav"> */}
+          </li> */}
+          <li>
+            {" "}
+            {/* className="has-subnav"> */}
             <a href="pricing">
               <i className="bi bi-bag bi-2x"></i>
               <span className="nav-text">Purchase</span>
             </a>
-            <ul>
-              <li className="has-subnav">
-                <a href="/buy-pro">
-                  <i className="bi bi-credit-card bi-2x"></i>
-                  <span className="nav-text">Pro License</span>
-                </a>
-              </li>
-              <li className="has-subnav">
-                <a href="/buy">
-                  <i className="bi bi-credit-card bi-2x"></i>
-                  <span className="nav-text">Basic License</span>
-                </a>
-              </li>
-            </ul>
           </li>
-          {/* <li className="has-subnav">
-            <a href="#">
-              <i className="fa fa-camera-retro fa-2x"></i>
-              <span className="nav-text">Survey Photos</span>
-            </a>
-          </li> */}
-          {/* <li>
-            <a href="#">
-              <i className="fa fa-film fa-2x"></i>
-              <span className="nav-text">Surveying Tutorials</span>
-            </a>
-          </li> */}
-          {/* <li>
-            <a href="#">
-              <i className="fa fa-book fa-2x"></i>
-              <span className="nav-text">Surveying Jobs</span>
-            </a>
-          </li> */}
           <li>
             <a href="/config">
               <i className="fa fa-cogs fa-2x"></i>
@@ -195,16 +159,32 @@ export default function SideNav() {
               <span className="nav-text">About</span>
             </a>
           </li>
-        </ul>
-
-        <ul className="logout">
           <li>
-            <a href="#">
-              <i className="fa fa-power-off fa-2x"></i>
-              <span className="nav-text">Logout</span>
+            <a href="tos">
+              <i className="bi bi-file-earmark-text bi-2x"></i>
+              <span className="nav-text">Terms of Service</span>
             </a>
           </li>
+          <li>
+            <a href="privacy">
+              <i className="bi bi-shield-lock bi-2x"></i>
+              <span className="nav-text">Privacy Policy</span>
+            </a>
+          </li>
+          <li className="has-subnav">
+            <a href="#">
+              <i className="bi bi-bug bi-2x"></i>
+              <span className="nav-text">Rebort a Bug</span>
+            </a>
+          </li>
+          {/* <li>
+            <a href="account">
+              <i className="fa fa-power-off fa-2x"></i>
+              <span className="nav-text">{isLoggedIn ? "Logout" : "Login/Sign up"}</span>
+            </a>
+          </li> */}
         </ul>
+
         <div className={`copyright-sticky-closed`}>
           <p
             style={{

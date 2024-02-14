@@ -3,6 +3,7 @@
   "version": "1.1.0",
   "private": false,
   "dependencies": {
+    "@prisma/client": "5.9.0",
     "@reduxjs/toolkit": "^2.0.1",
     "@testing-library/jest-dom": "^5.17.0",
     "@testing-library/react": "^13.4.0",
@@ -14,9 +15,11 @@
     "@uidotdev/usehooks": "^2.4.1",
     "@userfront/core": "^0.6.8",
     "@userfront/toolkit": "^1.0.6",
+    "@userfront/types": "^1.4.0",
     "axios": "^1.6.5",
     "bootstrap": "^5.3.2",
     "bootstrap-icons": "^1.11.3",
+    "device-uuid": "^1.0.4",
     "install": "^0.13.0",
     "npm": "^10.4.0",
     "potrace": "^2.1.8",
@@ -60,6 +63,7 @@
     ]
   },
   "devDependencies": {
+    "@types/device-uuid": "^1.0.3",
     "@types/potrace": "^2.1.5",
     "@types/react-color": "^3.0.11",
     "prisma": "^5.8.1"

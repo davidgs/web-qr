@@ -180,6 +180,7 @@ model Licensing {
   id                  Int          @id @default(autoincrement())
   license_type        String?
   license_key         String?
+  machine_ids         String[]
   expire_date         DateTime?
   created_at          DateTime     @default(now()) @db.Timestamp(6)
   updated_at          DateTime?    @db.Timestamp(6)

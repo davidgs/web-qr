@@ -24,39 +24,39 @@ import { ActiveLink } from '../types';
 
 export function makeLongLink(linkParts: ActiveLink): string {
   let tempLink: string = 'https://www.example.com/';
-  tempLink = linkParts?.utm_target?.endsWith('/')
-    ? linkParts?.utm_target
-    : `${linkParts?.utm_target}/`;
+  tempLink = linkParts?.utm_target as string;
+  let utmString = '';
   if (linkParts?.utm_campaign !== '' && linkParts?.utm_campaign !== undefined) {
-    tempLink = tempLink.endsWith('/')
-      ? (tempLink += `?utm_campaign=${linkParts?.utm_campaign}`)
-      : (tempLink += `&utm_source${linkParts?.utm_campaign}`);
+    utmString !== ''
+      ? (utmString += `?utm_campaign=${linkParts?.utm_campaign}`)
+      : (utmString += `&utm_source${linkParts?.utm_campaign}`);
   }
   if (linkParts?.utm_source !== '' && linkParts?.utm_source !== undefined) {
-    tempLink = tempLink.endsWith('/')
-      ? (tempLink += `?utm_source=${linkParts?.utm_source}`)
-      : (tempLink += `&utm_source=${linkParts?.utm_source}`);
+    utmString === ""
+      ? (utmString += `?utm_source=${linkParts?.utm_source}`)
+      : (utmString += `&utm_source=${linkParts?.utm_source}`);
   }
   if (linkParts?.utm_medium !== '' && linkParts?.utm_medium !== undefined) {
-    tempLink = tempLink.endsWith('/')
-      ? (tempLink += `?utm_medium=${linkParts?.utm_medium}`)
-      : (tempLink += `&utm_medium=${linkParts?.utm_medium}`);
+    utmString === ""
+      ? (utmString += `?utm_medium=${linkParts?.utm_medium}`)
+      : (utmString += `&utm_medium=${linkParts?.utm_medium}`);
   }
   if (linkParts?.utm_term !== '' && linkParts?.utm_term !== undefined) {
-    tempLink = tempLink.endsWith('/')
-      ? (tempLink += `?utm_term=${linkParts?.utm_term}`)
-      : (tempLink += `&utm_term=${linkParts?.utm_term}`);
+    utmString === ""
+      ? (utmString += `?utm_term=${linkParts?.utm_term}`)
+      : (utmString += `&utm_term=${linkParts?.utm_term}`);
   }
   if (linkParts?.utm_content !== '' && linkParts?.utm_content !== undefined) {
-    tempLink = tempLink.endsWith('/')
-      ? (tempLink += `?utm_content=${linkParts?.utm_content}`)
-      : (tempLink += `&utm_content=${linkParts?.utm_content}`);
+    utmString === ""
+      ? (utmString += `?utm_content=${linkParts?.utm_content}`)
+      : (utmString += `&utm_content=${linkParts?.utm_content}`);
   }
   if (linkParts?.utm_keyword !== '' && linkParts?.utm_keyword !== undefined) {
-    tempLink = tempLink.endsWith('/')
-      ? (tempLink += `?keyword=${linkParts?.utm_keyword}`)
-      : (tempLink += `&keyword=${linkParts?.utm_keyword}`);
+    utmString === ""
+      ? (utmString += `?keyword=${linkParts?.utm_keyword}`)
+      : (utmString += `&keyword=${linkParts?.utm_keyword}`);
   }
+  utmString !== '' ? (tempLink += `/${utmString}`) : (tempLink = tempLink);
   return tempLink;
 }
 

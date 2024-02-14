@@ -8,13 +8,12 @@ import URLForm from "../forms/URLForm";
 import WifiForm from "../forms/WiFiForm";
 import { RootState } from "../stores/store";
 
-export default function MainPage()  {
-
-    const mainSet = useSelector((state: RootState) => state.main.settings);
+export default function MainPage() {
+  const mainSet = useSelector((state: RootState) => state.main.settings);
 
   return (
     <>
-      <div className={`main-column-closed`}>
+      <div className={`main-column`}>
         <div className="link-form">
           {mainSet.sidebar !== "top" ? <QCode /> : <MobileQCode />}
           <hr />

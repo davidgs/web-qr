@@ -123,7 +123,7 @@ export const defaultSession: SessionProps = {
   organization: '',
   active: false,
   email: '',
-  license_type: 'pro',
+  license_type: 'free',
   expiry_date: new Date()
 };
 
