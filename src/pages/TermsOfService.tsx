@@ -1,3 +1,25 @@
+/* The MIT License (MIT)
+ *
+ * Copyright (c) 2022-present David G. Simmons
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ */
 export default function TermsOfService() {
   return (
     <div className={`main-column`}>
@@ -30,16 +52,15 @@ export default function TermsOfService() {
       </p>
       <h2>Cookies</h2>
       <p>
-        We employ the use of cookies. By accessing QR Builder, you agreed to
-        use cookies in agreement with the QR Builder's Privacy Policy.
+        We employ the use of cookies. By accessing QR Builder, you agreed to use
+        cookies in agreement with the QR Builder's Privacy Policy.
       </p>
       <p>
         Most interactive websites use cookies to let us retrieve the user’s
         details for each visit. Cookies are used by our website to enable the
         functionality of certain areas to make it easier for people visiting our
-        website.
-
-        We do not use cookies for tracking or advertising purposes, and we will never sell any of your data to anyone, ever.
+        website. We do not use cookies for tracking or advertising purposes, and
+        we will never sell any of your data to anyone, ever.
       </p>
       <h2>License</h2>
       <p>
@@ -51,13 +72,25 @@ export default function TermsOfService() {
       <ul>
         <li>Republish material from qr-builder.io</li>
         <li>Sell, rent or sub-license material from qr-builder.io</li>
-        <li>Reproduce, duplicate or copy material from qr-builder.io other than QR Codes that you have created.</li>
-        <li>Redistribute content from qr-builder.io other than QR Codes that you have created using qr-builder.io</li>
+        <li>
+          Reproduce, duplicate or copy material from qr-builder.io other than QR
+          Codes that you have created.
+        </li>
+        <li>
+          Redistribute content from qr-builder.io other than QR Codes that you
+          have created using qr-builder.io
+        </li>
       </ul>
       <p>This Agreement shall begin on the date hereof.</p>
       <h2>Offensive material:</h2>
       <p>
-        We do not allow the creation of QR Codes that link to offensive material, including but not limited to hate speech, racially or sexually offensive material, anti-LGBTQ+, anti-trans, anti-semitic, or any other material that could be considered offensive. We reserve the right to remove access to QR Builder for any user who creates QR Codes that link to offensive material. If you have a paid license to QR Builder and are removed for this reason, you will not be refunded.
+        We do not allow the creation of QR Codes that link to offensive
+        material, including but not limited to hate speech, racially or sexually
+        offensive material, anti-LGBTQ+, anti-trans, anti-semitic, or any other
+        material that could be considered offensive. We reserve the right to
+        remove access to QR Builder for any user who creates QR Codes that link
+        to offensive material. If you have a paid license to QR Builder and are
+        removed for this reason, you will not be refunded.
       </p>
     </div>
   );
