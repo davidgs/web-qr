@@ -24,10 +24,11 @@ import { createRoot } from "react-dom/client";
 import { Provider } from "react-redux";
 import App from "./App";
 import { mainStore } from "./stores/store";
+import ReactDOM from "react-dom/client";
 
-const container = document.getElementById("root")!;
-const root = createRoot(container);
-root.render(
+const root = document.getElementById("root");
+if (!root) throw new Error("No root element found");
+ReactDOM.createRoot(root).render(
   <Provider store={mainStore}>
     <App />
   </Provider>

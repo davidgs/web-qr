@@ -1,47 +1,37 @@
-import React from 'react';
-import { Button, Modal } from 'react-bootstrap';
-import Logo from '../images/NewLinkerLogo.png';
-import qCode1 from '../images/qcode1.png';
-import qCode2 from '../images/qcode2.png';
-import qCode3 from '../images/qcode3.png';
-import { Github, Envelope, Linkedin, Mastodon, Twitter } from 'react-bootstrap-icons';
-import { updateMainSettings } from '../reducers/main/mainSlice';
-import { useDispatch, useSelector } from "react-redux";
-import store from 'store2';
+import { Button } from "react-bootstrap";
+import { useNavigate } from "react-router-dom";
+import {
+  Github,
+  Envelope,
+  Twitter,
+  Linkedin,
+  Mastodon,
+} from "react-bootstrap-icons";
+import Logo from "../images/NewLinkerLogo.png";
+import qCode1 from "../images/qcode1.png";
+import qCode2 from "../images/qcode2.png";
+import qCode3 from "../images/qcode3.png";
+import { useSelector } from "react-redux";
+import { RootState } from "../stores/store";
 
-
-export default function WelcomeModal({ showMe, callback }: { showMe: boolean, callback: (res: boolean) => void }): React.JSX.Element {
-
-  const dispatch = useDispatch();
-  const mainSet = useSelector((state: any) => state.main.settings);
+export default function WelcomePage() {
+  const navigate = useNavigate();
   const dark = useSelector((state: any) => state.dark.dark);
+  const mainSet = useSelector((state: RootState) => state.main.settings);
+
   const darkClass = dark ? "header-stuff-dark" : "header-stuff";
 
-  const handleClose = () => {
-    callback(false);
-    const ms = { ...mainSet, firstRun: false };
-    dispatch(updateMainSettings(ms));
-    store.set("main-config", ms);
+  const go = () => {
+    navigate("/build");
+  };
+
+  const gobuy = () => {
+    navigate("/buy");
   };
 
   return (
-    <Modal size="xl" show={showMe} onHide={handleClose}>
-      <Modal.Header closeButton>
-        <Modal.Title>
-          <div style={{ margin: "auto" }}>
-            <h1>
-              <img
-                src={Logo}
-                alt="QR Builder Logo"
-                width={40}
-                height={40}
-              ></img>{" "}
-              Welcome to QR Builder
-            </h1>
-          </div>
-        </Modal.Title>
-      </Modal.Header>
-      <Modal.Body>
+    <div className={`main-column`}>
+      <>
         <div className="fullrow">
           <div style={{ margin: "auto", textAlign: "center" }}>
             <h1>
@@ -72,7 +62,7 @@ export default function WelcomeModal({ showMe, callback }: { showMe: boolean, ca
             <li>WiFi codes to allow for automatic signon to your networks</li>
             <li>Simple URL Codes</li>
             <li>
-              Save your QR Codes in <code>jpg</code>, <code>png</code>, or
+              Download your QR Codes in <code>jpg</code>, <code>png</code>, or
               &nbsp;
               <code>svg</code> format
             </li>
@@ -92,7 +82,7 @@ export default function WelcomeModal({ showMe, callback }: { showMe: boolean, ca
           </ul>
         </div>
         <div className="fullrow">
-          <Button variant="success" size={"sm"} >
+          <Button variant="success" size={"sm"} onClick={go}>
             Start Using
           </Button>
         </div>
@@ -128,16 +118,18 @@ export default function WelcomeModal({ showMe, callback }: { showMe: boolean, ca
               <a href="https://Bit.ly/">Bit.ly</a> integration to shorten your
               custom links
             </li>
+            <li>
+              <code>svg</code> QR Codes can be saved with a transparent
+              background
+            </li>
+
+            <li>
+              <h5>Cost: $10/month or $100/year</h5>
+            </li>
           </ul>
-          <h4>Cost: $10/month or $100/year</h4>
         </div>
         <div className="fullrow">
-          <Button
-            variant="success"
-            size={"sm"}
-            disabled={true}
-            onClick={() => {}}
-          >
+          <Button variant="success" size={"sm"} onClick={gobuy}>
             Purchase
           </Button>
         </div>
@@ -149,13 +141,16 @@ export default function WelcomeModal({ showMe, callback }: { showMe: boolean, ca
         </div>
         <div className="fullrow">
           <ul>
-            <li>Use on up to 3 devices</li>
+            <li>Use on up to 5 devices</li>
             <li> Add your logo to your QR Codes</li>
             <img src={qCode3} width="100px" height="100px" alt="QR Code" />
             <li>Add your custom bit.ly short-domain</li>
             <li>
               Customize whether you want to enter codes free-form, or use a
               pre-defined list of choices for each one
+            </li>
+            <li>
+              <h5>Cost: $19.99/month or $200/year</h5>
             </li>
           </ul>
         </div>
@@ -183,6 +178,7 @@ export default function WelcomeModal({ showMe, callback }: { showMe: boolean, ca
               sub-domain)
             </li>
             <li>Custom branding logo for the app</li>
+            <li>Customize all field labels, tooltips, etc.</li>
           </ul>
         </div>
         <div className="fullrow">
@@ -206,7 +202,7 @@ export default function WelcomeModal({ showMe, callback }: { showMe: boolean, ca
         </div>
         <div className="fullrow">
           <strong>QR Builder</strong>&nbsp; is built by &nbsp;
-          <a className={darkClass} href="https://davidgs.com/">
+          <a className={darkClass} href="https://qr-builder.io/">
             David G. Simmons.
           </a>
         </div>
@@ -246,12 +242,7 @@ export default function WelcomeModal({ showMe, callback }: { showMe: boolean, ca
             />
           </a>
         </div>
-      </Modal.Body>
-      <Modal.Footer>
-        <Button variant="secondary" onClick={handleClose}>
-          Close
-        </Button>
-      </Modal.Footer>
-    </Modal>
+      </>
+    </div>
   );
 }

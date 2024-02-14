@@ -40,7 +40,7 @@ export default function BitlyConfigurator({ eKey }: { eKey: string }) {
   const dark = useSelector((state: RootState) => state.dark.dark);
   const dispatch = useDispatch();
   const settings = useSelector((state: RootState) => state.bitly.settings);
-
+  const session = useSelector((state: RootState) => state.session.settings);
   const darkClass = dark ? 'header-stuff-dark' : 'header-stuff';
   const type: string = 'Link Shortener';
 
@@ -86,7 +86,7 @@ export default function BitlyConfigurator({ eKey }: { eKey: string }) {
           {settings.useValue && (
             <>
               {/* Link Shortener Type */}
-              <div className="fullrow">
+              {/* <div className="fullrow">
                 <div className="col30">
                   <Form.Label
                     className={darkClass}
@@ -122,7 +122,7 @@ export default function BitlyConfigurator({ eKey }: { eKey: string }) {
                 </div>
                 <div className="col50" />
                 <div className="col5" />
-              </div>
+              </div> */}
               {/* item link shortener URL */}
               <div className="fullrow">
                 <Form.Label className={darkClass}>
@@ -152,34 +152,38 @@ export default function BitlyConfigurator({ eKey }: { eKey: string }) {
                 </OverlayTrigger>
               </div>
               {/* item link shortener Domain */}
-              <div className="fullrow">
-                <Form.Label className={darkClass}>
-                  <strong>Short Link Domain (if any)</strong>
-                </Form.Label>
-              </div>
               {/* Fence off for Enterprise License */}
-              <div className="fullrow">
-                <OverlayTrigger
-                  placement="auto"
-                  delay={{ show: 250, hide: 300 }}
-                  overlay={
-                    <Tooltip id={`${settings.type}-error-tooltip`}>
-                      Enter the custom domain for your link shortener
-                    </Tooltip>
-                  }
-                >
-                  <Form.Control
-                    className={darkClass}
-                    type="text"
-                    id={`${type}-error`}
-                    placeholder={settings.bitlyDomain}
-                    value={settings.bitlyDomain}
-                    onChange={(e) => {
-                      dispatch(updateDomain(e.target.value));
-                    }}
-                  />
-                </OverlayTrigger>
-              </div>
+              {session.license_type === "pro" && (
+                <>
+                  <div className="fullrow">
+                    <Form.Label className={darkClass}>
+                      <strong>Short Link Domain (if any)</strong>
+                    </Form.Label>
+                  </div>
+                  <div className="fullrow">
+                    <OverlayTrigger
+                      placement="auto"
+                      delay={{ show: 250, hide: 300 }}
+                      overlay={
+                        <Tooltip id={`${settings.type}-error-tooltip`}>
+                          Enter the custom domain for your link shortener
+                        </Tooltip>
+                      }
+                    >
+                      <Form.Control
+                        className={darkClass}
+                        type="text"
+                        id={`${type}-error`}
+                        placeholder={settings.bitlyDomain}
+                        value={settings.bitlyDomain}
+                        onChange={(e) => {
+                          dispatch(updateDomain(e.target.value));
+                        }}
+                      />
+                    </OverlayTrigger>
+                  </div>
+                </>
+              )}
               {/* end fence */}
               {/* Link Shortener token */}
               <div className="fullrow">
@@ -210,12 +214,13 @@ export default function BitlyConfigurator({ eKey }: { eKey: string }) {
                 </OverlayTrigger>
               </div>
               {/* item Label */}
-              <div className="fullrow">
-                <Form.Label className={darkClass}>
-                  <strong>Label</strong>
-                </Form.Label>
-              </div>
-              {/* item Label Input */}
+              {session.license_type === "enterprise" && (
+                <>
+                <div className="fullrow">
+                  <Form.Label className={darkClass}>
+                    <strong>Label</strong>
+                  </Form.Label>
+                </div>
               <div className="fullrow">
                 <OverlayTrigger
                   placement="auto"
@@ -239,13 +244,11 @@ export default function BitlyConfigurator({ eKey }: { eKey: string }) {
                   />
                 </OverlayTrigger>
               </div>
-              {/* item Tooltip */}
               <div className="fullrow">
                 <Form.Label className={darkClass}>
                   <strong>ToolTip Text</strong>
                 </Form.Label>
               </div>
-              {/* item Tooltip Input */}
               <div className="fullrow">
                 <OverlayTrigger
                   placement="auto"
@@ -268,13 +271,11 @@ export default function BitlyConfigurator({ eKey }: { eKey: string }) {
                   />
                 </OverlayTrigger>
               </div>
-              {/* item Aria */}
               <div className="fullrow">
                 <Form.Label className={darkClass}>
                   <strong>ARIA (Accessibility) Text</strong>
                 </Form.Label>
               </div>
-              {/* item Aria Input */}
               <div className="fullrow">
                 <OverlayTrigger
                   placement="auto"
@@ -300,6 +301,12 @@ export default function BitlyConfigurator({ eKey }: { eKey: string }) {
                 </OverlayTrigger>
               </div>
               {/* item Error */}
+              {/* item Aria */}
+              <div className="fullrow">
+                <Form.Label className={darkClass}>
+                  <strong>Error Feedback Text</strong>
+                </Form.Label>
+              </div>
               <div className="fullrow">
                 <OverlayTrigger
                   placement="auto"
@@ -316,13 +323,15 @@ export default function BitlyConfigurator({ eKey }: { eKey: string }) {
                     id={`${type}-error`}
                     placeholder={`Enter ${settings.type} ${type} field error text`}
                     required
-                    value={settings.ariaLabel}
+                    value={settings.error}
                     onChange={(e) => {
                       dispatch(updateError(e.target.value));
                     }}
                   />
                 </OverlayTrigger>
-              </div>
+                  </div>
+                </>
+              )}
             </>
           )}
         </Form>

@@ -33,12 +33,13 @@
 
 html {
   font-family: Mulish, "Helvetica Neue", "Arial Nova", sans-serif !important;
-  overflow: hidden;
+  overflow: auto;
 }
 
 
 body {
   font-family: Mulish, "Helvetica Neue", "Arial Nova", sans-serif !important;
+  padding-bottom: 100px !important;
 }
 
 .form-select {
@@ -77,20 +78,30 @@ body {
   color: rgba(255, 255, 255, .5);
   background-color: rgb(10, 28, 46);
   font-size: .75rem;
-  height: 100vh;
-  position:absolute;
+  height: 100.25%;
+  position: fixed;
   left: 0px;
   border-bottom-right-radius: 10px;
   border-top-right-radius: 10px;
+  top: -1px;
 }
 
 .sidebar-closed {
-    color: rgba(255, 255, 255, .5);
+    text-align: center;
+  width: 60px;
+  transition: width 0.3s ease-in-out;
+  /* padding: 2rem 1rem; */
+  color: rgba(255, 255, 255, .5);
   background-color: rgb(10, 28, 46);
-    transition: width 0.3s ease-in-out;
-    width: 60px;
-    height: 100vh;
-    border-top-right-radius: 10px;
+  font-size: .75rem;
+  height: 101%;
+  position:fixed;
+  left: 0px;
+  top: -1px;
+  overflow-x: hidden;
+  border-bottom-right-radius: 10px;
+  border-top-right-radius: 10px;
+  z-index: 1;
 }
 .aside-column-top {
   display: flex;
@@ -162,7 +173,8 @@ body {
 
 }
 .brand-image-open {
-  transition: width 0.3s ease-in-out;
+  rotate: 360deg;
+  transition: rotate width 0.3s ease-in-out;
   margin-top: 10px;
   margin-bottom: 10px;
   margin-left: 0px;
@@ -174,7 +186,8 @@ body {
 
 
 .brand-image-closed {
-  transition: width 0.3s ease-in-out;
+  rotate: 360deg;
+  transition: rotate width 0.3s ease-in-out;
   width: 60px;
   height: 60px;
   margin-left: 0px;
@@ -206,20 +219,23 @@ body {
   width: 100vw;
   border-bottom-right-radius: 10px;
   border-bottom-left-radius: 10px;
+  position: fixed;
+  top: 0px;
 }
 
 .sidebar-closed {
+  text-align: center;
+  height: 100.25%;
+  width: 60px;
+  transition: width 0.3s ease-in-out;
+  /* padding: 2rem 1rem; */
   color: rgba(255, 255, 255, .5);
   background-color: rgb(10, 28, 46);
-  transition: width 0.3s ease-in-out;
-  width: 60px;
-  height: 100vh;
-  /* padding-top: 25px; */
-  position: absolute;
-  /* top: 50px; */
-  left: -7px;
-  border-top-right-radius: 10px;
+  font-size: .75rem;
+  position:fixed;
+  left: 0px;
   border-bottom-right-radius: 10px;
+  border-top-right-radius: 10px;
 }
 /* Sidebar links */
 .sidebar a {
@@ -294,6 +310,7 @@ a.sidebar-nav-item:focus {
   display: flex;
   flex-direction: column;
   position: absolute;
+  rotate: 360deg;
   transition: rotate 0.3s ease-in-out;
   bottom: 1rem;
   background-color: rgb(10, 28, 46);
@@ -346,7 +363,7 @@ a.sidebar-nav-item:focus {
 
 .copyright-sticky-closed {
   position: absolute;
-  rotate: 270deg;
+  rotate: -90deg;
   transition: rotate 0.3s ease-in-out;
   /* bottom: .5rem; */
   margin-left: -45px;
@@ -356,7 +373,10 @@ a.sidebar-nav-item:focus {
   padding-top: 20px;
   top: 40%;
   color: rgba(255, 255, 255, .5);
+  z-index: 1000;
 }
+
+
 
 .copyright-sticky-top {
   position: absolute;
@@ -403,6 +423,7 @@ a.sidebar-nav-item:focus {
 .sidebar-sticky-controls-closed {
   flex-direction: column;
   padding-left: 10px;
+  rotate: 360deg;
   transition: rotate 0.3s ease-in-out;
   /* width: 60px */
 }
@@ -756,6 +777,12 @@ a.sidebar-nav-item:focus {
 .side-nav-closed {
   display: flex;
   flex-direction: column;
+width: 60px;
+  background-color: rgb(10, 28, 46);
+  border-top-right-radius: 10px;
+  border-bottom-right-radius: 10px;
+  margin-top: -7px;
+margin-left: -7px;
 }
 
 .side-nav-open {
@@ -765,7 +792,7 @@ a.sidebar-nav-item:focus {
   background-color: rgb(10, 28, 46);
   border-top-right-radius: 10px;
   border-bottom-right-radius: 10px;
-  height: 100%;
+  margin-top: -7px;
 }
 .aside-column-open {
     transition: width 0.3s ease-in-out;
@@ -780,8 +807,7 @@ a.sidebar-nav-item:focus {
   }
 
   .main-column-top {
-    display: flex;
-    flex-direction: row;
+
     transition: width 0.3s ease-in-out;
     position: absolute;
     top: 60px;
@@ -792,8 +818,12 @@ a.sidebar-nav-item:focus {
     /* min-width: 500px; */
     margin-top: 10px;
     overflow-y: auto;
+    padding-bottom: 30px;
   }
-@media (min-width: 48em) {
+
+@media (min-width: 374px) {
+
+
   .aside-column {
     transition: width 0.3s ease-in-out;
     padding-top: 10px;
@@ -820,19 +850,86 @@ a.sidebar-nav-item:focus {
 
   .main-column-open {
     transition: width 0.3s ease-in-out;
-    float: right;
-    padding-left: 50px;
+    position: fixed;
+    left: 260px;
+    height: 100%;
+    overflow-x: auto;
+    /* padding-left: 50px; */
     margin-left: 10px;
-    margin-right: 10px;
+    padding-right: 20px;
+    padding-bottom: 30px;
     /* min-width: 500px; */
     margin-top: 10px;
     width: calc(100% - 280px)
   }
 
+  .main-column-closed {
+    transition: width 0.4s ease-in-out;
+    position: fixed;
+    left: 65px;
+    margin-left: 10px;
+    margin-right: 10px;
+    /* min-width: 500px; */
+    margin-top: 10px;
+    width: calc(100% - 90px);
+    position: absolute;
+    left: 60px;
+    overflow-y: auto;
+  }
+
+  /* Stops the float property from affecting content after the columns */
+  .columns:after {
+    content: "";
+    display: table;
+    clear: both;
+  }
+}
+@media (min-width: 48em) {
+
+
+  .aside-column {
+    transition: width 0.3s ease-in-out;
+    padding-top: 10px;
+    float: left;
+    width: 270px;
+    max-width: 250px;
+    margin-right: 10px;
+    border-top-right-radius: 10px;
+    background-color: rgb(10, 28, 46);
+    margin-top: -7px;
+  }
+
+  .aside-column-closed {
+    transition: width 0.3s ease-in-out;
+    width: 60x;
+    padding-top: 10px;
+    border-top-right-radius: 10px;
+    height: 100vh;
+    float: left;
+    margin-right: 10px;
+    background-color: rgb(10, 28, 46);
+    margin-top: -7px;
+  }
+
+  .main-column-open {
+    transition: width 0.3s ease-in-out;
+    position: fixed;
+    left: 260px;
+    height: 100%;
+    overflow-x: auto;
+    /* padding-left: 50px; */
+    margin-left: 10px;
+    padding-right: 20px;
+    padding-bottom: 30px;
+    /* min-width: 500px; */
+    margin-top: 10px;
+    width: calc(100% - 280px)
+  }
 
   .main-column-closed {
-    transition: width 0.3s ease-in-out;
-    float: right;
+    transition: width 0.4s ease-in-out;
+    position: fixed;
+    left: 65px;
     margin-left: 10px;
     margin-right: 10px;
     /* min-width: 500px; */
@@ -854,15 +951,14 @@ a.sidebar-nav-item:focus {
 @media (min-width: 64em) {
   .aside-column-open {
     transition: width 0.3s ease-in-out;
+    padding-top: 10px;
     float: left;
     width: 270px;
-    /* max-width: 230px; */
+    max-width: 250px;
     margin-right: 10px;
-    margin-top: -7px;
-    padding-right: 10px;
-    padding-top: 10px;
     border-top-right-radius: 10px;
     background-color: rgb(10, 28, 46);
+    margin-top: -7px;
   }
 
   .aside-column-closed {
@@ -890,13 +986,16 @@ a.sidebar-nav-item:focus {
 
   .main-column-closed {
     transition: width 0.3s ease-in-out;
-    float: right;
+    position: fixed;
+    left: 65px;
     margin-left: 10px;
     margin-right: 10px;
     /* min-width: 500px; */
     margin-top: 10px;
     width: calc(100% - 90px);
     overflow-y: auto;
+    position: absolute;
+    left: 60px;
   }
 
   /* Stops the float property from affecting content after the columns */
@@ -1453,3 +1552,117 @@ a.sidebar-nav-item:focus {
 }
 
 
+
+@import url(//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css);
+
+@import url(https://fonts.googleapis.com/css?family=Titillium+Web:300);
+.fa-2x {
+font-size: 2em;
+}
+.fa {
+position: relative;
+display: table-cell;
+width: 60px;
+height: 36px;
+text-align: center;
+vertical-align: middle;
+font-size:20px;
+}
+.bi-2x {
+font-size: 2em !important;
+}
+.bi-4x {
+  font-size: 4em !important;
+}
+.bi-8x {
+  font-size: 8em !important;
+}
+.bi {
+position: relative;
+display: table-cell;
+width: 60px;
+height: 36px;
+text-align: center;
+vertical-align: middle;
+font-size:20px;
+}
+
+.area {
+float: left;
+background: #e2e2e2;
+width: 100%;
+height: 100%;
+}
+
+section.pricing {
+  background: #007bff;
+  background: linear-gradient(to right, #0062E6, #33AEFF);
+}
+
+.pricing .card {
+  border: none;
+  border-radius: 1rem;
+  transition: all 0.2s;
+  box-shadow: 0 0.5rem 1rem 0 rgba(0, 0, 0, 0.1);
+}
+
+.pricing hr {
+  margin: 1.5rem 0;
+}
+
+.pricing .card-title {
+  margin: 0.5rem 0;
+  font-size: 0.9rem;
+  letter-spacing: .1rem;
+  font-weight: bold;
+}
+
+.pricing .card-price {
+  font-size: 3rem;
+  margin: 0;
+}
+
+.pricing .card-price .period {
+  font-size: 0.8rem;
+}
+
+.pricing ul li {
+  margin-bottom: 1rem;
+}
+
+.pricing .text-muted {
+  opacity: 0.7;
+}
+
+.pricing .btn {
+  font-size: 80%;
+  border-radius: 5rem;
+  letter-spacing: .1rem;
+  font-weight: bold;
+  padding: 1rem;
+  opacity: 0.7;
+  transition: all 0.2s;
+}
+
+/* Hover Effects on Card */
+
+@media (min-width: 992px) {
+  .pricing .card:hover {
+    margin-top: -.25rem;
+    margin-bottom: .25rem;
+    box-shadow: 0 0.5rem 1rem 0 rgba(0, 0, 0, 0.3);
+  }
+  .pricing .card:hover .btn {
+    opacity: 1;
+  }
+}
+
+@font-face {
+  font-family: 'Titillium Web';
+  font-style: normal;
+  font-weight: 300;
+  src: local('Titillium WebLight'), local('TitilliumWeb-Light'), url(http://themes.googleusercontent.com/static/fonts/titilliumweb/v2/anMUvcNT0H1YN4FII8wpr24bNCNEoFTpS2BTjF6FB5E.woff) format('woff');
+}
+
+@import
+'bootstrap-icons/font/bootstrap-icons.css'

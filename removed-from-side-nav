@@ -1,0 +1,175 @@
+  {/* {mainSet.sidebar !== "top" && (
+        <OverlayTrigger
+          placement="right"
+          delay={{ show: 250, hide: 300 }}
+          overlay={
+            mainSet.sidebar === "open" ? (
+              <Tooltip id="sidebar-tooltip">Collapse the Sidebar</Tooltip>
+            ) : (
+              <Tooltip id="sidebar-collapse-tooltip">
+                Expand the Sidebar
+              </Tooltip>
+            )
+          }
+        >
+          <button
+            type="button"
+            className="menuBtn"
+            style={{ float: "left" }}
+            onClick={toggleOpen}
+          >
+            {mainSet.sidebar === "open" ? (
+              <ChevronDoubleDown style={{ width: "32px", height: "26px" }} />
+            ) : (
+              <ChevronDoubleRight style={{ width: "32px", height: "26px" }} />
+            )}
+          </button>
+        </OverlayTrigger>
+      )} */}
+      {mainSet.sidebar === "open" && (
+        <article className={`post post-${sidebar}`}>
+          <h5>QR Code Builder</h5>
+          <p>
+            Create trackable links.
+            <br />
+            Design and add a custom QR Code to match your brand.
+          </p>
+        </article>
+)
+}
+      <div className='main-menu' >
+        {/* // {`brand-image-${sidebar}`}> */}
+
+       {mainSet.brandImage !== undefined &&
+          mainSet.brandImage !== null &&
+          mainSet.brandImage !== "" ? (
+            <ImgElement
+              byteString={mainSet.brandImage as string}
+              width={
+                sidebar === "closed" || sidebar === "top"
+                  ? 40
+                  : (mainSet.brandWidth as number)
+              }
+              height={
+                sidebar === "closed" || sidebar === "top"
+                  ? 40
+                  : (mainSet.brandHeight as number)
+              }
+              alt="Logo"
+            />
+        ) : (
+
+
+            // <OverlayTrigger
+            //   placement="auto"
+            //   delay={{ show: 250, hide: 300 }}
+            //   overlay={
+            //     <Tooltip id="brand-tooltip">
+            //       Click the <GearFill /> icon below to change this image.
+            //     </Tooltip>
+            //   }
+            // >
+        // {/* TODO: Make this a class */}
+
+            // </OverlayTrigger>
+          )}
+
+
+
+          <div className="fullrow">
+          <h4>Basic License:</h4>
+        </div>
+        <div className="fullrow">
+          <ul>
+            <li>Use on up to 3 devices</li>
+            <li>
+              Customize the colors of your QR Codes and change almost any aspect
+              of your QR Codes including the 'eye' shape, appearance, etc.
+            </li>
+            <div className="fullrow">
+              <div>
+                <img src={qCode1} width="100px" height="100px" alt="QR Code" />
+              </div>
+              <div className="col5" />
+              <div>
+                <img src={qCode2} width="100px" height="100px" alt="QR Code" />
+              </div>
+              {/* <div className="col25" /> */}
+            </div>
+            <li> Customize which 'UTM' codes you want to use</li>
+            <li>
+              Save any links you have previously encoded so you can get your QR
+              Codes back
+            </li>
+            <li>
+              <a href="https://Bit.ly/">Bit.ly</a> integration to shorten your
+              custom links
+            </li>
+            <li>
+              <code>svg</code> QR Codes can be saved with a transparent
+              background
+            </li>
+
+            <li>
+              <h5>Cost: $10/month or $100/year</h5>
+            </li>
+          </ul>
+        </div>
+        <div className="fullrow">
+          <Button variant="success" size={"sm"} onClick={gobuy}>
+            Purchase
+          </Button>
+        </div>
+        <div className="fullrow">
+          <hr />
+        </div>
+        <div className="fullrow">
+          <h4>Pro License:</h4>
+        </div>
+        <div className="fullrow">
+          <ul>
+            <li>Use on up to 5 devices</li>
+            <li> Add your logo to your QR Codes</li>
+            <img src={qCode3} width="100px" height="100px" alt="QR Code" />
+            <li>Add your custom bit.ly short-domain</li>
+            <li>
+              Customize whether you want to enter codes free-form, or use a
+              pre-defined list of choices for each one
+            </li>
+            <li>
+              <h5>Cost: $19.99/month or $200/year</h5>
+            </li>
+          </ul>
+        </div>
+        <div className="fullrow">
+          <Button
+            variant="success"
+            size={"sm"}
+            disabled={true}
+            onClick={() => {}}
+          >
+            Purchase
+          </Button>
+        </div>
+        <div className="fullrow">
+          <hr style={{ width: "100%" }} />
+        </div>
+        <div className="fullrow">
+          <h4>Enterprise License</h4>
+        </div>
+        <div className="fullrow">
+          <ul>
+            <li>Use on up to 10 devices</li>
+            <li>
+              Custom domain name (replace qr-builder.io with your own domain or
+              sub-domain)
+            </li>
+            <li>Custom branding logo for the app</li>
+            <li>Customize all field labels, tooltips, etc.</li>
+          </ul>
+        </div>
+        <div className="fullrow">
+          <Button variant="success" size={"sm"} disabled={true}>
+            Contact us
+          </Button>
+        </div>

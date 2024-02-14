@@ -101,6 +101,32 @@ export type UtmParams = {
   utm_content: UtmObj;
 };
 
+export type SessionProps = {
+  id: number;
+  login: string;
+  stripe_id: string;
+  first_name: string;
+  last_name: string;
+  organization?: string;
+  active: boolean;
+  email: string;
+  license_type: string;
+  expiry_date?: Date;
+};
+
+export const defaultSession: SessionProps = {
+  id: 0,
+  login: '',
+  stripe_id: '',
+  first_name: '',
+  last_name: '',
+  organization: '',
+  active: false,
+  email: '',
+  license_type: 'free',
+  expiry_date: new Date()
+};
+
 export const defaultBitlyConfig: BitlyConfig = {
   useValue: false,
   label: 'Shorten Link',
