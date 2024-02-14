@@ -30,7 +30,7 @@ import {
 } from "react-router-dom";
 
 import { RootState } from "./stores/store";
-import { updateMainSettings, updateSidebar } from "./reducers/main/mainSlice";
+import { updateMainSettings } from "./reducers/main/mainSlice";
 import SideNav from "./SideNav";
 // import LinkToolbar from './components/LinkToolbar';
 import { IProps } from "react-qrcode-logo";
@@ -71,7 +71,7 @@ import {
   DefaultQRStyle,
   defaultBitlyConfig,
 } from "./types";
-import { useWindowSize, useDebounce } from "@uidotdev/usehooks";
+// import { useWindowSize, useDebounce } from "@uidotdev/usehooks";
 import MainPage from "./pages/MainPage";
 import WelcomePage from "./pages/WelcomePage";
 import BuyPage from "./pages/BuyPage";
@@ -88,9 +88,9 @@ export default function App() {
   const [winWidth] = useState(window.innerWidth);
   const dark = useSelector((state: RootState) => state.dark);
   const darkClass = dark ? "header-stuff-dark" : "header-stuff";
-  const mainSet = useSelector((state: RootState) => state.main.settings);
-  const size = useWindowSize();
-  const width = useDebounce(size.width, 300);
+  // const mainSet = useSelector((state: RootState) => state.main.settings);
+  // const size = useWindowSize();
+  // const width = useDebounce(size.width, 300);
   const version = "1.1.0";
   console.log("version", version);
   // Userfront.init("qbjrr47b");

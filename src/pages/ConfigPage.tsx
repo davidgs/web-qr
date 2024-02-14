@@ -23,8 +23,7 @@
  */
 /* eslint-disable no-case-declarations */
 import { JSX, useState, SyntheticEvent, memo } from "react";
-import Button from "react-bootstrap/Button";
-import { Accordion, Modal, OverlayTrigger, Tooltip } from "react-bootstrap";
+import { Accordion, OverlayTrigger, Tooltip } from "react-bootstrap";
 import "primereact/resources/primereact.min.css";
 import { useDispatch, useSelector } from "react-redux";
 import store from "store2";
@@ -105,35 +104,35 @@ function ConfigPage(): JSX.Element {
   );
 
   /* handle closing without saving */
-  const handleCancel = () => {
-    const uc = store.get("utm-config");
-    if (uc !== null) {
-      dispatch(updateUTMCampaignSettings(uc.utm_campaign));
-      dispatch(updateUTMMediumSettings(uc.utm_medium));
-      dispatch(updateUTMSourceSettings(uc.utm_source));
-      dispatch(updateUTMTermSettings(uc.utm_term));
-      dispatch(updateUTMContentSettings(uc.utm_content));
-      dispatch(updateUTMKeywordSettings(uc.utm_keyword));
-      dispatch(updateUTMTargetSettings(uc.utm_target));
-    }
-    const mset = store.get("main-config");
-    if (mset !== null) {
-      dispatch(updateMainSettings(mset));
-    }
-    const qr: QRSettings = store.get("qr-config");
-    if (qr !== null) {
-      dispatch(updateQRSettings(qr));
-    }
-    const qs: IProps = store.get("qr-style");
-    if (qs !== null) {
-      dispatch(updateQRStyleSettings(qs));
-    }
-    const bc: BitlyConfig = store.get("bitly-config");
-    if (bc !== null) {
-      dispatch(updateBitlySettings(bc));
-    }
-    // callback(false);
-  };
+  // const handleCancel = () => {
+  //   const uc = store.get("utm-config");
+  //   if (uc !== null) {
+  //     dispatch(updateUTMCampaignSettings(uc.utm_campaign));
+  //     dispatch(updateUTMMediumSettings(uc.utm_medium));
+  //     dispatch(updateUTMSourceSettings(uc.utm_source));
+  //     dispatch(updateUTMTermSettings(uc.utm_term));
+  //     dispatch(updateUTMContentSettings(uc.utm_content));
+  //     dispatch(updateUTMKeywordSettings(uc.utm_keyword));
+  //     dispatch(updateUTMTargetSettings(uc.utm_target));
+  //   }
+  //   const mset = store.get("main-config");
+  //   if (mset !== null) {
+  //     dispatch(updateMainSettings(mset));
+  //   }
+  //   const qr: QRSettings = store.get("qr-config");
+  //   if (qr !== null) {
+  //     dispatch(updateQRSettings(qr));
+  //   }
+  //   const qs: IProps = store.get("qr-style");
+  //   if (qs !== null) {
+  //     dispatch(updateQRStyleSettings(qs));
+  //   }
+  //   const bc: BitlyConfig = store.get("bitly-config");
+  //   if (bc !== null) {
+  //     dispatch(updateBitlySettings(bc));
+  //   }
+  //   // callback(false);
+  // };
 
   /* All done! */
   function callDone() {

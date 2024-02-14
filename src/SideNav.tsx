@@ -23,23 +23,10 @@
  */
 import './css/hyde.css';
 import { useEffect, useState } from 'react';
-import { Form, OverlayTrigger, Tooltip, Button } from 'react-bootstrap';
-import {
-  Lightbulb,
-  LightbulbFill,
-  Gear,
-  GearFill,
-  ExclamationCircleFill,
-  ExclamationTriangleFill,
-  ExclamationOctagonFill,
-  InfoCircle,
-  InfoCircleFill,
-} from 'react-bootstrap-icons';
 import store from 'store2';
 import { useSelector, useDispatch } from 'react-redux';
 import Logo from './images/NewLinkerLogo.png';
 import { RootState } from './stores/store';
-import spinner from './images/loading.png';
 import { setDark } from './reducers/dark/darkSlice';
 import ConfigEditor from './configuration/ConfigEditor';
 import AboutModal from './components/AboutModal';
@@ -51,7 +38,6 @@ import Userfront from '@userfront/toolkit';
 export default function SideNav() {
   const dark = useSelector((state: RootState) => state.dark);
   const dispatch = useDispatch();
-  const [updateText] = useState<string>("");
   const [editConfig, setEditConfig] = useState(false);
   const [showAboutModal, setShowAboutModal] = useState(false);
   const mainSet = useSelector((state: RootState) => state.main.settings);
@@ -209,7 +195,7 @@ export default function SideNav() {
       {/* {sidebar !== "top" && ( */}
 
       {/* )} */}
-      {editConfig && (
+      {/* {editConfig && (
         <ConfigEditor showMe={editConfig} callback={setEditConfig} />
       )}
       {showAboutModal && (
@@ -224,7 +210,7 @@ export default function SideNav() {
             dispatch(updateMainSettings(ms));
           }}
         />
-      )}
+      )} */}
     </div>
     // </div>
   );
