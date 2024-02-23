@@ -20,7 +20,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-import { Button } from "react-bootstrap";
+import { Button, OverlayTrigger, Tooltip } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import {
   Github,
@@ -34,13 +34,10 @@ import qCode1 from "../images/qcode1.png";
 import qCode2 from "../images/qcode2.png";
 import qCode3 from "../images/qcode3.png";
 import { useSelector } from "react-redux";
-// import { RootState } from "../stores/store";
 
 export default function WelcomePage() {
   const navigate = useNavigate();
   const dark = useSelector((state: any) => state.dark.dark);
-  // const mainSet = useSelector((state: RootState) => state.main.settings);
-
   const darkClass = dark ? "header-stuff-dark" : "header-stuff";
 
   const go = () => {
@@ -57,21 +54,19 @@ export default function WelcomePage() {
         <div className="fullrow">
           <div style={{ margin: "auto", textAlign: "center" }}>
             <h1>
-              <img
-                src={Logo}
-                alt="QR Builder Logo"
-                width={40}
-                height={40}
-              ></img>{" "}
+              <img src={Logo} alt="QR Builder Logo" width={40} height={40} />{" "}
               &nbsp; &nbsp;
-              <strong>Welcome to QR Builder</strong>
+              <strong>
+                Welcome to QR Builder<span className="tr">&trade;</span>
+              </strong>
             </h1>
           </div>
         </div>
-        <div className="fullrow" style={{ textWrap: "pretty" }}>
-          <strong>QR Builder</strong>&nbsp;is a cross-platform application for
-          creating QR Codes for things like URLs, WiFi Networks, etc. It is
-          highly customizable and can be adapted for just about any need.
+        <div>
+          <b style={{ textWrap: "nowrap" }}>QR Builder </b> is a cross-platform
+          application for creating QR Codes for things like URLs, WiFi Networks,
+          etc. It is highly customizable and can be adapted for just about any
+          need.
         </div>
         <div className="fullrow">
           <hr style={{ width: "100%" }}></hr>
@@ -81,14 +76,12 @@ export default function WelcomePage() {
         </div>
         <div className="fullrow">
           <ul>
-            <li>WiFi codes to allow for automatic signon to your networks</li>
-            <li>Simple URL Codes</li>
             <li>
-              Download your QR Codes in <code>jpg</code>, <code>png</code>, or
-              &nbsp;
-              <code>svg</code> format
+              Create QR Codes for URLs <em>and</em> WiFi networks to allow for
+              automatic signons to your networks
             </li>
-            <li> Encode your links for tracking</li>
+            <li>Simple URL Codes</li>
+            <li>Encode your links for tracking</li>
             <ul>
               <li>
                 <code>
@@ -97,9 +90,11 @@ export default function WelcomePage() {
                 </code>
               </li>
             </ul>
+            <li>WiFi codes to allow for automatic signon to your networks</li>
             <li>
-              Create QR Codes for URLs <em>and</em> WiFi networks to allow for
-              automatic signons to your networks
+              Download your QR Codes in <code>jpg</code>, <code>png</code>, or
+              &nbsp;
+              <code>svg</code> format
             </li>
           </ul>
         </div>
@@ -151,9 +146,24 @@ export default function WelcomePage() {
           </ul>
         </div>
         <div className="fullrow">
-          <Button variant="success" size={"sm"} onClick={gobuy}>
-            Purchase
-          </Button>
+          <OverlayTrigger
+            placement="auto"
+            delay={{ show: 250, hide: 300 }}
+            overlay={
+              <Tooltip id="basic-coming-soon-tooltip">
+                Coming Soon! Basic License
+              </Tooltip>
+            }
+          >
+            <Button
+              variant="success"
+              size={"sm"}
+              onClick={gobuy}
+              disabled={true}
+            >
+              Purchase
+            </Button>
+          </OverlayTrigger>
         </div>
         <div className="fullrow">
           <hr />
@@ -263,6 +273,9 @@ export default function WelcomePage() {
               style={{ height: "20px", width: "20px" }}
             />
           </a>
+        </div>
+        <div className="fullrow" style={{ paddingBottom: "30px" }}>
+          <p></p>
         </div>
       </>
     </div>

@@ -14,7 +14,6 @@ import {
   Twitter,
 } from "react-bootstrap-icons";
 
-
 /**
  *
  * @returns const options = {
@@ -35,7 +34,6 @@ export default function AboutModal({
   showMe: boolean;
   callback: (res: boolean) => void;
 }): React.JSX.Element {
-
   const dark = useSelector((state: RootState) => state.dark.dark);
   const darkClass = dark ? "header-stuff-dark" : "header-stuff";
 
@@ -55,7 +53,7 @@ export default function AboutModal({
                 width={40}
                 height={40}
               ></img>{" "}
-              About to QR Builder
+              About to QR Builder<span className="tr">&trade;</span>
             </h1>
           </div>
         </Modal.Title>
@@ -142,7 +140,10 @@ export default function AboutModal({
           </a>
         </p>
         <p>
-          <strong>QR Builder</strong> is built by <a className={darkClass} href="https://davidgs.com/">David G. Simmons.</a>
+          <strong>QR Builder</strong> is built by{" "}
+          <a className={darkClass} href="https://davidgs.com/">
+            David G. Simmons.
+          </a>
         </p>
         <p>
           <a href="mailto:davidgs@qr-builder.io">

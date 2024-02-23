@@ -20,18 +20,18 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-import { Form, OverlayTrigger, Tooltip } from 'react-bootstrap';
-import { RootState } from '../../stores/store';
-import { useSelector, useDispatch } from 'react-redux';
-import { updateEyeRadius } from '../../reducers/qr/qrCodeSettingsSlice';
-import { CornerRadii } from '../../types';
-import AdjusterKnob from './AdjusterKnob';
+import { OverlayTrigger, Tooltip } from "react-bootstrap";
+import { RootState } from "../../stores/store";
+import { useSelector, useDispatch } from "react-redux";
+import { updateEyeRadius } from "../../reducers/qr/qrCodeSettingsSlice";
+import { CornerRadii } from "../../types";
+import AdjusterKnob from "./AdjusterKnob";
+import "../../css/EyeStylers.css";
+import "../../css/MainConfig.css";
 
 export default function EyeStylers() {
   const dispatch = useDispatch();
   const qConfig = useSelector((state: RootState) => state.qrCode.settings);
-  const dark = useSelector((state: RootState) => state.dark.dark);
-  const darkClass = dark ? 'header-stuff-dark' : 'header-stuff';
   /* Update properties when eye-radius values change */
   const handleEyeRadiusChange = (e: number, index: number, corner: number) => {
     const value = e;
@@ -44,17 +44,17 @@ export default function EyeStylers() {
     switch (index) {
       case 0:
         dispatch(
-          updateEyeRadius([newCorner, newEyeRadius[1], newEyeRadius[2]]),
+          updateEyeRadius([newCorner, newEyeRadius[1], newEyeRadius[2]])
         );
         break;
       case 1:
         dispatch(
-          updateEyeRadius([newEyeRadius[0], newCorner, newEyeRadius[2]]),
+          updateEyeRadius([newEyeRadius[0], newCorner, newEyeRadius[2]])
         );
         break;
       case 2:
         dispatch(
-          updateEyeRadius([newEyeRadius[0], newEyeRadius[1], newCorner]),
+          updateEyeRadius([newEyeRadius[0], newEyeRadius[1], newCorner])
         );
         break;
       default:
@@ -63,20 +63,9 @@ export default function EyeStylers() {
   };
 
   return (
-    <div className="col40">
-      {/* Top Left & right labels */}
-      <div className="fullrow">
-        <div className="col40" style={{ margin: "auto" }}>
-          <Form.Label className={darkClass}>Top Left: </Form.Label>
-        </div>
-        <div className="col10" />
-        <div className="col40" style={{ margin: "auto" }}>
-          <Form.Label className={darkClass}>Top Right: </Form.Label>
-        </div>
-        <div className="col10" />
-      </div>
+    <div className="eye-styler">
       {/* Top Left & right knobs */}
-      <div className="fullrow">
+      <div className="controls-row">
         <OverlayTrigger
           placement="auto"
           delay={{ show: 250, hide: 300 }}
@@ -86,7 +75,8 @@ export default function EyeStylers() {
             </Tooltip>
           }
         >
-          <div className="col45">
+          <div className="styler-column">
+            <div className="styler-title">Top Left:</div>
             <div className="fullrow">
               {/* Top Left /top left */}
               <div className="eye-color-adjuster">
@@ -151,8 +141,8 @@ export default function EyeStylers() {
             </div>
           </div>
         </OverlayTrigger>
-        <div className="col10" />
         {/* Top Right knobs */}
+
         <OverlayTrigger
           placement="auto"
           delay={{ show: 250, hide: 300 }}
@@ -162,7 +152,8 @@ export default function EyeStylers() {
             </Tooltip>
           }
         >
-          <div className="col45">
+          <div className="styler-column">
+            <div className="styler-title">Top Right:</div>
             <div className="fullrow">
               <div className="eye-color-adjuster">
                 <AdjusterKnob
@@ -224,15 +215,8 @@ export default function EyeStylers() {
           </div>
         </OverlayTrigger>
       </div>
-      <div className="fullrow">
-        <div className="col40" style={{ margin: "auto" }}>
-          <Form.Label className={darkClass}>Bottom Left:</Form.Label>
-        </div>
-        <div className="col10" />
-        <div className="col40" style={{ margin: "auto" }} />
-        <div className="col10" />
-      </div>
-      <div className="fullrow">
+      {/* Bottom Left knob */}
+      <div className="controls-row">
         <OverlayTrigger
           placement="auto"
           delay={{ show: 250, hide: 300 }}
@@ -242,7 +226,8 @@ export default function EyeStylers() {
             </Tooltip>
           }
         >
-          <div className="col45">
+          <div className="styler-column">
+            <div className="styler-title">Lower Left:</div>
             <div className="fullrow">
               <div className="eye-color-adjuster">
                 <AdjusterKnob
@@ -303,8 +288,7 @@ export default function EyeStylers() {
             </div>
           </div>
         </OverlayTrigger>
-        <div className="col10" />
-        <div className="col45" />
+        <div className="styler-column"></div>
       </div>
     </div>
   );

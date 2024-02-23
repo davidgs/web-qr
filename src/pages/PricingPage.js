@@ -20,6 +20,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
+
 import { Button, Col, Row } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import {
@@ -31,22 +32,19 @@ import {
 } from "react-bootstrap-icons";
 import Logo from "../images/NewLinkerLogo.png";
 import { useSelector } from "react-redux";
-import { RootState } from "../stores/store";
 
 export default function PricingPage() {
   const navigate = useNavigate();
   const dark = useSelector((state) => state.dark.dark);
-  const mainSet = useSelector((state) => state.main.settings);
-
   const darkClass = dark ? "header-stuff-dark" : "header-stuff";
 
   const go = () => {
     navigate("/build");
   };
 
-  const gobuy = () => {
-    navigate("/buy");
-  };
+  // const gobuy = () => {
+  //   navigate("/buy");
+  // };
 
   return (
     <div className={`main-column`}>
@@ -61,11 +59,13 @@ export default function PricingPage() {
                 height={40}
               ></img>{" "}
               &nbsp; &nbsp;
-              <strong>Welcome to QR Builder</strong>
+              <strong>
+                Welcome to QR Builder<span className="tr">&trade;</span>
+              </strong>
             </h1>
           </div>
         </div>
-        <div className="fullrow" style={{ textWrap: "pretty" }}>
+        <div>
           <strong>QR Builder</strong>&nbsp;is a cross-platform application for
           creating QR Codes for things like URLs, WiFi Networks, etc. It is
           highly customizable and can be adapted for just about any need.
@@ -108,17 +108,6 @@ export default function PricingPage() {
         <div className="fullrow">
           <hr style={{ width: "100%" }} />
         </div>
-        {/* <section className="pricing py-5">
-          <div className="container">
-            <div className="row">
-              {
-                myPrices.map((obj) => {
-                  return <Card data={obj}></Card>;
-                }) // store data in myPrices map to card
-              }
-            </div>
-          </div>
-        </section> */}
         <Row>
           <Col size="sm8" style={{ fontSize: "24px", color: "grey" }}></Col>
           <Col size="sm1" style={{ fontSize: "24px", color: "grey" }}>

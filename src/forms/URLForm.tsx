@@ -112,6 +112,7 @@ export default function URLForm() {
   return (
     <>
       {/* utm_target */}
+      <div className="fullrow">
         <InputGroup size="lg">
             <UTMTextField
               valueChanged={linkPartChanged}
@@ -125,6 +126,7 @@ export default function URLForm() {
               settings={utmTarget}
             />
         </InputGroup>
+      </div>
       {/* </Row> */}
       {/* utm_source & utm_medium */}
       {mainConfig.formType === "encoded" && (

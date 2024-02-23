@@ -24,7 +24,8 @@
 
 .main-column {
     transition: width 0.4s ease-in-out;
-    position: fixed;
+    position: absolute;
+    top: 15px;
     left: 45px;
     margin-left: 10px;
     margin-right: 10px;
@@ -44,17 +45,17 @@ nav.main-menu.expanded {
 
 .main-menu {
   background: rgb(10, 28, 46);
-  /* border-right:1px solid #e5e5e5; */
-  position: absolute;
+  position: fixed;
   top: 0px;
   bottom: 0px;
-  height: 100%;
+  height: 100vh;
   left: 0;
   width: 60px;
-  overflow: hidden;
-  -webkit-transition: width .05s linear;
-  transition: width .05s linear;
+  overflow-y: scroll;
+  -webkit-transition: width .1s linear;
+  transition: width .1s linear;
   -webkit-transform: translateZ(0) scale(1, 1);
+  transform: translateZ(0) scale(1, 1);
   z-index: 1000;
   border-top-right-radius: 10px;
   border-bottom-right-radius: 10px;
@@ -97,6 +98,7 @@ nav.main-menu.expanded {
   font-size: 14px;
   text-decoration: none;
   -webkit-transform: translateZ(0) scale(1, 1);
+  transform: translateZ(0) scale(1, 1);
   -webkit-transition: all .1s linear;
   transition: all .1s linear;
 
@@ -265,6 +267,7 @@ nav.main-menu li.active>a,
     -webkit-transition: height .05s linear;
     transition: height .05s linear;
     -webkit-transform: translateY(0) scale(1, 1);
+    transform: translateY(0) scale(1, 1);
     z-index: 1000;
     border-bottom-left-radius: 10px;
     border-bottom-right-radius: 10px;
@@ -313,6 +316,7 @@ nav.main-menu li.active>a,
     font-size: 14px;
     text-decoration: none;
     -webkit-transform: translateY(0) scale(1, 1);
+    transform: translateY(0) scale(1, 1);
     -webkit-transition: all .1s linear;
     transition: all .1s linear;
 
@@ -483,6 +487,7 @@ nav.main-menu li.active>a,
     -webkit-transition: height .05s linear;
     transition: height .05s linear;
     -webkit-transform: translateY(0) scale(1, 1);
+    transform: translateY(0) scale(1, 1);
     z-index: 1000;
     border-bottom-left-radius: 10px;
     border-bottom-right-radius: 10px;
@@ -531,6 +536,7 @@ nav.main-menu li.active>a,
     font-size: 14px;
     text-decoration: none;
     -webkit-transform: translateY(0) scale(1, 1);
+    transform: translateY(0) scale(1, 1);
     -webkit-transition: all .1s linear;
     transition: all .1s linear;
 

@@ -20,11 +20,11 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-import React, { JSX, useState } from 'react';
-import { OverlayTrigger, Tooltip } from 'react-bootstrap';
-import { FiletypeSvg, FiletypeJpg, FiletypePng } from 'react-bootstrap-icons';
-import { useSelector } from 'react-redux';
-import { RootState } from '../stores/store';
+import React, { JSX, useState } from "react";
+import { OverlayTrigger, Tooltip } from "react-bootstrap";
+import { FiletypeSvg, FiletypeJpg, FiletypePng } from "react-bootstrap-icons";
+import { useSelector } from "react-redux";
+import { RootState } from "../stores/store";
 
 interface FileTypeProps {
   // eslint-disable-next-line no-unused-vars
@@ -37,18 +37,18 @@ function FileTypeSelector(props: FileTypeProps): JSX.Element {
   const { onSelectionChange, fileType } = props;
   const [selectedFileType, setSelectedFileType] = useState(fileType);
   const dark = useSelector((state: RootState) => state.dark.dark);
-  const darkClass = dark ? 'header-stuff-dark' : 'header-stuff';
+  const darkClass = dark ? "header-stuff-dark" : "header-stuff";
 
   const handleSelectionChange = (event: React.MouseEvent<SVGSVGElement>) => {
     const selectedFileTypeValue = event.currentTarget.getAttribute(
-      'data-value',
+      "data-value"
     ) as string;
     setSelectedFileType(selectedFileTypeValue);
     onSelectionChange(selectedFileTypeValue);
   };
 
   return (
-    <div style={{ paddingTop: '10px' }}>
+    <div>
       <OverlayTrigger
         placement="top"
         delay={{ show: 250, hide: 400 }}
@@ -64,12 +64,13 @@ function FileTypeSelector(props: FileTypeProps): JSX.Element {
           data-value="svg"
           size={30}
           className={
-            selectedFileType === 'svg'
+            selectedFileType === "svg"
               ? `${darkClass} custom-radio selected`
               : `${darkClass} custom-radio`
           }
           style={{
-            cursor: 'pointer'          }}
+            cursor: "pointer",
+          }}
         />
       </OverlayTrigger>
       <OverlayTrigger
@@ -87,12 +88,12 @@ function FileTypeSelector(props: FileTypeProps): JSX.Element {
           data-value="jpg"
           size={30}
           className={
-            selectedFileType === 'jpg'
-              ? 'custom-radio selected'
-              : 'custom-radio'
+            selectedFileType === "jpg"
+              ? "custom-radio selected"
+              : "custom-radio"
           }
           style={{
-            cursor: 'pointer',
+            cursor: "pointer",
           }}
         />
       </OverlayTrigger>
@@ -111,12 +112,12 @@ function FileTypeSelector(props: FileTypeProps): JSX.Element {
           data-value="png"
           size={30}
           className={
-            selectedFileType === 'png'
-              ? 'custom-radio selected'
-              : 'custom-radio'
+            selectedFileType === "png"
+              ? "custom-radio selected"
+              : "custom-radio"
           }
           style={{
-            cursor: 'pointer',
+            cursor: "pointer",
           }}
         />
       </OverlayTrigger>

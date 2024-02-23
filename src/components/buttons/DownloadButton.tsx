@@ -82,7 +82,7 @@ export default function DownloadButton() {
         className={darkClass}
         style={{ float: "right", alignItems: "center" }}
       >
-        <Download className={darkClass} color={dark ? "#adb5bd" : "#0B263E"} />
+        <Download />
       </Button>
     </OverlayTrigger>
   );

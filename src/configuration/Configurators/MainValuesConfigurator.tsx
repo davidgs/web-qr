@@ -20,29 +20,27 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-import React, { SyntheticEvent, useState } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+import React, { SyntheticEvent, useState } from "react";
+import { useSelector, useDispatch } from "react-redux";
 import {
   Accordion,
   Form,
   Button,
   OverlayTrigger,
   Tooltip,
-} from 'react-bootstrap';
-import { brandImageSettings, defaultMainSettings } from '../../types';
-import AdjusterKnob from '../../components/knobs/AdjusterKnob';
+} from "react-bootstrap";
+import { brandImageSettings, defaultMainSettings } from "../../types";
+import AdjusterKnob from "../../components/knobs/AdjusterKnob";
 import {
   updateBrandImage,
   updateHeight,
   updateMainSettings,
   updateWidth,
-} from '../../reducers/main/mainSlice';
-import Checker from '../../components/buttons/Checker';
-import Locked from '../../components/Locked';
-import UnLocked from '../../components/Unlocked';
-import ImgElement from '../../components/ImgElement';
-import { RootState } from '../../stores/store';
-
+} from "../../reducers/main/mainSlice";
+import Checker from "../../components/buttons/Checker";
+import ImgElement from "../../components/ImgElement";
+import { RootState } from "../../stores/store";
+import "../../css/MainConfig.css";
 export default function BrandingConfigurator({
   targetValidated,
 }: {
@@ -53,10 +51,10 @@ export default function BrandingConfigurator({
   const [showMainLogo, setShowMainLogo] = useState<boolean>(
     settings.brandImage !== undefined &&
       settings.brandImage !== null &&
-      settings.brandImage !== '',
+      settings.brandImage !== ""
   );
   const dark = useSelector((state: RootState) => state.dark.dark);
-  const darkClass = dark ? 'header-stuff-dark' : 'header-stuff';
+  const darkClass = dark ? "header-stuff-dark" : "header-stuff";
   const [isMainAspectLocked, setIsMainAspectLocked] = useState<boolean>(true);
   const [aspect, setAspect] = useState<number>(1);
 
@@ -79,13 +77,13 @@ export default function BrandingConfigurator({
       if (height > brandImageSettings.maxBrandHeight) {
         newH = brandImageSettings.maxBrandHeight;
         newW = Math.round(
-          (brandImageSettings.maxBrandWidth * aspect * 1e2) / 1e2,
+          (brandImageSettings.maxBrandWidth * aspect * 1e2) / 1e2
         );
       }
       if (width > brandImageSettings.maxBrandWidth) {
         newW = brandImageSettings.maxBrandWidth;
         newH = Math.round(
-          (brandImageSettings.maxBrandHeight * aspect * 1e2) / 1e2,
+          (brandImageSettings.maxBrandHeight * aspect * 1e2) / 1e2
         );
       } else {
         newH = height;
@@ -131,7 +129,7 @@ export default function BrandingConfigurator({
             ) {
               setImageSize(
                 brandImageSettings.minHeight,
-                brandImageSettings.minWidth * aspect,
+                brandImageSettings.minWidth * aspect
               );
               h = brandImageSettings.minHeight;
               w = Math.round(brandImageSettings.minWidth * aspect * 1e2) / 1e2;
@@ -141,7 +139,7 @@ export default function BrandingConfigurator({
             ) {
               setImageSize(
                 brandImageSettings.maxBrandHeight,
-                brandImageSettings.maxBrandWidth * aspect,
+                brandImageSettings.maxBrandWidth * aspect
               );
               h = brandImageSettings.maxBrandHeight;
               w =
@@ -167,11 +165,11 @@ export default function BrandingConfigurator({
     dispatch(
       updateMainSettings({
         ...settings,
-        brandImage: '',
+        brandImage: "",
         brandHeight: defaultMainSettings.brandHeight,
         brandWidth: defaultMainSettings.brandWidth,
         brandOpacity: defaultMainSettings.brandOpacity,
-      }),
+      })
     );
 
     setShowMainLogo(false);
@@ -195,172 +193,168 @@ export default function BrandingConfigurator({
       <Accordion.Body id="images">
         <Form noValidate validated={targetValidated}>
           {/* Main Logo */}
-          <div className="fullrow">
-            <div className="col60">
-              <div className="fullrow">
-                <OverlayTrigger
-                  placement="auto"
-                  delay={{ show: 250, hide: 300 }}
-                  overlay={
-                    <Tooltip id="main-logo-tooltip">
-                      Click to select a logo for the App
-                    </Tooltip>
-                  }
-                >
-                  <Form.Control
-                    className={darkClass}
-                    type="file"
-                    id="input-main-file"
-                    onInput={(e) => {
-                      setMainImg(e);
-                    }}
-                    accept=".png,.jpg,.jpeg, .svg"
-                  />
-                </OverlayTrigger>
-              </div>
-              <div className="fullrow">
+          <div className="section-header">Overall Branding Image</div>
+          <div className="main-settings-row">
+            <div className="main-settings-settings">
+              <OverlayTrigger
+                placement="auto"
+                delay={{ show: 250, hide: 300 }}
+                overlay={
+                  <Tooltip id="main-logo-tooltip">
+                    Click to select a logo for the App
+                  </Tooltip>
+                }
+              >
+                <Form.Control
+                  className={darkClass}
+                  type="file"
+                  id="input-main-file"
+                  onInput={(e) => {
+                    setMainImg(e);
+                  }}
+                  accept=".png,.jpg,.jpeg, .svg"
+                />
+              </OverlayTrigger>
+
+              <div className="main-settings-row">
                 {/* Show Main Logo */}
-                <div className="col20">
-                  <Form.Label className={darkClass}>Show Logo?</Form.Label>
-                </div>
-                <div className="col10">
-                  <Checker
-                    cState={showMainLogo}
-                    disabled={false}
-                    label=""
-                    tooltip="Show the logo"
-                    callback={(value) => setShowMainLogo(value)}
-                  />
-                </div>
-                <div className="col20">
-                  {settings.brandImage !== undefined &&
-                  settings.brandImage !== null &&
-                  settings.brandImage !== "" ? (
-                    <Form.Label className={darkClass}>
-                      Remove Custom Logo?
-                    </Form.Label>
-                  ) : (
-                    // eslint-disable-next-line react/jsx-no-useless-fragment
-                    <></>
-                  )}
-                </div>
-                <div className="col10">
-                  {settings.brandImage !== undefined &&
-                  settings.brandImage !== null &&
-                  settings.brandImage !== "" ? (
+                <div className="controls-row">
+                  <div className="label-column">
+                    <Form.Label className={darkClass}>Show Logo?</Form.Label>
+                  </div>
+                  <div className="check-column">
                     <Checker
-                      cState={false}
+                      cState={showMainLogo}
                       disabled={false}
                       label=""
                       tooltip="Show the logo"
-                      callback={() => deleteMainLogo()}
+                      callback={(value) => setShowMainLogo(value)}
                     />
-                  ) : (
-                    // eslint-disable-next-line react/jsx-no-useless-fragment
-                    <></>
-                  )}
+                  </div>
                 </div>
+                {settings.brandImage !== undefined &&
+                settings.brandImage !== null &&
+                settings.brandImage !== "" ? (
+                  <div className="controls-row">
+                    <div className="label-column">
+                      <Form.Label className={darkClass}>
+                        Remove Custom Logo?
+                      </Form.Label>
+                    </div>
+                    <div className="check-column">
+                      <Checker
+                        cState={false}
+                        disabled={false}
+                        label=""
+                        tooltip="Show the logo"
+                        callback={() => deleteMainLogo()}
+                      />
+                    </div>
+                  </div>
+                ) : (
+                  // eslint-disable-next-line react/jsx-no-useless-fragment
+                  <></>
+                )}
               </div>
 
               {/* Main Logo Height/ width */}
-              <div className="fullrow">
-                <div className="col25">
-                  <Form.Label
-                    className={darkClass}
-                    style={{ marginTop: "1rem" }}
-                  >
-                    Logo Height
-                  </Form.Label>
-                </div>
-                <OverlayTrigger
-                  placement="top"
-                  delay={{ show: 250, hide: 300 }}
-                  overlay={
-                    <Tooltip id="qr-size-tooltip">
-                      Adjust the height of the logo
-                    </Tooltip>
-                  }
-                >
-                  <div className="col15">
-                    <AdjusterKnob
-                      name="brandHeight"
-                      value={settings.brandHeight}
-                      min={brandImageSettings.minHeight}
-                      max={brandImageSettings.maxBrandHeight}
-                      step={1}
-                      disabled={!showMainLogo}
-                      callback={(value) => {
-                        dispatch(updateHeight(value));
-                        setImageSize(value, settings.brandWidth);
-                      }}
-                    />
+              <div className="main-settings-row">
+                <div className="controls-row">
+                  <div className="adjuster-label">
+                    <Form.Label
+                      className={darkClass}
+                      style={{ marginTop: "1rem" }}
+                    >
+                      Logo Height
+                    </Form.Label>
                   </div>
-                </OverlayTrigger>
-                <div className="col5" />
-                <OverlayTrigger
-                  placement="top"
-                  delay={{ show: 250, hide: 300 }}
-                  overlay={
-                    <Tooltip id="qr-aspect-tooltip">
-                      {isMainAspectLocked ? "Unlock" : "Lock"} Image Aspect
-                      Ratio
-                    </Tooltip>
-                  }
-                >
-                  <div className="col15">
+                  <OverlayTrigger
+                    placement="top"
+                    delay={{ show: 250, hide: 300 }}
+                    overlay={
+                      <Tooltip id="qr-size-tooltip">
+                        Adjust the height of the logo
+                      </Tooltip>
+                    }
+                  >
+                    <div className="adjuster-control">
+                      <AdjusterKnob
+                        name="brandHeight"
+                        value={settings.brandHeight}
+                        min={brandImageSettings.minHeight}
+                        max={brandImageSettings.maxBrandHeight}
+                        step={1}
+                        disabled={!showMainLogo}
+                        callback={(value) => {
+                          dispatch(updateHeight(value));
+                          setImageSize(value, settings.brandWidth);
+                        }}
+                      />
+                    </div>
+                  </OverlayTrigger>
+                </div>
+                <div className="controls-row">
+                  <OverlayTrigger
+                    placement="top"
+                    delay={{ show: 250, hide: 300 }}
+                    overlay={
+                      <Tooltip id="qr-aspect-tooltip">
+                        {isMainAspectLocked ? "Unlock" : "Lock"} Image Aspect
+                        Ratio
+                      </Tooltip>
+                    }
+                  >
                     <Button
+                      className="aspect-button"
                       variant="outline-secondary"
-                      style={{ width: "100%", fontSize: "0.6rem" }}
+                      // style={{ width: "100%", fontSize: "0.6rem" }}
                       onClick={setLockMainAspectRatio}
                       disabled={!showMainLogo}
                     >
-                      {isMainAspectLocked ? <Locked /> : <UnLocked />} <br />
-                      Aspect Ratio
+                      {isMainAspectLocked ? <i className="bi bi-lock-fill" /> : <i className="bi bi-unlock-fill" />}
+                        {/* <Locked /> : <UnLocked />} */}
+                      {/* <br />
+                      Aspect Ratio */}
                     </Button>
-                  </div>
-                </OverlayTrigger>
-                <div className="col5" />
-                <div className="col25">
-                  <Form.Label
-                    className={darkClass}
-                    style={{ marginTop: "1rem" }}
-                  >
-                    Logo Width
-                  </Form.Label>
+                  </OverlayTrigger>
                 </div>
-                <OverlayTrigger
-                  placement="top"
-                  delay={{ show: 250, hide: 300 }}
-                  overlay={
-                    <Tooltip id="qr-size-tooltip">
-                      Adjust the width of the logo
-                    </Tooltip>
-                  }
-                >
-                  <div className="col15">
-                    <AdjusterKnob
-                      name="brandWidth"
-                      value={settings.brandWidth}
-                      min={brandImageSettings.minWidth}
-                      max={brandImageSettings.maxBrandWidth}
-                      step={1}
-                      disabled={!showMainLogo || isMainAspectLocked}
-                      callback={(value) => {
-                        dispatch(updateWidth(value));
-                        setImageSize(settings.brandHeight, value);
-                      }}
-                    />
+                <div className="controls-row">
+                  <div className="adjuster-label">
+                    <Form.Label
+                      className={darkClass}
+                      style={{ marginTop: "1rem" }}
+                    >
+                      Logo Width
+                    </Form.Label>
                   </div>
-                </OverlayTrigger>
+                  <OverlayTrigger
+                    placement="top"
+                    delay={{ show: 250, hide: 300 }}
+                    overlay={
+                      <Tooltip id="qr-size-tooltip">
+                        Adjust the width of the logo
+                      </Tooltip>
+                    }
+                  >
+                    <div className="adjuster-control">
+                      <AdjusterKnob
+                        name="brandWidth"
+                        value={settings.brandWidth}
+                        min={brandImageSettings.minWidth}
+                        max={brandImageSettings.maxBrandWidth}
+                        step={1}
+                        disabled={!showMainLogo || isMainAspectLocked}
+                        callback={(value) => {
+                          dispatch(updateWidth(value));
+                          setImageSize(settings.brandHeight, value);
+                        }}
+                      />
+                    </div>
+                  </OverlayTrigger>
+                </div>
               </div>
             </div>
-            <div
-              style={{
-                display: "flex",
-                flexDirection: "column",
-                margin: "auto",
-              }}
-            >
+            <div className="image-preview">
               {settings.brandImage !== undefined &&
               settings.brandImage !== null &&
               settings.brandImage !== "" &&

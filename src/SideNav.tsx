@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/anchor-is-valid */
 /* eslint-disable no-nested-ternary */
 /* The MIT License (MIT)
  *
@@ -22,15 +23,12 @@
  * SOFTWARE.
  */
 import './css/hyde.css';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import store from 'store2';
 import { useSelector, useDispatch } from 'react-redux';
 import Logo from './images/NewLinkerLogo.png';
 import { RootState } from './stores/store';
 import { setDark } from './reducers/dark/darkSlice';
-import ConfigEditor from './configuration/ConfigEditor';
-import AboutModal from './components/AboutModal';
-import WelcomeModal from './components/WelcomeModal';
 import { updateMainSettings } from './reducers/main/mainSlice';
 import { SessionResponse } from '@userfront/core';
 import Userfront from '@userfront/toolkit';
@@ -38,17 +36,17 @@ import Userfront from '@userfront/toolkit';
 export default function SideNav() {
   const dark = useSelector((state: RootState) => state.dark);
   const dispatch = useDispatch();
-  const [editConfig, setEditConfig] = useState(false);
-  const [showAboutModal, setShowAboutModal] = useState(false);
+  // const [editConfig, setEditConfig] = useState(false);
+  // const [showAboutModal, setShowAboutModal] = useState(false);
   const mainSet = useSelector((state: RootState) => state.main.settings);
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  // const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   useEffect(() => {
     Userfront.getSession()
       .then((session: SessionResponse) => {
         if (session) {
           console.log(`session`, session.isLoggedIn);
-          setIsLoggedIn(session.isLoggedIn);
+          // setIsLoggedIn(session.isLoggedIn);
           return true;
         } else {
           return false;

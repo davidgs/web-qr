@@ -30,8 +30,6 @@ import { useSelector } from 'react-redux';
 export default function QRConfigButton(): React.JSX.Element {
   const [showConfig, setShowConfig] = useState<boolean>(false);
   const dark = useSelector((state: RootState) => state.dark.dark);
-  const darkClass = dark ? 'header-stuff-dark' : 'header-stuff';
-
   /**
    * Show the configuration window
    */
@@ -40,7 +38,7 @@ export default function QRConfigButton(): React.JSX.Element {
   };
 
   return (
-    <div>
+    <>
       <OverlayTrigger
         placement="top"
         delay={{ show: 250, hide: 300 }}
@@ -50,16 +48,15 @@ export default function QRConfigButton(): React.JSX.Element {
           variant={dark ? "icon-only-dark" : "icon-only"}
           size="sm"
           onClick={showConfigWindow}
-          className={darkClass}
         >
           {dark ? (
-            <Gear className={darkClass} />
+            <Gear/>
           ) : (
-            <GearFill className={darkClass} />
+            <GearFill/>
           )}
         </Button>
       </OverlayTrigger>
       <QRConfigForm show={showConfig} onHide={showConfigWindow} />
-    </div>
+    </>
   );
 }

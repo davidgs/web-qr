@@ -29,8 +29,8 @@ import {
   Accordion,
 } from 'react-bootstrap';
 import { RootState } from '../stores/store';
-import { useSelector, useDispatch } from 'react-redux';
-import { updateQRType } from '../reducers/qr/qrSlice';
+import { useSelector } from 'react-redux';
+// import { updateQRType } from '../reducers/qr/qrSlice';
 import QRConfigurator from './Configurators/QRConfigurator';
 
 export default function QRConfigForm({
@@ -40,12 +40,12 @@ export default function QRConfigForm({
   show: boolean;
   onHide: () => void;
 }): React.JSX.Element {
-  const dispatch = useDispatch();
+  // const dispatch = useDispatch();
   const [, setShowConfig] = useState<boolean>(show);
-  const qSet = useSelector((state: RootState) => state.qr.settings);
-  const qrConf = useSelector((state: RootState) => state.qrCode.settings);
+  // const qSet = useSelector((state: RootState) => state.qr.settings);
+  // const qrConf = useSelector((state: RootState) => state.qrCode.settings);
   const dark = useSelector((state: RootState) => state.dark.dark);
-  const session = useSelector((state: RootState) => state.session.settings);
+  // const session = useSelector((state: RootState) => state.session.settings);
   const darkClass = dark ? 'header-stuff-dark' : 'header-stuff';
 
   const handleSubmit = (event: SyntheticEvent) => {
@@ -59,9 +59,9 @@ export default function QRConfigForm({
     onHide();
   };
 
-  const handleExtChange = (selectedFileType: string) => {
-    dispatch(updateQRType(selectedFileType));
-  };
+  // const handleExtChange = (selectedFileType: string) => {
+  //   dispatch(updateQRType(selectedFileType));
+  // };
 
   // const onXparentChange = (value: boolean) => {
   //   dispatch(updateXParent(value));

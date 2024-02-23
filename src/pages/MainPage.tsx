@@ -22,13 +22,11 @@
  */
 import { useSelector } from "react-redux";
 import LinkToolbar from "../components/LinkToolbar";
-import MobileLinkToolbar from "../components/MobileLinkToolbar";
-import MobileQCode from "../forms/MobileQRCodeForm";
-import MobileURLForm from "../forms/MobileURLForm";
 import QCode from "../forms/QRCodeForm";
 import URLForm from "../forms/URLForm";
 import WifiForm from "../forms/WiFiForm";
 import { RootState } from "../stores/store";
+import Logo from "../images/NewLinkerLogo.png";
 
 export default function MainPage() {
   const mainSet = useSelector((state: RootState) => state.main.settings);
@@ -36,13 +34,30 @@ export default function MainPage() {
   return (
     <>
       <div className={`main-column`}>
+        <div className="fullrow">
+          <div style={{ margin: "auto", textAlign: "center" }}>
+            <h2>
+              <img
+                src={Logo}
+                alt="QR Builder Logo"
+                width={40}
+                height={40}
+              ></img>{" "}
+              &nbsp; &nbsp;
+              <strong>
+                QR Builder
+                  <span className="tr">&trade;</span>
+              </strong>
+            </h2>
+          </div>
+        </div>
         <div className="link-form">
-          {mainSet.sidebar !== "top" ? <QCode /> : <MobileQCode />}
+          <QCode />
+          {/* {mainSet.sidebar !== "top" ? <QCode /> : <MobileQCode />} */}
           <hr />
-          {mainSet.sidebar !== "top" ? <LinkToolbar /> : <MobileLinkToolbar />}
+          <LinkToolbar />
           <hr />
-          {mainSet.formType === "wifi" && <WifiForm />}
-          {mainSet.sidebar !== "top" ? <URLForm /> : <MobileURLForm />}
+          {mainSet.formType === "wifi" ? <WifiForm /> : <URLForm />}
         </div>
       </div>
       {/* W: {width} x H: {size.height} */}

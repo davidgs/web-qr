@@ -1,4 +1,5 @@
 /* The MIT License (MIT)
+process.env.NODE_ENV = "development";
  *
  * Copyright (c) 2022-present David G. Simmons
  *
@@ -20,16 +21,13 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-import React from "react";
-import { useNavigate } from "react-router-dom";
-import { useSelector } from "react-redux";
 
 export default function BuyPage() {
-  const navigate = useNavigate();
-  const dark = useSelector((state) => state.dark.dark);
-  const mainSet = useSelector((state) => state.main.settings);
+  // const navigate = useNavigate();
+  // const dark = useSelector((state) => state.dark.dark);
+  // const mainSet = useSelector((state) => state.main.settings);
 
-  const darkClass = dark ? "header-stuff-dark" : "header-stuff";
+  // const darkClass = dark ? "header-stuff-dark" : "header-stuff";
 
   // Paste the stripe-pricing-table snippet in your React component
   return (

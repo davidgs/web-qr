@@ -23,7 +23,9 @@
 export default function TermsOfService() {
   return (
     <div className={`main-column`}>
-      <h1 style={{ textAlign: "center" }}>Terms of Service</h1>
+      <h1 style={{ textAlign: "center" }}>
+        QR Builder<span className="tr">&trade;</span> Terms of Service
+      </h1>
       <p>
         These terms and conditions outline the rules and regulations for the use
         of QR Builder, located at{" "}

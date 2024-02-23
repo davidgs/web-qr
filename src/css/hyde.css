@@ -806,20 +806,7 @@ margin-left: -7px;
     margin-top: -7px;
   }
 
-  .main-column-top {
 
-    transition: width 0.3s ease-in-out;
-    position: absolute;
-    top: 60px;
-    width: calc(100vw - 21px);
-    height: calc(100vh - 65px);
-    margin-left: 10px;
-    margin-right: 10px;
-    /* min-width: 500px; */
-    margin-top: 10px;
-    overflow-y: auto;
-    padding-bottom: 30px;
-  }
 
 @media (min-width: 374px) {
 
@@ -848,34 +835,6 @@ margin-left: -7px;
     margin-top: -7px;
   }
 
-  .main-column-open {
-    transition: width 0.3s ease-in-out;
-    position: fixed;
-    left: 260px;
-    height: 100%;
-    overflow-x: auto;
-    /* padding-left: 50px; */
-    margin-left: 10px;
-    padding-right: 20px;
-    padding-bottom: 30px;
-    /* min-width: 500px; */
-    margin-top: 10px;
-    width: calc(100% - 280px)
-  }
-
-  .main-column-closed {
-    transition: width 0.4s ease-in-out;
-    position: fixed;
-    left: 65px;
-    margin-left: 10px;
-    margin-right: 10px;
-    /* min-width: 500px; */
-    margin-top: 10px;
-    width: calc(100% - 90px);
-    position: absolute;
-    left: 60px;
-    overflow-y: auto;
-  }
 
   /* Stops the float property from affecting content after the columns */
   .columns:after {
@@ -911,34 +870,6 @@ margin-left: -7px;
     margin-top: -7px;
   }
 
-  .main-column-open {
-    transition: width 0.3s ease-in-out;
-    position: fixed;
-    left: 260px;
-    height: 100%;
-    overflow-x: auto;
-    /* padding-left: 50px; */
-    margin-left: 10px;
-    padding-right: 20px;
-    padding-bottom: 30px;
-    /* min-width: 500px; */
-    margin-top: 10px;
-    width: calc(100% - 280px)
-  }
-
-  .main-column-closed {
-    transition: width 0.4s ease-in-out;
-    position: fixed;
-    left: 65px;
-    margin-left: 10px;
-    margin-right: 10px;
-    /* min-width: 500px; */
-    margin-top: 10px;
-    width: calc(100% - 90px);
-    position: absolute;
-    left: 60px;
-    overflow-y: auto;
-  }
 
   /* Stops the float property from affecting content after the columns */
   .columns:after {
@@ -973,30 +904,6 @@ margin-left: -7px;
     margin-top: -7px;
   }
 
-  .main-column {
-    transition: width 0.3s ease-in-out;
-    float: right;
-    padding-left: 50px;
-    margin-left: 10px;
-    margin-right: 10px;
-    /* min-width: 500px; */
-    margin-top: 10px;
-    width: calc(100% - 280px)
-  }
-
-  .main-column-closed {
-    transition: width 0.3s ease-in-out;
-    position: fixed;
-    left: 65px;
-    margin-left: 10px;
-    margin-right: 10px;
-    /* min-width: 500px; */
-    margin-top: 10px;
-    width: calc(100% - 90px);
-    overflow-y: auto;
-    position: absolute;
-    left: 60px;
-  }
 
   /* Stops the float property from affecting content after the columns */
   .columns:after {
@@ -1032,85 +939,6 @@ margin-left: -7px;
 .vertical-slider {
   transform: rotate(90deg);
   padding-top: 5rem;
-}
-
-.btn-icon-only {
-  border-color: #0B3665;
-  border: 1px solid #0B3665;
-  border-radius: 10%;
-  cursor: pointer;
-  transition: all 0.2s ease-in-out;
-  border-top-color: initial;
-  border-top-style: solid;
-  border-top-width: 0.5px;
-  border-right-color: initial;
-  border-right-style: solid;
-  border-right-width: 0.5px;
-  border-bottom-color: initial;
-  border-bottom-style: solid;
-  border-bottom-width: 0.5px;
-  border-left-color: initial;
-  border-left-style: solid;
-  border-left-width: 0.5px;
-  border-image-source: initial;
-  border-image-slice: initial;
-  border-image-width: initial;
-  border-image-outset: initial;
-  border-image-repeat: initial;
-  outline: solid;
-  color: #0B3665;
-}
-
-.btn-icon-only-dark {
-  border-color: #adb5bd;
-  border: 1px solid #adb5bd;
-  border-radius: 10%;
-  cursor: pointer;
-  transition: all 0.2s ease-in-out;
-  border-top-color: initial;
-  border-top-style: solid;
-  border-top-width: 0.5px;
-  border-right-color: initial;
-  border-right-style: solid;
-  border-right-width: 0.5px;
-  border-bottom-color: initial;
-  border-bottom-style: solid;
-  border-bottom-width: 0.5px;
-  border-left-color: initial;
-  border-left-style: solid;
-  border-left-width: 0.5px;
-  border-image-source: initial;
-  border-image-slice: initial;
-  border-image-width: initial;
-  border-image-outset: initial;
-  border-image-repeat: initial;
-  outline: solid;
-  color: #adb5bd;
-}
-
-.config-btn-icon-only-dark {
-  border-radius: 10%;
-  cursor: pointer;
-  transition: all 0.2s ease-in-out;
-  border-top-color: initial;
-  border-top-style: solid;
-  border-top-width: 0.5px;
-  border-right-color: initial;
-  border-right-style: solid;
-  border-right-width: 0.5px;
-  border-bottom-color: initial;
-  border-bottom-style: solid;
-  border-bottom-width: 0.5px;
-  border-left-color: initial;
-  border-left-style: solid;
-  border-left-width: 0.5px;
-  border-image-source: initial;
-  border-image-slice: initial;
-  border-image-width: initial;
-  border-image-outset: initial;
-  border-image-repeat: initial;
-  outline: solid;
-  color: #adb5bd;
 }
 
 .button-icon {
@@ -1307,11 +1135,7 @@ margin-left: -7px;
   opacity: 1;
 }
 
-.eye-color-adjuster {
-  width: 50%;
-  margin: auto;
-  /* padding-left: 7px; */
-}
+
 
 .fullrow {
   width: 100%;
@@ -1551,6 +1375,10 @@ margin-left: -7px;
     bottom: 0;
 }
 
+.tr {
+  font-size: 1.25rem;
+  vertical-align: super;
+}
 
 
 @import url(//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css);
