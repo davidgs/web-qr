@@ -47,8 +47,15 @@ import { updateBitlySettings } from "../reducers/bitly/bitlySlice";
 import { updateMainSettings } from "../reducers/main/mainSlice";
 import { updateQRStyleSettings } from "../reducers/qr/qrCodeSettingsSlice";
 import { updateQRSettings } from "../reducers/qr/qrSlice";
-import { updateUTMCampaignSettings, updateUTMContentSettings, updateUTMKeywordSettings, updateUTMMediumSettings, updateUTMSourceSettings, updateUTMTargetSettings, updateUTMTermSettings } from "../reducers/utm/utmSlice";
-
+import {
+  updateUTMCampaignSettings,
+  updateUTMContentSettings,
+  updateUTMKeywordSettings,
+  updateUTMMediumSettings,
+  updateUTMSourceSettings,
+  updateUTMTargetSettings,
+  updateUTMTermSettings,
+} from "../reducers/utm/utmSlice";
 
 interface ConfigEditorProps {
   showMe: boolean;
@@ -75,25 +82,25 @@ function ConfigEditor(props: ConfigEditorProps): JSX.Element {
     (state: RootState) => state.bitly.settings
   );
   const utmTarget: UtmObj = useSelector(
-    (state: RootState) => state.utmStuff.settings.utm_target
+    (state: RootState) => state.utmConfigs.settings.utm_target
   );
   const utmSource: UtmObj = useSelector(
-    (state: RootState) => state.utmStuff.settings.utm_source
+    (state: RootState) => state.utmConfigs.settings.utm_source
   );
   const utmCampaign: UtmObj = useSelector(
-    (state: RootState) => state.utmStuff.settings.utm_campaign
+    (state: RootState) => state.utmConfigs.settings.utm_campaign
   );
   const utmMedium: UtmObj = useSelector(
-    (state: RootState) => state.utmStuff.settings.utm_medium
+    (state: RootState) => state.utmConfigs.settings.utm_medium
   );
   const utmContent: UtmObj = useSelector(
-    (state: RootState) => state.utmStuff.settings.utm_content
+    (state: RootState) => state.utmConfigs.settings.utm_content
   );
   const utmTerm: UtmObj = useSelector(
-    (state: RootState) => state.utmStuff.settings.utm_term
+    (state: RootState) => state.utmConfigs.settings.utm_term
   );
   const utmKeyword: UtmObj = useSelector(
-    (state: RootState) => state.utmStuff.settings.utm_keyword
+    (state: RootState) => state.utmConfigs.settings.utm_keyword
   );
 
   /* handle closing without saving */

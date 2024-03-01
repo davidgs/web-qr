@@ -4,7 +4,7 @@ import Logo from "../images/NewLinkerLogo.png";
 import qCode1 from "../images/qcode1.png";
 import qCode2 from "../images/qcode2.png";
 import qCode3 from "../images/qcode3.png";
-import { RootState } from "../stores/store";
+import { RootState } from "../src/stores/store";
 import { useSelector } from "react-redux";
 import {
   Github,

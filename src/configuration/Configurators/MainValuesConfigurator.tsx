@@ -312,9 +312,6 @@ export default function BrandingConfigurator({
                       disabled={!showMainLogo}
                     >
                       {isMainAspectLocked ? <i className="bi bi-lock-fill" /> : <i className="bi bi-unlock-fill" />}
-                        {/* <Locked /> : <UnLocked />} */}
-                      {/* <br />
-                      Aspect Ratio */}
                     </Button>
                   </OverlayTrigger>
                 </div>

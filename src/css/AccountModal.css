@@ -1,0 +1,14 @@
+
+.field-label {
+  font-size: larger;
+  font-weight: bold;
+  padding-top: 10px;
+}
+
+@media (width < 48em) {
+  .field-label {
+    font-size: medium;
+    font-weight: bold;
+    padding-top: 10px;
+  }
+}

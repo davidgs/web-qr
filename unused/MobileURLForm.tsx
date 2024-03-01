@@ -21,54 +21,62 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-import { InputGroup } from 'react-bootstrap';
-import { useEffect } from 'react';
-import { makeLongLink } from '../utils/LongLink';
-import { useSelector, useDispatch } from 'react-redux';
-import { RootState } from '../stores/store';
-import { updateQRValue } from '../reducers/qr/qrCodeSettingsSlice';
-import { setActiveLink } from '../reducers/history/historySlice';
-import UTMTextField from '../components/UTMTextField';
-import UTMChoice from '../components/choosers/UTMChoice';
+import { InputGroup } from "react-bootstrap";
+import { useEffect } from "react";
+import { makeLongLink } from "../src/utils/LongLink";
+import { useSelector, useDispatch } from "react-redux";
+import { RootState } from "../src/stores/store";
+import { updateQRValue } from "../src/reducers/qr/qrCodeSettingsSlice";
+import { setActiveLink } from "../src/reducers/history/historySlice";
+import UTMTextField from "../src/components/UTMTextField";
+import UTMChoice from "../src/components/choosers/UTMChoice";
 
 export default function MobileURLForm() {
   const dispatch = useDispatch();
   const mainConfig = useSelector((state: RootState) => state.main.settings);
-  const utmTarget = useSelector((state: RootState) => state.utmStuff.settings.utm_target);
-  const utmCampaign = useSelector(
-    (state: RootState) => state.utmStuff?.settings.utm_campaign,
+  const utmTarget = useSelector(
+    (state: RootState) => state.utmConfigs.settings.utm_target
   );
-  const utmSource = useSelector((state: RootState) => state.utmStuff?.settings.utm_source);
-  const utmMedium = useSelector((state: RootState) => state.utmStuff?.settings.utm_medium);
-  const utmTerm = useSelector((state: RootState) => state.utmStuff?.settings.utm_term);
+  const utmCampaign = useSelector(
+    (state: RootState) => state.utmConfigs?.settings.utm_campaign
+  );
+  const utmSource = useSelector(
+    (state: RootState) => state.utmConfigs?.settings.utm_source
+  );
+  const utmMedium = useSelector(
+    (state: RootState) => state.utmConfigs?.settings.utm_medium
+  );
+  const utmTerm = useSelector(
+    (state: RootState) => state.utmConfigs?.settings.utm_term
+  );
   const utmContent = useSelector(
-    (state: RootState) => state.utmStuff?.settings.utm_content,
+    (state: RootState) => state.utmConfigs?.settings.utm_content
   );
   const activeLink = useSelector(
-    (state: RootState) => state.history.activeLink,
+    (state: RootState) => state.history.activeLink
   );
   const utmKeyword = useSelector(
-    (state: RootState) => state.utmStuff?.settings.utm_keyword,
+    (state: RootState) => state.utmConfigs?.settings.utm_keyword
   );
   dispatch(
     updateQRValue(
-      activeLink?.short_link ? activeLink?.short_link : makeLongLink(activeLink),
-    ),
+      activeLink?.short_link ? activeLink?.short_link : makeLongLink(activeLink)
+    )
   );
 
   useEffect(() => {
-    if (mainConfig?.formType === 'simple') {
+    if (mainConfig?.formType === "simple") {
       dispatch(
         setActiveLink({
           ...activeLink,
-          utm_target: '',
+          utm_target: "",
           utm_campaign: undefined,
           utm_source: undefined,
           utm_medium: undefined,
           utm_term: undefined,
           utm_content: undefined,
           utm_keyword: undefined,
-        }),
+        })
       );
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -76,31 +84,31 @@ export default function MobileURLForm() {
 
   const linkPartChanged = (value: string, type: string) => {
     switch (type) {
-      case 'utm_target':
+      case "utm_target":
         dispatch(setActiveLink({ ...activeLink, utm_target: value as string }));
         break;
-      case 'utm_campaign':
+      case "utm_campaign":
         dispatch(
-          setActiveLink({ ...activeLink, utm_campaign: value as string }),
+          setActiveLink({ ...activeLink, utm_campaign: value as string })
         );
         break;
-      case 'utm_source':
+      case "utm_source":
         dispatch(setActiveLink({ ...activeLink, utm_source: value as string }));
         break;
-      case 'utm_medium':
+      case "utm_medium":
         dispatch(setActiveLink({ ...activeLink, utm_medium: value as string }));
         break;
-      case 'utm_term':
+      case "utm_term":
         dispatch(setActiveLink({ ...activeLink, utm_term: value as string }));
         break;
-      case 'utm_content':
+      case "utm_content":
         dispatch(
-          setActiveLink({ ...activeLink, utm_content: value as string }),
+          setActiveLink({ ...activeLink, utm_content: value as string })
         );
         break;
-      case 'utm_keyword':
+      case "utm_keyword":
         dispatch(
-          setActiveLink({ ...activeLink, utm_keyword: value as string }),
+          setActiveLink({ ...activeLink, utm_keyword: value as string })
         );
         break;
       default:
@@ -175,22 +183,22 @@ export default function MobileURLForm() {
           {/* utm_campaign */}
           {utmCampaign?.useValue && (
             <>
-            {utmCampaign?.isChooser ? (
-              <UTMChoice
-                valueChanged={linkPartChanged}
-                targetType="utm_campaign"
-                settings={utmCampaign}
-              />
-            ) : (
-              <UTMTextField
-                valueChanged={linkPartChanged}
-                targetType="utm_campaign"
-                value={
-                  activeLink?.utm_campaign ? activeLink?.utm_campaign : ""
-                }
-                settings={utmCampaign}
-              />
-            )}
+              {utmCampaign?.isChooser ? (
+                <UTMChoice
+                  valueChanged={linkPartChanged}
+                  targetType="utm_campaign"
+                  settings={utmCampaign}
+                />
+              ) : (
+                <UTMTextField
+                  valueChanged={linkPartChanged}
+                  targetType="utm_campaign"
+                  value={
+                    activeLink?.utm_campaign ? activeLink?.utm_campaign : ""
+                  }
+                  settings={utmCampaign}
+                />
+              )}
             </>
           )}
           {/* utm_term */}
@@ -229,7 +237,7 @@ export default function MobileURLForm() {
                   value={activeLink?.utm_content ? activeLink?.utm_content : ""}
                   settings={utmContent}
                 />
-            )}
+              )}
             </>
           )}
           {/* utm_keyword */}
@@ -252,7 +260,7 @@ export default function MobileURLForm() {
             </>
           )}
         </>
-       )}
+      )}
     </>
   );
 }

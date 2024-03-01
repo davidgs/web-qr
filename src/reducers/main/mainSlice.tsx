@@ -46,12 +46,6 @@ export const mainSlice = createSlice({
     updateFormType: (state, action) => {
       state.settings.formType = action.payload as 'wifi' | 'simple' | 'encoded';
     },
-    updateSidebar: (state, action) => {
-      state.settings.sidebar = action.payload as 'open' | 'closed';
-    },
-    updateFirstRun: (state, action) => {
-      state.settings.firstRun = action.payload as boolean;
-    },
     updateMainSettings: (state, action) => {
       const mSet: MainSettings = action.payload;
       state.settings = mSet;
@@ -68,9 +62,7 @@ export const {
   updateWidth,
   updateBrandOpacity,
   updateFormType,
-  updateSidebar,
   updateMainSettings,
-  updateFirstRun,
   returnMainSettings,
 } = mainSlice.actions;
 

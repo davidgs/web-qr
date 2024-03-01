@@ -234,11 +234,6 @@ export const utmSlice = createSlice({
       const uSet = action.payload;
       state.settings.utm_term = uSet;
     },
-    updateUTMSettings: (state, action) => {
-      const uSet = action.payload;
-      state.settings = uSet;
-    },
-
   },
 });
 
@@ -306,7 +301,6 @@ export const {
   updateTermUseValue,
   updateTermValue,
   updateUTMTermSettings,
-  updateUTMSettings,
 } = utmSlice.actions;
 
 export default utmSlice.reducer;

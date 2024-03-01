@@ -26,21 +26,21 @@ import { OverlayTrigger, Tooltip, Button } from "react-bootstrap";
 import { useSelector, useDispatch } from "react-redux";
 import { SaveFill, Save, XCircleFill, XCircle } from "react-bootstrap-icons";
 import store from "store2";
-import BitlyCheck from "./buttons/BitlyCheck";
-import HistoryChooser from "./choosers/HistoryChooser";
-import { WiFiLink } from "../types";
-import ReactId from "../utils/ReactId";
-import { RootState } from "../stores/store";
-import { makeLongLink } from "../utils/LongLink";
+import BitlyCheck from "../src/components/buttons/BitlyCheck";
+import HistoryChooser from "../src/components/choosers/HistoryChooser";
+import { WiFiLink } from "../src/types";
+import ReactId from "../src/utils/ReactId";
+import { RootState } from "../src/stores/store";
+import { makeLongLink } from "../src/utils/LongLink";
 import {
   setActiveLink,
   setUtmLinkHistory,
   setWifiLinkHistory,
-} from "../reducers/history/historySlice";
-import { updateQRValue } from "../reducers/qr/qrCodeSettingsSlice";
-import QRConfigButton from "./buttons/QRConfigButton";
-import DownloadButton from "./buttons/DownloadButton";
-import FormChooser from "./choosers/FormChooser";
+} from "../src/reducers/history/historySlice";
+import { updateQRValue } from "../src/reducers/qr/qrCodeSettingsSlice";
+import QRConfigButton from "../src/components/buttons/QRConfigButton";
+import DownloadButton from "../src/components/buttons/DownloadButton";
+import FormChooser from "../src/components/choosers/FormChooser";
 
 export default function MobileLinkToolbar(): JSX.Element {
   const dispatch = useDispatch();
@@ -159,92 +159,95 @@ export default function MobileLinkToolbar(): JSX.Element {
   /* End fence */
 
   return (
-  <>
+    <>
       {/* fence for basic license */}
       {/* bitly enable */}
-      {useBitly && mainSet?.formType !== "wifi" ? <div className='fullrow'><BitlyCheck /></div> : null}
+      {useBitly && mainSet?.formType !== "wifi" ? (
+        <div className="fullrow">
+          <BitlyCheck />
+        </div>
+      ) : null}
+      <div className="fullrow">
+        <div className="col75">
+          {/* end fence */}
+          {/* QR Type selector */}
+          <FormChooser />
+          {/* fence for Basic License */}
+          {/* history button */}
           <div className="fullrow">
-
-            <div className="col75">
-        {/* end fence */}
-        {/* QR Type selector */}
-        <FormChooser />
-        {/* fence for Basic License */}
-        {/* history button */}
-        <div className="fullrow">
-          <HistoryChooser />
-        </div>
-        {/* end fence */}
-      </div>
-      <div className="col25">
-        <div className='fullrow' />
-        <div className="fullrow">
-          <div className="col10px" />
-          {/* download QR Code BUtton */}
-          <div className="colauto">
-            <DownloadButton />
-          </div>
-          {/* spacer */}
-          <div className="col10px" />
-          {/* config button */}
-          <div className="colauto">
-            <QRConfigButton />
-          </div>
-        </div>
-        <div className="fullrow">
-          {/* spacer */}
-          <div className="col10px" />
-          {/* fence for basic license */}
-          {/* save button */}
-          <div className="colauto">
-            <OverlayTrigger
-              placement="top"
-              delay={{ show: 250, hide: 300 }}
-              overlay={
-                <Tooltip id="save-btn-tooltip">
-                  Save the current link to your history.
-                </Tooltip>
-              }
-            >
-              <Button
-                size="sm"
-                id="save-btn"
-                variant={dark ? "icon-only-dark" : "icon-only"}
-                onClick={() => saveLink()}
-                className={darkClass}
-              >
-                {dark ? <Save /> : <SaveFill />}
-              </Button>
-            </OverlayTrigger>
+            <HistoryChooser />
           </div>
           {/* end fence */}
-          {/* spacer */}
-          <div className="col10px" />
-          {/* clear button */}
-          <div className="colauto">
-            <OverlayTrigger
-              placement="top"
-              delay={{ show: 250, hide: 300 }}
-              overlay={
-                <Tooltip id="clear-btn-tooltip">
-                  Clear the form and start over.
-                </Tooltip>
-              }
-            >
-              <Button
-                size="sm"
-                variant={dark ? "icon-only-dark" : "icon-only"}
-                color={dark ? "#adb5bd" : "#0B3665"}
-                className={dark ? "header-stuff-dark" : "header-stuff"}
-                onClick={clearForm}
+        </div>
+        <div className="col25">
+          <div className="fullrow" />
+          <div className="fullrow">
+            <div className="col10px" />
+            {/* download QR Code BUtton */}
+            <div className="colauto">
+              <DownloadButton />
+            </div>
+            {/* spacer */}
+            <div className="col10px" />
+            {/* config button */}
+            <div className="colauto">
+              <QRConfigButton />
+            </div>
+          </div>
+          <div className="fullrow">
+            {/* spacer */}
+            <div className="col10px" />
+            {/* fence for basic license */}
+            {/* save button */}
+            <div className="colauto">
+              <OverlayTrigger
+                placement="top"
+                delay={{ show: 250, hide: 300 }}
+                overlay={
+                  <Tooltip id="save-btn-tooltip">
+                    Save the current link to your history.
+                  </Tooltip>
+                }
               >
-                {dark ? <XCircle /> : <XCircleFill />}
-              </Button>
-            </OverlayTrigger>
+                <Button
+                  size="sm"
+                  id="save-btn"
+                  variant={dark ? "icon-only-dark" : "icon-only"}
+                  onClick={() => saveLink()}
+                  className={darkClass}
+                >
+                  {dark ? <Save /> : <SaveFill />}
+                </Button>
+              </OverlayTrigger>
+            </div>
+            {/* end fence */}
+            {/* spacer */}
+            <div className="col10px" />
+            {/* clear button */}
+            <div className="colauto">
+              <OverlayTrigger
+                placement="top"
+                delay={{ show: 250, hide: 300 }}
+                overlay={
+                  <Tooltip id="clear-btn-tooltip">
+                    Clear the form and start over.
+                  </Tooltip>
+                }
+              >
+                <Button
+                  size="sm"
+                  variant={dark ? "icon-only-dark" : "icon-only"}
+                  color={dark ? "#adb5bd" : "#0B3665"}
+                  className={dark ? "header-stuff-dark" : "header-stuff"}
+                  onClick={clearForm}
+                >
+                  {dark ? <XCircle /> : <XCircleFill />}
+                </Button>
+              </OverlayTrigger>
+            </div>
           </div>
         </div>
       </div>
-      </div>
-      </>
+    </>
   );
 }

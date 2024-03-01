@@ -1,17 +1,27 @@
-import React from 'react';
-import { Button, Modal } from 'react-bootstrap';
-import Logo from '../images/NewLinkerLogo.png';
-import qCode1 from '../images/qcode1.png';
-import qCode2 from '../images/qcode2.png';
-import qCode3 from '../images/qcode3.png';
-import { Github, Envelope, Linkedin, Mastodon, Twitter } from 'react-bootstrap-icons';
-import { updateMainSettings } from '../reducers/main/mainSlice';
+import React from "react";
+import { Button, Modal } from "react-bootstrap";
+import Logo from "../images/NewLinkerLogo.png";
+import qCode1 from "../images/qcode1.png";
+import qCode2 from "../images/qcode2.png";
+import qCode3 from "../images/qcode3.png";
+import {
+  Github,
+  Envelope,
+  Linkedin,
+  Mastodon,
+  Twitter,
+} from "react-bootstrap-icons";
+import { updateMainSettings } from "../src/reducers/main/mainSlice";
 import { useDispatch, useSelector } from "react-redux";
-import store from 'store2';
+import store from "store2";
 
-
-export default function WelcomeModal({ showMe, callback }: { showMe: boolean, callback: (res: boolean) => void }): React.JSX.Element {
-
+export default function WelcomeModal({
+  showMe,
+  callback,
+}: {
+  showMe: boolean;
+  callback: (res: boolean) => void;
+}): React.JSX.Element {
   const dispatch = useDispatch();
   const mainSet = useSelector((state: any) => state.main.settings);
   const dark = useSelector((state: any) => state.dark.dark);
@@ -92,7 +102,7 @@ export default function WelcomeModal({ showMe, callback }: { showMe: boolean, ca
           </ul>
         </div>
         <div className="fullrow">
-          <Button variant="success" size={"sm"} >
+          <Button variant="success" size={"sm"}>
             Start Using
           </Button>
         </div>

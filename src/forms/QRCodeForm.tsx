@@ -21,14 +21,14 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-import { useState, KeyboardEventHandler } from 'react';
-import { QRCode } from 'react-qrcode-logo';
-import { OverlayTrigger, Tooltip } from 'react-bootstrap';
-import { ClipboardData, Clipboard2CheckFill } from 'react-bootstrap-icons';
-import potrace from 'potrace';
-import { useSelector } from 'react-redux';
-import { RootState } from '../stores/store';
-import ReactId from '../utils/ReactId';
+import { useState, KeyboardEventHandler } from "react";
+import { QRCode } from "react-qrcode-logo";
+import { OverlayTrigger, Tooltip } from "react-bootstrap";
+import { ClipboardData, Clipboard2CheckFill } from "react-bootstrap-icons";
+import potrace from "potrace";
+import { useSelector } from "react-redux";
+import { RootState } from "../stores/store";
+import ReactId from "../utils/ReactId";
 import "../css/QRForm.css";
 
 export default function QCode() {
@@ -38,10 +38,10 @@ export default function QCode() {
   const qrSettings = useSelector((state: RootState) => state.qrCode.settings);
   const [qrState, setQrState] = useState<boolean>(false);
   const dark = useSelector((state: RootState) => state.dark.dark);
-  const darkClass = dark ? 'header-stuff-dark' : 'header-stuff';
+  const darkClass = dark ? "header-stuff-dark" : "header-stuff";
   const darkIconClass = dark
-    ? 'copy-icon header-stuff-dark'
-    : 'copy-icon header-stuff';
+    ? "copy-icon header-stuff-dark"
+    : "copy-icon header-stuff";
   /**
    * Saving as an SVG is a pain in the ass, so we do (most)
    * of that here but it requires Node.js to actually accomplish it, for unknown reasons.
@@ -69,15 +69,15 @@ export default function QCode() {
    * Handle the 'download' click. and save the image
    */
   const onDownloadClick = (): void => {
-    if (qSet.QRType === 'svg') {
+    if (qSet.QRType === "svg") {
       saveSVG();
       return;
     }
     const canvas = document.getElementById(
-      'react-qrcode-logo',
+      "react-qrcode-logo"
     ) as HTMLCanvasElement;
     const dataURL = canvas?.toDataURL(`image/${qSet.QRType}`);
-    const a = document.createElement('a');
+    const a = document.createElement("a");
     a.href = dataURL;
     a.download = `qrcode-${ReactId()}.${qSet.QRType}`;
     a.click();
@@ -94,7 +94,7 @@ export default function QCode() {
         .writeText(qrSettings?.value)
         .then(null, null)
         // eslint-disable-next-line no-console
-        .catch((err) => console.error('Error: ', err));
+        .catch((err) => console.error("Error: ", err));
     }
   }
 

@@ -21,86 +21,101 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-import { InputGroup } from 'react-bootstrap';
-import { useEffect } from 'react';
-import { makeLongLink } from '../utils/LongLink';
-import { useSelector, useDispatch } from 'react-redux';
-import { RootState } from '../stores/store';
-import { updateQRValue } from '../reducers/qr/qrCodeSettingsSlice';
-import { setActiveLink } from '../reducers/history/historySlice';
-import UTMTextField from '../components/UTMTextField';
-import UTMChoice from '../components/choosers/UTMChoice';
+import { InputGroup } from "react-bootstrap";
+import { useEffect } from "react";
+import { makeLongLink } from "../utils/LongLink";
+import { useSelector, useDispatch } from "react-redux";
+import { RootState } from "../stores/store";
+import { updateQRValue } from "../reducers/qr/qrCodeSettingsSlice";
+import { setActiveLink } from "../reducers/history/historySlice";
+import UTMTextField from "../components/UTMTextField";
+import UTMChoice from "../components/choosers/UTMChoice";
+import "../css/URLForm.css";
 
 export default function URLForm() {
   const dispatch = useDispatch();
   const mainConfig = useSelector((state: RootState) => state.main.settings);
-  const utmTarget = useSelector((state: RootState) => state.utmStuff.settings.utm_target);
-  const utmCampaign = useSelector(
-    (state: RootState) => state.utmStuff?.settings.utm_campaign,
+  const utmTarget = useSelector(
+    (state: RootState) => state.utmConfigs.settings.utm_target
   );
-  const utmSource = useSelector((state: RootState) => state.utmStuff?.settings.utm_source);
-  const utmMedium = useSelector((state: RootState) => state.utmStuff?.settings.utm_medium);
-  const utmTerm = useSelector((state: RootState) => state.utmStuff?.settings.utm_term);
+  const utmCampaign = useSelector(
+    (state: RootState) => state.utmConfigs.settings.utm_campaign
+  );
+  const utmSource = useSelector(
+    (state: RootState) => state.utmConfigs.settings.utm_source
+  );
+  const utmMedium = useSelector(
+    (state: RootState) => state.utmConfigs.settings.utm_medium
+  );
+  const utmTerm = useSelector(
+    (state: RootState) => state.utmConfigs.settings.utm_term
+  );
   const utmContent = useSelector(
-    (state: RootState) => state.utmStuff?.settings.utm_content,
+    (state: RootState) => state.utmConfigs.settings.utm_content
   );
   const activeLink = useSelector(
-    (state: RootState) => state.history.activeLink,
+    (state: RootState) => state.history.activeLink
   );
   const utmKeyword = useSelector(
-    (state: RootState) => state.utmStuff?.settings.utm_keyword,
+    (state: RootState) => state.utmConfigs.settings.utm_keyword
   );
   dispatch(
     updateQRValue(
-      activeLink?.short_link ? activeLink?.short_link : makeLongLink(activeLink),
-    ),
+      activeLink?.short_link ? activeLink?.short_link : makeLongLink(activeLink)
+    )
   );
 
+  console.log("Use Keyword: ", utmKeyword.useValue);
   useEffect(() => {
-    if (mainConfig?.formType === 'simple') {
+    if (mainConfig?.formType === "simple") {
       dispatch(
         setActiveLink({
           ...activeLink,
-          utm_target: '',
+          utm_target: "",
           utm_campaign: undefined,
           utm_source: undefined,
           utm_medium: undefined,
           utm_term: undefined,
           utm_content: undefined,
           utm_keyword: undefined,
-        }),
+        })
       );
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [mainConfig.formType]);
 
+  /**
+   *
+   * @param value The new value
+   * @param type  The type of value (utm_target, etc.)
+   */
   const linkPartChanged = (value: string, type: string) => {
     switch (type) {
-      case 'utm_target':
+      case "utm_target":
         dispatch(setActiveLink({ ...activeLink, utm_target: value as string }));
         break;
-      case 'utm_campaign':
+      case "utm_campaign":
         dispatch(
-          setActiveLink({ ...activeLink, utm_campaign: value as string }),
+          setActiveLink({ ...activeLink, utm_campaign: value as string })
         );
         break;
-      case 'utm_source':
+      case "utm_source":
         dispatch(setActiveLink({ ...activeLink, utm_source: value as string }));
         break;
-      case 'utm_medium':
+      case "utm_medium":
         dispatch(setActiveLink({ ...activeLink, utm_medium: value as string }));
         break;
-      case 'utm_term':
+      case "utm_term":
         dispatch(setActiveLink({ ...activeLink, utm_term: value as string }));
         break;
-      case 'utm_content':
+      case "utm_content":
         dispatch(
-          setActiveLink({ ...activeLink, utm_content: value as string }),
+          setActiveLink({ ...activeLink, utm_content: value as string })
         );
         break;
-      case 'utm_keyword':
+      case "utm_keyword":
         dispatch(
-          setActiveLink({ ...activeLink, utm_keyword: value as string }),
+          setActiveLink({ ...activeLink, utm_keyword: value as string })
         );
         break;
       default:
@@ -114,17 +129,17 @@ export default function URLForm() {
       {/* utm_target */}
       <div className="fullrow">
         <InputGroup size="lg">
-            <UTMTextField
-              valueChanged={linkPartChanged}
-              targetType="utm_target"
-              value={
-                activeLink?.utm_target &&
-                activeLink?.utm_target !== "https://www.example.com/"
-                  ? activeLink?.utm_target
-                  : ""
-              }
-              settings={utmTarget}
-            />
+          <UTMTextField
+            valueChanged={linkPartChanged}
+            targetType="utm_target"
+            value={
+              activeLink?.utm_target &&
+              activeLink?.utm_target !== "https://www.example.com/"
+                ? activeLink?.utm_target
+                : ""
+            }
+            settings={utmTarget}
+          />
         </InputGroup>
       </div>
       {/* </Row> */}
@@ -187,22 +202,24 @@ export default function URLForm() {
           {/* utm_campaign */}
           {utmCampaign?.useValue ? (
             <div className={utmTerm?.useValue ? "col50" : "col100"}>
-              {utmCampaign?.isChooser ? (
-                <UTMChoice
-                  valueChanged={linkPartChanged}
-                  targetType="utm_campaign"
-                  settings={utmCampaign}
-                />
-              ) : (
-                <UTMTextField
-                  valueChanged={linkPartChanged}
-                  targetType="utm_campaign"
-                  value={
-                    activeLink?.utm_campaign ? activeLink?.utm_campaign : ""
-                  }
-                  settings={utmCampaign}
-                />
-              )}
+              <InputGroup size="lg">
+                {utmCampaign?.isChooser ? (
+                  <UTMChoice
+                    valueChanged={linkPartChanged}
+                    targetType="utm_campaign"
+                    settings={utmCampaign}
+                  />
+                ) : (
+                  <UTMTextField
+                    valueChanged={linkPartChanged}
+                    targetType="utm_campaign"
+                    value={
+                      activeLink?.utm_campaign ? activeLink?.utm_campaign : ""
+                    }
+                    settings={utmCampaign}
+                  />
+                )}
+              </InputGroup>
             </div>
           ) : (
             <></>
@@ -210,20 +227,22 @@ export default function URLForm() {
           {/* utm_term */}
           {utmTerm?.useValue ? (
             <div className={utmCampaign?.useValue ? "col50" : "col100"}>
-              {utmTerm?.isChooser ? (
-                <UTMChoice
-                  valueChanged={linkPartChanged}
-                  targetType="utm_term"
-                  settings={utmTerm}
-                />
-              ) : (
-                <UTMTextField
-                  valueChanged={linkPartChanged}
-                  targetType="utm_term"
-                  value={activeLink?.utm_term ? activeLink?.utm_term : ""}
-                  settings={utmTerm}
-                />
-              )}
+              <InputGroup size="lg">
+                {utmTerm?.isChooser ? (
+                  <UTMChoice
+                    valueChanged={linkPartChanged}
+                    targetType="utm_term"
+                    settings={utmTerm}
+                  />
+                ) : (
+                  <UTMTextField
+                    valueChanged={linkPartChanged}
+                    targetType="utm_term"
+                    value={activeLink?.utm_term ? activeLink?.utm_term : ""}
+                    settings={utmTerm}
+                  />
+                )}
+              </InputGroup>
             </div>
           ) : (
             <></>
@@ -236,20 +255,24 @@ export default function URLForm() {
           {/* utm_content */}
           {utmContent?.useValue ? (
             <div className={utmKeyword?.useValue ? "col50" : "col100"}>
-              {utmContent?.isChooser ? (
-                <UTMChoice
-                  valueChanged={linkPartChanged}
-                  targetType="utm_content"
-                  settings={utmContent}
-                />
-              ) : (
-                <UTMTextField
-                  valueChanged={linkPartChanged}
-                  targetType="utm_content"
-                  value={activeLink?.utm_content ? activeLink?.utm_content : ""}
-                  settings={utmContent}
-                />
-              )}
+              <InputGroup size="lg">
+                {utmContent?.isChooser ? (
+                  <UTMChoice
+                    valueChanged={linkPartChanged}
+                    targetType="utm_content"
+                    settings={utmContent}
+                  />
+                ) : (
+                  <UTMTextField
+                    valueChanged={linkPartChanged}
+                    targetType="utm_content"
+                    value={
+                      activeLink?.utm_content ? activeLink?.utm_content : ""
+                    }
+                    settings={utmContent}
+                  />
+                )}
+              </InputGroup>
             </div>
           ) : (
             <></>
@@ -257,20 +280,24 @@ export default function URLForm() {
           {/* utm_keyword */}
           {utmKeyword?.useValue ? (
             <div className={utmContent?.useValue ? "col50" : "col100"}>
-              {utmKeyword?.isChooser ? (
-                <UTMChoice
-                  valueChanged={linkPartChanged}
-                  targetType="utm_keyword"
-                  settings={utmKeyword}
-                />
-              ) : (
-                <UTMTextField
-                  valueChanged={linkPartChanged}
-                  targetType="utm_keyword"
-                  value={activeLink?.utm_keyword ? activeLink?.utm_keyword : ""}
-                  settings={utmKeyword}
-                />
-              )}
+              <InputGroup size="lg">
+                {utmKeyword?.isChooser ? (
+                  <UTMChoice
+                    valueChanged={linkPartChanged}
+                    targetType="utm_keyword"
+                    settings={utmKeyword}
+                  />
+                ) : (
+                  <UTMTextField
+                    valueChanged={linkPartChanged}
+                    targetType="utm_keyword"
+                    value={
+                      activeLink?.utm_keyword ? activeLink?.utm_keyword : ""
+                    }
+                    settings={utmKeyword}
+                  />
+                )}
+              </InputGroup>
             </div>
           ) : (
             <></>

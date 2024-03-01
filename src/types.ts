@@ -111,7 +111,7 @@ export type SessionProps = {
   active: boolean;
   email: string;
   license_type: string;
-  expiry_date?: Date;
+  expiry_date?: string | Date;
 };
 
 export const defaultSession: SessionProps = {
@@ -123,8 +123,8 @@ export const defaultSession: SessionProps = {
   organization: '',
   active: false,
   email: '',
-  license_type: 'free',
-  expiry_date: new Date()
+  license_type: 'enterprise',
+  expiry_date: new Date().toDateString(),
 };
 
 export const defaultBitlyConfig: BitlyConfig = {
@@ -279,8 +279,6 @@ export type MainSettings = {
   brandWidth: number;
   brandOpacity: number;
   formType: 'simple' | 'encoded' | 'wifi';
-  sidebar: 'open' | 'closed' | 'top';
-  firstRun: boolean;
 };
 
 export type WiFiSettings = {
@@ -438,8 +436,6 @@ export const defaultMainSettings: MainSettings = {
   brandWidth: 200,
   brandOpacity: 1.0,
   formType: 'simple',
-  sidebar: 'open',
-  firstRun: true,
 };
 
 export const knobConfig = {

@@ -21,12 +21,12 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-import { JSX, useState, SyntheticEvent } from 'react';
-import { Accordion, Form, OverlayTrigger, Tooltip } from 'react-bootstrap';
-import { UtmKeyValue, UtmObj } from '../../types';
-import Checker from '../buttons/Checker';
-import { RootState } from '../../stores/store';
-import { useSelector, useDispatch } from 'react-redux';
+import { JSX, useState, SyntheticEvent } from "react";
+import { Accordion, Form, OverlayTrigger, Tooltip } from "react-bootstrap";
+import { UtmKeyValue, UtmObj } from "../../types";
+import Checker from "../buttons/Checker";
+import { RootState } from "../../stores/store";
+import { useSelector, useDispatch } from "react-redux";
 import {
   updateTermLabel,
   updateTermValue,
@@ -37,23 +37,23 @@ import {
   updateTermTooltip,
   updateTermUseValue,
 } from "../../reducers/utm/utmSlice";
-import PillArea from '../pills/PillArea';
+import PillArea from "../pills/PillArea";
 
 export default function UTMTermAccordian(): JSX.Element {
   const dispatch = useDispatch();
   const dark = useSelector((state: RootState) => state.dark.dark);
-  const darkClass = dark ? 'header-stuff-dark' : 'header-stuff';
-  const valKind: string = 'utm_term';
-  const itemNo: string = '5';
-  const type: string = 'UTM Term';
+  const darkClass = dark ? "header-stuff-dark" : "header-stuff";
+  const valKind: string = "utm_term";
+  const itemNo: string = "5";
+  const type: string = "UTM Term";
   const accValue = useSelector(
-    (state: RootState) => state.utmStuff.settings.utm_term as UtmObj,
+    (state: RootState) => state.utmConfigs.settings.utm_term as UtmObj
   );
-  const [kvValue, setKvValue] = useState<string>('');
+  const [kvValue, setKvValue] = useState<string>("");
   const [valValid, setValValid] = useState<boolean>(true);
 
   const [fieldValue, setFieldValue] = useState<string>(
-    accValue.showName ? `${accValue?.label} (${valKind})` : `${accValue.label}`,
+    accValue.showName ? `${accValue?.label} (${valKind})` : `${accValue.label}`
   );
 
   const updateFieldValue = (eventKey: SyntheticEvent) => {
@@ -66,7 +66,7 @@ export default function UTMTermAccordian(): JSX.Element {
     } else {
       setFieldValue(v);
     }
-    const newV = v.replace(`(${valKind})`, '').trim();
+    const newV = v.replace(`(${valKind})`, "").trim();
     dispatch(updateTermLabel(newV));
   };
   /**
@@ -90,18 +90,18 @@ export default function UTMTermAccordian(): JSX.Element {
   const addPill = (event: SyntheticEvent) => {
     const target = event.target as HTMLInputElement;
     setKvValue(target?.value);
-    if (!target?.value.includes(',')) {
+    if (!target?.value.includes(",")) {
       return;
     }
-    if (target?.value.indexOf('=') === -1) {
+    if (target?.value.indexOf("=") === -1) {
       setValValid(false);
       return;
     }
-    setKvValue('');
+    setKvValue("");
     const newTrm = accValue?.value as UtmKeyValue[];
     const newTrmPill = {
-      key: target?.value?.replace(/,/g, '').split('=')[1].trim(),
-      value: target?.value?.replace(/,/g, '').split('=')[0].trim(),
+      key: target?.value?.replace(/,/g, "").split("=")[1].trim(),
+      value: target?.value?.replace(/,/g, "").split("=")[0].trim(),
     };
     const newVals: UtmKeyValue[] = [];
     newTrm.forEach((item) => {
@@ -147,6 +147,7 @@ export default function UTMTermAccordian(): JSX.Element {
                     : `Check to use the '${valKind}' value`
                 }
                 callback={(value) => {
+                  console.log("Term use value value", value);
                   dispatch(updateTermUseValue(value));
                 }}
               />

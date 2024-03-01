@@ -24,10 +24,10 @@ export default function FormChooser(): React.JSX.Element {
 
   return (
     <div className='fullrow'>
-      <div className={mainSet.sidebar === 'top' ? "col45" : "col15"}>
+      <div className="chooser-label">
         <Form.Label className={darkClass}>Link Type</Form.Label>
       </div>
-      <div className={mainSet.sidebar === 'top' ? "col45" : "col25"}>
+      <div className="chooser-column">
         <Form.Select
           className={darkClass}
           size="sm"

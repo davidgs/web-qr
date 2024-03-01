@@ -47,15 +47,13 @@ export default function UTMCampaignAccordian(): JSX.Element {
   const itemNo: string = "4";
   const type: string = "UTM Campaign";
   const accValue = useSelector(
-    (state: RootState) => state.utmStuff.settings.utm_campaign as UtmObj
+    (state: RootState) => state.utmConfigs.settings.utm_campaign as UtmObj
   );
   const [kvValue, setKvValue] = useState<string>("");
   const [valValid, setValValid] = useState<boolean>(true);
 
   const [fieldValue, setFieldValue] = useState<string>(
-    accValue.showName
-      ? `${accValue?.label} (${valKind})`
-      : `${accValue.label}`
+    accValue.showName ? `${accValue?.label} (${valKind})` : `${accValue.label}`
   );
 
   const updateFieldValue = (eventKey: SyntheticEvent) => {

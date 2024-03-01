@@ -21,14 +21,14 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-import { useState, KeyboardEventHandler } from 'react';
-import { QRCode } from 'react-qrcode-logo';
-import { OverlayTrigger, Tooltip } from 'react-bootstrap';
-import { ClipboardData, Clipboard2CheckFill } from 'react-bootstrap-icons';
-import potrace from 'potrace';
-import { useSelector } from 'react-redux';
-import { RootState } from '../stores/store';
-import ReactId from '../utils/ReactId';
+import { useState, KeyboardEventHandler } from "react";
+import { QRCode } from "react-qrcode-logo";
+import { OverlayTrigger, Tooltip } from "react-bootstrap";
+import { ClipboardData, Clipboard2CheckFill } from "react-bootstrap-icons";
+import potrace from "potrace";
+import { useSelector } from "react-redux";
+import { RootState } from "../src/stores/store";
+import ReactId from "../src/utils/ReactId";
 
 export default function MobileQCode() {
   const [copied, setCopied] = useState<boolean>(false);
@@ -37,10 +37,10 @@ export default function MobileQCode() {
   const qrSettings = useSelector((state: RootState) => state.qrCode.settings);
   const [qrState, setQrState] = useState<boolean>(false);
   const dark = useSelector((state: RootState) => state.dark.dark);
-  const darkClass = dark ? 'header-stuff-dark' : 'header-stuff';
+  const darkClass = dark ? "header-stuff-dark" : "header-stuff";
   const darkIconClass = dark
-    ? 'copy-icon header-stuff-dark'
-    : 'copy-icon header-stuff';
+    ? "copy-icon header-stuff-dark"
+    : "copy-icon header-stuff";
   /**
    * Saving as an SVZG is a pain in the ass, so we do (most)
    * of that here but it requires Node.js to actually accomplish it, for unknown reasons.
@@ -68,15 +68,15 @@ export default function MobileQCode() {
    * Handle the 'download' click. and save the image
    */
   const onDownloadClick = (): void => {
-    if (qSet.QRType === 'svg') {
+    if (qSet.QRType === "svg") {
       saveSVG();
       return;
     }
     const canvas = document.getElementById(
-      'react-qrcode-logo',
+      "react-qrcode-logo"
     ) as HTMLCanvasElement;
     const dataURL = canvas?.toDataURL(`image/${qSet.QRType}`);
-    const a = document.createElement('a');
+    const a = document.createElement("a");
     a.href = dataURL;
     a.download = `qrcode-${ReactId()}.${qSet.QRType}`;
     a.click();
@@ -93,13 +93,13 @@ export default function MobileQCode() {
         .writeText(qrSettings?.value)
         .then(null, null)
         // eslint-disable-next-line no-console
-        .catch((err) => console.error('Error: ', err));
+        .catch((err) => console.error("Error: ", err));
     }
   }
 
   return (
     <>
-      <div className='fullrow'>
+      <div className="fullrow">
         <div id="qr-element" style={{ margin: "auto" }}>
           <OverlayTrigger
             placement="auto"
@@ -117,8 +117,8 @@ export default function MobileQCode() {
               onKeyDown={null as unknown as KeyboardEventHandler}
               role="button"
               tabIndex={-1}
-            aria-label="Download QR Code"
-            style={{ margin: 'auto' }}
+              aria-label="Download QR Code"
+              style={{ margin: "auto" }}
             >
               <QRCode
                 id="react-qrcode-logo"
@@ -152,7 +152,7 @@ export default function MobileQCode() {
         </div>
       </div>
       {settings.formType !== "wifi" && (
-        <div className='fullrow' style={{height: '80px'}}>
+        <div className="fullrow" style={{ height: "80px" }}>
           <div className="col45">
             {copied && (
               <OverlayTrigger
@@ -200,8 +200,8 @@ export default function MobileQCode() {
               </OverlayTrigger>
             )}
           </div>
-          <div className='col5' />
-          <div className="urlCol" >
+          <div className="col5" />
+          <div className="urlCol">
             <OverlayTrigger
               placement="auto"
               delay={{ show: 250, hide: 300 }}

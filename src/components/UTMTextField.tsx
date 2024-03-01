@@ -20,17 +20,18 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-import { JSX } from 'react';
-import Form from 'react-bootstrap/Form';
+import { JSX, useMemo } from "react";
+import Form from "react-bootstrap/Form";
 import {
   FloatingLabel,
   FormControl,
   OverlayTrigger,
   Tooltip,
-} from 'react-bootstrap';
-import { useSelector } from 'react-redux';
-import { UtmObj } from '../types';
-import { RootState } from '../stores/store';
+} from "react-bootstrap";
+import { useSelector } from "react-redux";
+import { UtmObj } from "../types";
+import { RootState } from "../stores/store";
+import "../css/URLForm.css";
 
 interface UTMTextFieldProps {
   // eslint-disable-next-line no-unused-vars
@@ -43,10 +44,21 @@ interface UTMTextFieldProps {
 export default function UTMTextField(props: UTMTextFieldProps): JSX.Element {
   const { valueChanged, targetType, value, settings } = props;
   const dark = useSelector((state: RootState) => state.dark.dark);
-  const darkClass = dark ? 'header-stuff-dark' : 'header-stuff';
+  const darkClass = dark ? "header-stuff-dark" : "header-stuff";
   const returnVal = (v: string) => {
     valueChanged(v, targetType);
   };
+
+  const label = useMemo(() => {
+    if (settings?.showName) {
+      return (
+        <>{settings?.label} <span className="t-label">({targetType})</span></>
+      );
+    } else {
+      return `${settings?.label}`;
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [settings?.label, settings?.showName]);
 
   return (
     <>
@@ -58,17 +70,13 @@ export default function UTMTextField(props: UTMTextFieldProps): JSX.Element {
         }
       >
         <FloatingLabel
-          label={
-            settings?.showName
-              ? `${settings?.label} (${targetType})`
-              : `${settings?.label}`
-          }
+          label={label}
           className={darkClass}
         >
           <FormControl
             required
             className={darkClass}
-            type={targetType === 'utm_target' ? "url" : "text"}
+            type={targetType === "utm_target" ? "url" : "text"}
             size="sm"
             id={`${targetType}`}
             aria-label={settings?.ariaLabel}

@@ -46,7 +46,7 @@ export default function MainPage() {
               &nbsp; &nbsp;
               <strong>
                 QR Builder
-                  <span className="tr">&trade;</span>
+                <span className="tr">&trade;</span>
               </strong>
             </h2>
           </div>

@@ -22,5 +22,5 @@
   },
   "include": [
     "src"
-  ]
+, "src/forms/QRCodeForm.tsx", "unused/MobileQRCodeForm.tsx", "unused/MobileURLForm.tsx", "unused/MobileLinkToolbar.tsx", "unused/AboutModal.tsx", "unused/WelcomeModal.tsx", "unused/Locked.tsx", "unused/Unlocked.tsx"  ]
 }

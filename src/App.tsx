@@ -20,7 +20,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import "./css/App.css";
 import { useDispatch, useSelector } from "react-redux";
 import store from "store2";
@@ -28,11 +28,12 @@ import {
   createBrowserRouter,
   RouterProvider,
 } from "react-router-dom";
+import { PrismaClient } from "@prisma/client";
+
 
 import { RootState } from "./stores/store";
 import { updateMainSettings } from "./reducers/main/mainSlice";
 import SideNav from "./SideNav";
-// import LinkToolbar from './components/LinkToolbar';
 import { IProps } from "react-qrcode-logo";
 import { DeviceUUID } from "device-uuid";
 import { updateBitlySettings } from "./reducers/bitly/bitlySlice";
@@ -52,7 +53,6 @@ import {
   updateUTMContentSettings,
   updateUTMKeywordSettings,
   updateUTMTargetSettings,
-  updateUTMSettings,
 } from "./reducers/utm/utmSlice";
 import {
   QRSettings,
@@ -65,13 +65,10 @@ import {
   defaultUTMContent,
   defaultUTMKeyword,
   defaultUTMTarget,
-  defaultUTMParams,
-  defaultMainSettings,
   defaultQRSettings,
   DefaultQRStyle,
   defaultBitlyConfig,
 } from "./types";
-// import { useWindowSize, useDebounce } from "@uidotdev/usehooks";
 import MainPage from "./pages/MainPage";
 import WelcomePage from "./pages/WelcomePage";
 import BuyPage from "./pages/BuyPage";
@@ -82,19 +79,15 @@ import TermsOfService from "./pages/TermsOfService";
 import "./css/sidebar.css";
 import Account from "./pages/Account";
 import Privacy from "./pages/Privacy";
+import Userfront from "@userfront/toolkit";
+import Login from "./pages/Login";
 
 export default function App() {
   const dispatch = useDispatch();
-  const [winWidth] = useState(window.innerWidth);
   const dark = useSelector((state: RootState) => state.dark);
   const darkClass = dark ? "header-stuff-dark" : "header-stuff";
-  // const mainSet = useSelector((state: RootState) => state.main.settings);
-  // const size = useWindowSize();
-  // const width = useDebounce(size.width, 300);
   const version = "1.1.0";
-  console.log("version", version);
-  // Userfront.init("qbjrr47b");
-  // Userfront.init("qbjrr47b");
+  Userfront.init("qbjrr47b");
 
   useEffect(() => {
     const deviceUUID = new DeviceUUID().get();
@@ -143,35 +136,10 @@ export default function App() {
       dispatch(updateUTMContentSettings(defaultUTMContent));
       dispatch(updateUTMKeywordSettings(defaultUTMKeyword));
       dispatch(updateUTMTargetSettings(defaultUTMTarget));
-      dispatch(updateUTMSettings(defaultUTMParams));
     }
     const mset = store.get("main-config");
     if (mset !== null) {
-      if (winWidth < 650) {
-        const f = { ...mset, sidebar: "top" };
-        store.set("main-config", f);
-        dispatch(updateMainSettings(f));
-      } else if (winWidth <= 780) {
-        const f = { ...mset, sidebar: "closed" };
-        store.set("main-config", f);
-        dispatch(updateMainSettings(f));
-      } else {
         dispatch(updateMainSettings(mset));
-      }
-    } else {
-      if (winWidth < 750) {
-        const f = { ...defaultMainSettings, sidebar: "top" };
-        store.set("main-config", f);
-        dispatch(updateMainSettings(f));
-      } else if (winWidth <= 780) {
-        const f = { ...defaultMainSettings, sidebar: "closed" };
-        store.set("main-config", f);
-        dispatch(updateMainSettings(f));
-      } else {
-        const m = { ...defaultMainSettings };
-        store.set("main-config", m);
-        dispatch(updateMainSettings(m));
-      }
     }
     const qr: QRSettings = store.get("qr-config");
     if (qr !== null) {
@@ -202,8 +170,6 @@ export default function App() {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
-
 
   /**
    * set the dark mode
@@ -244,6 +210,10 @@ export default function App() {
       element: <ConfigPage />,
     },
     {
+      path: "login",
+      element: <Login />,
+    },
+    {
       path: "pricing",
       element: <PricingPage />,
     },
@@ -266,23 +236,12 @@ export default function App() {
   ]);
   return (
     <>
-      {/* <div className="fullrow"> */}
         <SideNav />
         <RouterProvider router={router} />
-        {/* <Router>
-          <Routes>
-            <Route path="/" element={<WelcomePage />} />
-            <Route path="/build" element={<MainPage />} />
-          </Routes>
-        </Router> */}
         <p></p>
-        <div
-          className={`${darkClass} version-div`}
-
-        >
+        <div className={`${darkClass} version-div`}>
           <em>qr-builder v{version}</em>
         </div>
-      {/* </div> */}
     </>
   );
 }

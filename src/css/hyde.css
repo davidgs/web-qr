@@ -1415,6 +1415,12 @@ vertical-align: middle;
 font-size:20px;
 }
 
+.off {
+  rotate: 180deg;
+  transition: rotate 0.3s ease-in-out;
+  color: #FF0000;
+}
+
 .area {
 float: left;
 background: #e2e2e2;

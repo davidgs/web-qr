@@ -23,7 +23,7 @@
  * SOFTWARE.
  */
 import './css/hyde.css';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import store from 'store2';
 import { useSelector, useDispatch } from 'react-redux';
 import Logo from './images/NewLinkerLogo.png';
@@ -31,22 +31,22 @@ import { RootState } from './stores/store';
 import { setDark } from './reducers/dark/darkSlice';
 import { updateMainSettings } from './reducers/main/mainSlice';
 import { SessionResponse } from '@userfront/core';
-import Userfront from '@userfront/toolkit';
+import Userfront from '@userfront/core';
 
 export default function SideNav() {
   const dark = useSelector((state: RootState) => state.dark);
   const dispatch = useDispatch();
   // const [editConfig, setEditConfig] = useState(false);
-  // const [showAboutModal, setShowAboutModal] = useState(false);
   const mainSet = useSelector((state: RootState) => state.main.settings);
-  // const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  Userfront.init("xbp876mb");
 
   useEffect(() => {
     Userfront.getSession()
       .then((session: SessionResponse) => {
         if (session) {
           console.log(`session`, session.isLoggedIn);
-          // setIsLoggedIn(session.isLoggedIn);
+          setIsLoggedIn(session.isLoggedIn);
           return true;
         } else {
           return false;
@@ -62,7 +62,6 @@ export default function SideNav() {
    */
   const toggleOpen = () => {
     const ms = { ...mainSet };
-    ms.sidebar = mainSet.sidebar === "open" ? "closed" : "open";
     dispatch(updateMainSettings(ms));
     store.set("main-config", ms);
   };
@@ -126,7 +125,7 @@ export default function SideNav() {
           <li>
             {" "}
             {/* className="has-subnav"> */}
-            <a href="pricing">
+            <a href="/pricing">
               <i className="bi bi-bag bi-2x"></i>
               <span className="nav-text">Purchase</span>
             </a>
@@ -138,19 +137,19 @@ export default function SideNav() {
             </a>
           </li>
           <li>
-            <a href="welcome">
+            <a href="/welcome">
               <i className="bi bi-info-circle bi-2x"></i>
               <span className="nav-text">About</span>
             </a>
           </li>
           <li>
-            <a href="tos">
+            <a href="/tos">
               <i className="bi bi-file-earmark-text bi-2x"></i>
               <span className="nav-text">Terms of Service</span>
             </a>
           </li>
           <li>
-            <a href="privacy">
+            <a href="/privacy">
               <i className="bi bi-shield-lock bi-2x"></i>
               <span className="nav-text">Privacy Policy</span>
             </a>
@@ -161,12 +160,13 @@ export default function SideNav() {
               <span className="nav-text">Rebort a Bug</span>
             </a>
           </li>
-          {/* <li>
-            <a href="account">
-              <i className="fa fa-power-off fa-2x"></i>
+          <li>
+            <a href="/account">
+              {isLoggedIn ? <i className="bi bi-power bi-2x"></i> : <i className="bi bi-power off bi-2x"></i>}
+
               <span className="nav-text">{isLoggedIn ? "Logout" : "Login/Sign up"}</span>
             </a>
-          </li> */}
+          </li>
         </ul>
 
         <div className={`copyright-sticky-closed`}>

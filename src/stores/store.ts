@@ -37,7 +37,7 @@ export const mainStore = configureStore({
     main: mainReducer,
     qr: qrReducer,
     qrCode: qrCodeReducer,
-    utmStuff: utmReducer,
+    utmConfigs: utmReducer,
     wifi: wifiReducer,
     dark: darkReducer,
     history: historyReducer,
