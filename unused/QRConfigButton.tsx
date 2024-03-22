@@ -20,16 +20,16 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-import React, { useState } from 'react';
-import { OverlayTrigger, Tooltip, Button } from 'react-bootstrap';
-import { Gear, GearFill } from 'react-bootstrap-icons';
-import QRConfigForm from '../../configuration/QRConfigForm';
-import { RootState } from '../../stores/store';
-import { useSelector } from 'react-redux';
+import React, { useState } from "react";
+import { OverlayTrigger, Tooltip, Button } from "react-bootstrap";
+import { Gear, GearFill } from "react-bootstrap-icons";
+import QRConfigForm from "./QRConfigForm";
+import { RootState } from "../src/stores/store";
+import { useSelector } from "react-redux";
 
 export default function QRConfigButton(): React.JSX.Element {
   const [showConfig, setShowConfig] = useState<boolean>(false);
-  const dark = useSelector((state: RootState) => state.dark.dark);
+  const dark = useSelector((state: RootState) => state.main.dark);
   /**
    * Show the configuration window
    */
@@ -46,14 +46,10 @@ export default function QRConfigButton(): React.JSX.Element {
       >
         <Button
           variant={dark ? "icon-only-dark" : "icon-only"}
-          size="sm"
+          // size="sm"
           onClick={showConfigWindow}
         >
-          {dark ? (
-            <Gear/>
-          ) : (
-            <GearFill/>
-          )}
+          {dark ? <Gear /> : <GearFill />}
         </Button>
       </OverlayTrigger>
       <QRConfigForm show={showConfig} onHide={showConfigWindow} />

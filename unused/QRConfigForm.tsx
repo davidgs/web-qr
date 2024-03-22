@@ -21,17 +21,11 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-import React, { useState, SyntheticEvent } from 'react';
-import {
-  Form,
-  Button,
-  Modal,
-  Accordion,
-} from 'react-bootstrap';
-import { RootState } from '../stores/store';
-import { useSelector } from 'react-redux';
-// import { updateQRType } from '../reducers/qr/qrSlice';
-import QRConfigurator from './Configurators/QRConfigurator';
+import React, { useState, SyntheticEvent } from "react";
+import { Form, Button, Modal, Accordion } from "react-bootstrap";
+import { RootState } from "../src/stores/store";
+import { useSelector } from "react-redux";
+import QRConfigurator from "../src/configuration/Configurators/QRConfigurator";
 
 export default function QRConfigForm({
   show,
@@ -40,13 +34,9 @@ export default function QRConfigForm({
   show: boolean;
   onHide: () => void;
 }): React.JSX.Element {
-  // const dispatch = useDispatch();
   const [, setShowConfig] = useState<boolean>(show);
-  // const qSet = useSelector((state: RootState) => state.qr.settings);
-  // const qrConf = useSelector((state: RootState) => state.qrCode.settings);
-  const dark = useSelector((state: RootState) => state.dark.dark);
-  // const session = useSelector((state: RootState) => state.session.settings);
-  const darkClass = dark ? 'header-stuff-dark' : 'header-stuff';
+  const dark = useSelector((state: RootState) => state.main.dark);
+  const darkClass = dark ? "header-stuff-dark" : "header-stuff";
 
   const handleSubmit = (event: SyntheticEvent) => {
     event.preventDefault();
@@ -59,19 +49,12 @@ export default function QRConfigForm({
     onHide();
   };
 
-  // const handleExtChange = (selectedFileType: string) => {
-  //   dispatch(updateQRType(selectedFileType));
-  // };
-
-  // const onXparentChange = (value: boolean) => {
-  //   dispatch(updateXParent(value));
-  // };
-
   return (
     <Modal
       show={show}
       onHide={handleCancel}
       size="xl"
+      width="90%"
       backdrop="static"
     >
       <Modal.Header closeButton>
@@ -84,7 +67,7 @@ export default function QRConfigForm({
               <Accordion.Header className={darkClass}>
                 <strong>QR Code Configuration</strong>
               </Accordion.Header>
-                <QRConfigurator />
+              <QRConfigurator />
             </Accordion.Item>
           </Accordion>
           <div className="fullrow">

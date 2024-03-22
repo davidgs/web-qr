@@ -22,21 +22,23 @@
  */
 import { OverlayTrigger, Tooltip } from "react-bootstrap";
 import { RootState } from "../../stores/store";
-import { useSelector, useDispatch } from "react-redux";
+import { useDispatch } from "react-redux";
 import { updateEyeRadius } from "../../reducers/qr/qrCodeSettingsSlice";
 import { CornerRadii } from "../../types";
 import AdjusterKnob from "./AdjusterKnob";
 import "../../css/EyeStylers.css";
 import "../../css/MainConfig.css";
+import { useAppSelector } from "../../stores/hooks";
+import { setSettingsUpdated } from "../../reducers/session/loginSlice";
 
 export default function EyeStylers() {
   const dispatch = useDispatch();
-  const qConfig = useSelector((state: RootState) => state.qrCode.settings);
+  const qConfig = useAppSelector((state: RootState) => state.qrCode);
   /* Update properties when eye-radius values change */
   const handleEyeRadiusChange = (e: number, index: number, corner: number) => {
     const value = e;
     const newEyeRadius: [CornerRadii, CornerRadii, CornerRadii] =
-      qConfig.eyeRadius;
+      qConfig?.settings?.eyeRadius;
     const newCorner: [number, number, number, number] = [
       ...(newEyeRadius[index] as [number, number, number, number]),
     ];
@@ -46,21 +48,25 @@ export default function EyeStylers() {
         dispatch(
           updateEyeRadius([newCorner, newEyeRadius[1], newEyeRadius[2]])
         );
+        dispatch(setSettingsUpdated(true));
         break;
       case 1:
         dispatch(
           updateEyeRadius([newEyeRadius[0], newCorner, newEyeRadius[2]])
         );
+        dispatch(setSettingsUpdated(true));
         break;
       case 2:
         dispatch(
           updateEyeRadius([newEyeRadius[0], newEyeRadius[1], newCorner])
         );
+        dispatch(setSettingsUpdated(true));
         break;
       default:
         break;
     }
   };
+
 
   return (
     <div className="eye-styler">
@@ -82,7 +88,7 @@ export default function EyeStylers() {
               <div className="eye-color-adjuster">
                 <AdjusterKnob
                   name="eyeRadius-0-0"
-                  value={qConfig.eyeRadius[0][0]}
+                  value={qConfig?.settings?.eyeRadius[0][0]}
                   min={0}
                   max={50}
                   step={1}
@@ -97,7 +103,7 @@ export default function EyeStylers() {
               <div className="eye-color-adjuster">
                 <AdjusterKnob
                   name="eyeRadius-0-1"
-                  value={qConfig.eyeRadius[0][1]}
+                  value={qConfig?.settings?.eyeRadius[0][1]}
                   min={0}
                   max={50}
                   step={1}
@@ -113,7 +119,7 @@ export default function EyeStylers() {
               <div className="eye-color-adjuster">
                 <AdjusterKnob
                   name="eyeRadius-0-3"
-                  value={qConfig.eyeRadius[0][3]}
+                  value={qConfig?.settings?.eyeRadius[0][3]}
                   min={0}
                   max={50}
                   step={1}
@@ -128,7 +134,7 @@ export default function EyeStylers() {
               <div className="eye-color-adjuster">
                 <AdjusterKnob
                   name="eyeRadius-0-2"
-                  value={qConfig.eyeRadius[0][2]}
+                  value={qConfig?.settings?.eyeRadius[0][2]}
                   min={0}
                   max={50}
                   step={1}
@@ -158,7 +164,7 @@ export default function EyeStylers() {
               <div className="eye-color-adjuster">
                 <AdjusterKnob
                   name="eyeRadius-1-0"
-                  value={qConfig.eyeRadius[1][0]}
+                  value={qConfig?.settings?.eyeRadius[1][0] || 0}
                   min={0}
                   max={50}
                   step={1}
@@ -172,7 +178,7 @@ export default function EyeStylers() {
               <div className="eye-color-adjuster">
                 <AdjusterKnob
                   name="eyeRadius-1-1"
-                  value={qConfig?.eyeRadius[1][1]}
+                  value={qConfig?.settings?.eyeRadius[1][1] || 0}
                   min={0}
                   max={50}
                   step={1}
@@ -187,7 +193,7 @@ export default function EyeStylers() {
               <div className="eye-color-adjuster">
                 <AdjusterKnob
                   name="eyeRadius-1-3"
-                  value={qConfig.eyeRadius[1][3]}
+                  value={qConfig?.settings?.eyeRadius[1][3] || 0}
                   min={0}
                   max={50}
                   step={1}
@@ -201,7 +207,7 @@ export default function EyeStylers() {
               <div className="eye-color-adjuster">
                 <AdjusterKnob
                   name="eyeRadius-1-2"
-                  value={qConfig.eyeRadius[1][2]}
+                  value={qConfig?.settings?.eyeRadius[1][2] || 0}
                   min={0}
                   max={50}
                   step={1}
@@ -232,7 +238,7 @@ export default function EyeStylers() {
               <div className="eye-color-adjuster">
                 <AdjusterKnob
                   name="eyeRadius-2-0"
-                  value={qConfig.eyeRadius[2][0]}
+                  value={qConfig?.settings?.eyeRadius[2][0] || 0}
                   min={0}
                   max={50}
                   step={1}
@@ -246,7 +252,7 @@ export default function EyeStylers() {
               <div className="eye-color-adjuster">
                 <AdjusterKnob
                   name="eyeRadius-2-1"
-                  value={qConfig.eyeRadius[2][1]}
+                  value={qConfig?.settings?.eyeRadius[2][1] || 0}
                   min={0}
                   max={50}
                   step={1}
@@ -261,7 +267,7 @@ export default function EyeStylers() {
               <div className="eye-color-adjuster">
                 <AdjusterKnob
                   name="eyeRadius-2-3"
-                  value={qConfig.eyeRadius[2][3]}
+                  value={qConfig?.settings?.eyeRadius[2][3] || 0}
                   min={0}
                   max={50}
                   step={1}
@@ -275,7 +281,7 @@ export default function EyeStylers() {
               <div className="eye-color-adjuster">
                 <AdjusterKnob
                   name="eyeRadius-2-2"
-                  value={qConfig.eyeRadius[2][2]}
+                  value={qConfig?.settings?.eyeRadius[2][2] || 0 }
                   min={0}
                   max={50}
                   step={1}

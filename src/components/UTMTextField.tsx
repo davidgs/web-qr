@@ -28,10 +28,11 @@ import {
   OverlayTrigger,
   Tooltip,
 } from "react-bootstrap";
-import { useSelector } from "react-redux";
 import { UtmObj } from "../types";
 import { RootState } from "../stores/store";
 import "../css/URLForm.css";
+import store from "store2";
+import { useAppSelector } from "../stores/hooks";
 
 interface UTMTextFieldProps {
   // eslint-disable-next-line no-unused-vars
@@ -43,22 +44,24 @@ interface UTMTextFieldProps {
 
 export default function UTMTextField(props: UTMTextFieldProps): JSX.Element {
   const { valueChanged, targetType, value, settings } = props;
-  const dark = useSelector((state: RootState) => state.dark.dark);
+  const dark = useAppSelector((state: RootState) => state.main.settings.dark);
   const darkClass = dark ? "header-stuff-dark" : "header-stuff";
   const returnVal = (v: string) => {
     valueChanged(v, targetType);
   };
 
   const label = useMemo(() => {
-    if (settings?.showName) {
+    if (settings?.show_name) {
       return (
-        <>{settings?.label} <span className="t-label">({targetType})</span></>
+        <>
+          {settings?.label} <span className="t-label">({targetType})</span>
+        </>
       );
     } else {
       return `${settings?.label}`;
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [settings?.label, settings?.showName]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [settings?.label, settings?.show_name]);
 
   return (
     <>
@@ -69,17 +72,14 @@ export default function UTMTextField(props: UTMTextFieldProps): JSX.Element {
           <Tooltip id={`${targetType}-tooltip`}>{settings?.tooltip}</Tooltip>
         }
       >
-        <FloatingLabel
-          label={label}
-          className={darkClass}
-        >
+        <FloatingLabel label={label} className={darkClass}>
           <FormControl
             required
             className={darkClass}
             type={targetType === "utm_target" ? "url" : "text"}
             size="sm"
             id={`${targetType}`}
-            aria-label={settings?.ariaLabel}
+            aria-label={settings?.aria_label}
             aria-describedby={settings?.tooltip}
             value={value}
             onChange={(eventKey) => {

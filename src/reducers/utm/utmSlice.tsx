@@ -20,220 +20,295 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-import { createSlice } from '@reduxjs/toolkit';
-import { defaultUTMParams } from '../../types';
+import { PayloadAction, createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { UtmKeyValue, UtmObj, UtmParams, defaultUTMParams, settingsServer } from "../../types";
 
-const initialState = {
-  settings: defaultUTMParams,
+interface UtmState {
+  settings: UtmParams;
+  loading: boolean;
+  error: string | undefined;
+}
+const initialState: UtmState = {
+  settings: {
+    utm_campaign: defaultUTMParams.utm_campaign,
+    utm_content: defaultUTMParams.utm_content,
+    utm_keyword: defaultUTMParams.utm_keyword,
+    utm_medium: defaultUTMParams.utm_medium,
+    utm_source: defaultUTMParams.utm_source,
+    utm_target: defaultUTMParams.utm_target,
+    utm_term: defaultUTMParams.utm_term,
+  },
+  loading: false,
+  error: undefined,
 };
+
+export const fetchUtm = createAsyncThunk(
+  "bitly/fetchUtm",
+  async ({ username }: { username: string }) => {
+    const data = { username: username, data_fetch: "utm_settings" };
+    if (username === "") {
+      return defaultUTMParams as UtmParams;
+    }
+    const session = fetch(`${settingsServer}user-data`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        return data;
+      });
+    return session;
+  }
+);
+
+export const saveUtm = createAsyncThunk(
+  "utm/saveUtm",
+  async ({ username, settings }: { username: string; settings: UtmParams }) => {
+    const dataObj = { username: username, settings: settings };
+    const session = fetch(`${settingsServer}update-utm-settings`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(dataObj),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        return data;
+      });
+    return session;
+  }
+);
 
 export const utmSlice = createSlice({
   name: "utmSlice",
   initialState,
   reducers: {
     // Campaign
-    updateCampaignUseValue: (state, action) => {
-      state.settings.utm_campaign.useValue = action.payload as boolean;
+    updateCampaignUseValue: (state, action: PayloadAction<boolean>) => {
+      state.settings.utm_campaign.use_value = action.payload as boolean;
     },
-    updateCampaignIsChooser: (state, action) => {
-      state.settings.utm_campaign.isChooser = action.payload as boolean;
+    updateCampaignIsChooser: (state, action: PayloadAction<boolean>) => {
+      state.settings.utm_campaign.is_chooser = action.payload as boolean;
     },
-    updateCampaignShowName: (state, action) => {
-      state.settings.utm_campaign.showName = action.payload as boolean;
+    updateCampaignShowName: (state, action: PayloadAction<boolean>) => {
+      state.settings.utm_campaign.show_name = action.payload as boolean;
     },
-    updateCampaignLabel: (state, action) => {
+    updateCampaignLabel: (state, action: PayloadAction<string>) => {
       state.settings.utm_campaign.label = action.payload as string;
     },
-    updateCampaignTooltip: (state, action) => {
+    updateCampaignTooltip: (state, action: PayloadAction<string>) => {
       state.settings.utm_campaign.tooltip = action.payload as string;
     },
-    updateCampaignAriaLabel: (state, action) => {
-      state.settings.utm_campaign.ariaLabel = action.payload as string;
+    updateCampaignAriaLabel: (state, action: PayloadAction<string>) => {
+      state.settings.utm_campaign.aria_label = action.payload as string;
     },
-    updateCampaignError: (state, action) => {
+    updateCampaignError: (state, action: PayloadAction<string>) => {
       state.settings.utm_campaign.error = action.payload as string;
     },
-    updateCampaignValue: (state, action) => {
+    updateCampaignValue: (state, action: PayloadAction<UtmKeyValue[]>) => {
       state.settings.utm_campaign.value = action.payload;
     },
-    updateUTMCampaignSettings: (state, action) => {
-      const uSet = action.payload;
-      state.settings.utm_campaign = uSet;
+    updateUTMCampaignSettings: (state, action: PayloadAction<UtmObj>) => {
+      state.settings.utm_campaign = action.payload;
     },
     // Content
-    updateContentUseValue: (state, action) => {
-      state.settings.utm_content.useValue = action.payload as boolean;
+    updateContentUseValue: (state, action: PayloadAction<boolean>) => {
+      state.settings.utm_content.use_value = action.payload as boolean;
     },
-    updateContentIsChooser: (state, action) => {
-      state.settings.utm_content.isChooser = action.payload as boolean;
+    updateContentIsChooser: (state, action: PayloadAction<boolean>) => {
+      state.settings.utm_content.is_chooser = action.payload as boolean;
     },
-    updateContentShowName: (state, action) => {
-      state.settings.utm_content.showName = action.payload as boolean;
+    updateContentShowName: (state, action: PayloadAction<boolean>) => {
+      state.settings.utm_content.show_name = action.payload as boolean;
     },
-    updateContentLabel: (state, action) => {
+    updateContentLabel: (state, action: PayloadAction<string>) => {
       state.settings.utm_content.label = action.payload as string;
     },
-    updateContentTooltip: (state, action) => {
+    updateContentTooltip: (state, action: PayloadAction<string>) => {
       state.settings.utm_content.tooltip = action.payload as string;
     },
-    updateContentAriaLabel: (state, action) => {
-      state.settings.utm_content.ariaLabel = action.payload as string;
+    updateContentAriaLabel: (state, action: PayloadAction<string>) => {
+      state.settings.utm_content.aria_label = action.payload as string;
     },
-    updateContentError: (state, action) => {
+    updateContentError: (state, action: PayloadAction<string>) => {
       state.settings.utm_content.error = action.payload as string;
     },
-    updateContentValue: (state, action) => {
+    updateContentValue: (state, action: PayloadAction<UtmKeyValue[]>) => {
       state.settings.utm_content.value = action.payload;
     },
-    updateUTMContentSettings: (state, action) => {
-      const uSet = action.payload;
-      state.settings.utm_content = uSet;
+    updateUTMContentSettings: (state, action: PayloadAction<UtmObj>) => {
+      state.settings.utm_content = action.payload;
     },
     // Keyword
-    updateKeywordUseValue: (state, action) => {
-      state.settings.utm_keyword.useValue = action.payload as boolean;
+    updateKeywordUseValue: (state, action: PayloadAction<boolean>) => {
+      state.settings.utm_keyword.use_value = action.payload as boolean;
     },
-    updateKeywordIsChooser: (state, action) => {
-      state.settings.utm_keyword.isChooser = action.payload as boolean;
+    updateKeywordIsChooser: (state, action: PayloadAction<boolean>) => {
+      state.settings.utm_keyword.is_chooser = action.payload as boolean;
     },
-    updateKeywordShowName: (state, action) => {
-      state.settings.utm_keyword.showName = action.payload as boolean;
+    updateKeywordShowName: (state, action: PayloadAction<boolean>) => {
+      state.settings.utm_keyword.show_name = action.payload as boolean;
     },
-    updateKeywordLabel: (state, action) => {
+    updateKeywordLabel: (state, action: PayloadAction<string>) => {
       state.settings.utm_keyword.label = action.payload as string;
     },
-    updateKeywordTooltip: (state, action) => {
+    updateKeywordTooltip: (state, action: PayloadAction<string>) => {
       state.settings.utm_keyword.tooltip = action.payload as string;
     },
-    updateKeywordAriaLabel: (state, action) => {
-      state.settings.utm_keyword.ariaLabel = action.payload as string;
+    updateKeywordAriaLabel: (state, action: PayloadAction<string>) => {
+      state.settings.utm_keyword.aria_label = action.payload as string;
     },
-    updateKeywordError: (state, action) => {
+    updateKeywordError: (state, action: PayloadAction<string>) => {
       state.settings.utm_keyword.error = action.payload as string;
     },
-    updateKeywordValue: (state, action) => {
+    updateKeywordValue: (state, action: PayloadAction<UtmKeyValue[]>) => {
       state.settings.utm_keyword.value = action.payload;
     },
-    updateUTMKeywordSettings: (state, action) => {
-      const uSet = action.payload;
-      state.settings.utm_keyword = uSet;
+    updateUTMKeywordSettings: (state, action: PayloadAction<UtmObj>) => {
+      state.settings.utm_keyword = action.payload;
     },
     // Medium
-    updateMediumUseValue: (state, action) => {
-      state.settings.utm_medium.useValue = action.payload as boolean;
+    updateMediumUseValue: (state, action: PayloadAction<boolean>) => {
+      state.settings.utm_medium.use_value = action.payload as boolean;
     },
-    updateMediumIsChooser: (state, action) => {
-      state.settings.utm_medium.isChooser = action.payload as boolean;
+    updateMediumIsChooser: (state, action: PayloadAction<boolean>) => {
+      state.settings.utm_medium.is_chooser = action.payload as boolean;
     },
-    updateMediumShowName: (state, action) => {
-      state.settings.utm_medium.showName = action.payload as boolean;
+    updateMediumShowName: (state, action: PayloadAction<boolean>) => {
+      state.settings.utm_medium.show_name = action.payload as boolean;
     },
-    updateMediumLabel: (state, action) => {
+    updateMediumLabel: (state, action: PayloadAction<string>) => {
       state.settings.utm_medium.label = action.payload as string;
     },
-    updateMediumTooltip: (state, action) => {
+    updateMediumTooltip: (state, action: PayloadAction<string>) => {
       state.settings.utm_medium.tooltip = action.payload as string;
     },
-    updateMediumAriaLabel: (state, action) => {
-      state.settings.utm_medium.ariaLabel = action.payload as string;
+    updateMediumAriaLabel: (state, action: PayloadAction<string>) => {
+      state.settings.utm_medium.aria_label = action.payload as string;
     },
-    updateMediumError: (state, action) => {
+    updateMediumError: (state, action: PayloadAction<string>) => {
       state.settings.utm_medium.error = action.payload as string;
     },
-    updateMediumValue: (state, action) => {
+    updateMediumValue: (state, action: PayloadAction<UtmKeyValue[]>) => {
       state.settings.utm_medium.value = action.payload;
     },
-    updateUTMMediumSettings: (state, action) => {
-      const uSet = action.payload;
-      state.settings.utm_medium = uSet;
+    updateUTMMediumSettings: (state, action: PayloadAction<UtmObj>) => {
+      state.settings.utm_medium = action.payload;
     },
     // Source
-    updateSourceUseValue: (state, action) => {
-      state.settings.utm_source.useValue = action.payload as boolean;
+    updateSourceUseValue: (state, action: PayloadAction<boolean>) => {
+      state.settings.utm_source.use_value = action.payload as boolean;
     },
-    updateSourceIsChooser: (state, action) => {
-      state.settings.utm_source.isChooser = action.payload as boolean;
+    updateSourceIsChooser: (state, action: PayloadAction<boolean>) => {
+      state.settings.utm_source.is_chooser = action.payload as boolean;
     },
-    updateSourceShowName: (state, action) => {
-      state.settings.utm_source.showName = action.payload as boolean;
+    updateSourceShowName: (state, action: PayloadAction<boolean>) => {
+      state.settings.utm_source.show_name = action.payload as boolean;
     },
-    updateSourceLabel: (state, action) => {
+    updateSourceLabel: (state, action: PayloadAction<string>) => {
       state.settings.utm_source.label = action.payload as string;
     },
-    updateSourceTooltip: (state, action) => {
+    updateSourceTooltip: (state, action: PayloadAction<string>) => {
       state.settings.utm_source.tooltip = action.payload as string;
     },
-    updateSourceAriaLabel: (state, action) => {
-      state.settings.utm_source.ariaLabel = action.payload as string;
+    updateSourceAriaLabel: (state, action: PayloadAction<string>) => {
+      state.settings.utm_source.aria_label = action.payload as string;
     },
-    updateSourceError: (state, action) => {
+    updateSourceError: (state, action: PayloadAction<string>) => {
       state.settings.utm_source.error = action.payload as string;
     },
-    updateSourceValue: (state, action) => {
+    updateSourceValue: (state, action: PayloadAction<UtmKeyValue[]>) => {
       state.settings.utm_source.value = action.payload;
     },
-    updateUTMSourceSettings: (state, action) => {
-      const uSet = action.payload;
-      state.settings.utm_source = uSet;
+    updateUTMSourceSettings: (state, action: PayloadAction<UtmObj>) => {
+      state.settings.utm_source = action.payload;
     },
     // Target
-    updateTargetUseValue: (state, action) => {
-      state.settings.utm_target.useValue = action.payload as boolean;
+    updateTargetUseValue: (state, action: PayloadAction<boolean>) => {
+      state.settings.utm_target.use_value = action.payload as boolean;
     },
-    updateTargetIsChooser: (state, action) => {
-      state.settings.utm_target.isChooser = action.payload as boolean;
+    updateTargetIsChooser: (state, action: PayloadAction<boolean>) => {
+      state.settings.utm_target.is_chooser = action.payload as boolean;
     },
-    updateTargetShowName: (state, action) => {
-      state.settings.utm_target.showName = action.payload as boolean;
+    updateTargetShowName: (state, action: PayloadAction<boolean>) => {
+      state.settings.utm_target.show_name = action.payload as boolean;
     },
-    updateTargetLabel: (state, action) => {
+    updateTargetLabel: (state, action: PayloadAction<string>) => {
       state.settings.utm_target.label = action.payload as string;
     },
-    updateTargetTooltip: (state, action) => {
+    updateTargetTooltip: (state, action: PayloadAction<string>) => {
       state.settings.utm_target.tooltip = action.payload as string;
     },
-    updateTargetAriaLabel: (state, action) => {
-      state.settings.utm_target.ariaLabel = action.payload as string;
+    updateTargetAriaLabel: (state, action: PayloadAction<string>) => {
+      state.settings.utm_target.aria_label = action.payload as string;
     },
-    updateTargetError: (state, action) => {
+    updateTargetError: (state, action: PayloadAction<string>) => {
       state.settings.utm_target.error = action.payload as string;
     },
-    updateTargetValue: (state, action) => {
+    updateTargetValue: (state, action: PayloadAction<UtmKeyValue[]>) => {
       state.settings.utm_target.value = action.payload;
     },
-    updateUTMTargetSettings: (state, action) => {
-      const uSet = action.payload;
-      state.settings.utm_target = uSet;
+    updateUTMTargetSettings: (state, action: PayloadAction<UtmObj>) => {
+      state.settings.utm_target = action.payload;
     },
     // Term
-    updateTermUseValue: (state, action) => {
-      state.settings.utm_term.useValue = action.payload as boolean;
+    updateTermUseValue: (state, action: PayloadAction<boolean>) => {
+      state.settings.utm_term.use_value = action.payload as boolean;
     },
-    updateTermIsChooser: (state, action) => {
-      state.settings.utm_term.isChooser = action.payload as boolean;
+    updateTermIsChooser: (state, action: PayloadAction<boolean>) => {
+      state.settings.utm_term.is_chooser = action.payload as boolean;
     },
-    updateTermShowName: (state, action) => {
-      state.settings.utm_term.showName = action.payload as boolean;
+    updateTermShowName: (state, action: PayloadAction<boolean>) => {
+      state.settings.utm_term.show_name = action.payload as boolean;
     },
-    updateTermLabel: (state, action) => {
+    updateTermLabel: (state, action: PayloadAction<string>) => {
       state.settings.utm_term.label = action.payload as string;
     },
-    updateTermTooltip: (state, action) => {
+    updateTermTooltip: (state, action: PayloadAction<string>) => {
       state.settings.utm_term.tooltip = action.payload as string;
     },
-    updateTermAriaLabel: (state, action) => {
-      state.settings.utm_term.ariaLabel = action.payload as string;
+    updateTermAriaLabel: (state, action: PayloadAction<string>) => {
+      state.settings.utm_term.aria_label = action.payload as string;
     },
-    updateTermError: (state, action) => {
+    updateTermError: (state, action: PayloadAction<string>) => {
       state.settings.utm_term.error = action.payload as string;
     },
-    updateTermValue: (state, action) => {
+    updateTermValue: (state, action: PayloadAction<UtmKeyValue[]>) => {
       state.settings.utm_term.value = action.payload;
     },
-    updateUTMTermSettings: (state, action) => {
-      const uSet = action.payload;
-      state.settings.utm_term = uSet;
+    updateUTMTermSettings: (state, action: PayloadAction<UtmObj>) => {
+      state.settings.utm_term = action.payload;
     },
+  },
+  extraReducers: (builder) => {
+    builder.addCase(fetchUtm.pending, (state) => {
+      state.loading = true;
+    });
+    builder.addCase(fetchUtm.fulfilled, (state, action) => {
+      state.loading = false;
+      state.settings = action.payload as UtmParams;
+    });
+    builder.addCase(fetchUtm.rejected, (state, action) => {
+      state.loading = false;
+      state.settings = defaultUTMParams;
+      state.error = action.error.message;
+    });
+    builder.addCase(saveUtm.pending, (state) => {
+      state.loading = true;
+    });
+    builder.addCase(saveUtm.fulfilled, (state, action) => {
+      state.loading = false;
+      state.error = undefined;
+    });
+    builder.addCase(saveUtm.rejected, (state, action) => {
+      state.loading = false;
+      state.settings = defaultUTMParams;
+      state.error = action.error.message;
+    });
   },
 });
 

@@ -1,3 +1,5 @@
+import { IProps } from "react-qrcode-logo";
+
 /* The MIT License (MIT)
  *
  * Copyright (c) 2022-present David G. Simmons
@@ -30,7 +32,7 @@ declare type EyeColor = string; // | InnerOuterEyeColor;
 //   inner: string;
 //   outer: string;
 // };
-export interface IProps {
+export interface QProps extends IProps {
   value: string;
   ecLevel: 'L' | 'M' | 'Q' | 'H';
   enableCORS: boolean;
@@ -45,12 +47,14 @@ export interface IProps {
   logoOnLoad?: () => void;
   removeQrCodeBehindLogo: boolean;
   logoPadding: number;
-  logoPaddingStyle: 'square' | 'circle' | 'none' | undefined;
+  logoPaddingStyle: 'square' | 'circle' | undefined;
   eyeRadius: [CornerRadii, CornerRadii, CornerRadii];
   eyeColor: EyeColor;
   qrStyle: 'squares' | 'dots';
   style: object;
   id: string;
+  QRType: "png" | "svg" | "jpg";
+  XParent: boolean;
 }
 
 export type ICountry = {
@@ -68,26 +72,26 @@ export type UtmKeyValue = {
 };
 
 export type UtmObj = {
-  useValue: boolean;
-  isChooser: boolean;
-  showName: boolean;
+  use_value: boolean;
+  is_chooser: boolean;
+  show_name: boolean;
   label: string;
-  ariaLabel: string;
+  aria_label: string;
   tooltip: string;
   error: string;
   value: UtmKeyValue[];
 };
 
 export type BitlyConfig = {
-  useValue: boolean;
+  use_value: boolean;
   label: string;
-  ariaLabel: string;
+  aria_label: string;
   tooltip: string;
   error: string;
-  bitlyToken: string;
-  bitlyDomain: string;
-  bitlyAddr: string;
-  bitlyEnabled: boolean;
+  bitly_token: string;
+  bitly_domain: string;
+  bitly_addr: string;
+  bitly_enabled: boolean;
   type: string;
 };
 
@@ -114,6 +118,115 @@ export type SessionProps = {
   expiry_date?: string | Date;
 };
 
+/*
+{
+    "mode": "test",
+    "userId": 11,
+    "userUuid": "a484eafa-c95a-4c02-b97d-2afb3ff0cd24",
+    "username": "tweety_bird",
+    "email": "tweety@bird.com",
+    "name": "Tweety Bird",
+    "image": "https://res.cloudinary.com/component/image/upload/avatars/avatar-plain-4.png",
+    "phoneNumber": null,
+    "data": {},
+    "locked": false,
+    "isMfaRequired": false,
+    "preferredFirstFactor": {
+        "channel": "email",
+        "strategy": "password"
+    },
+    "preferredSecondFactor": {
+        "channel": "authenticator",
+        "strategy": "totp"
+    },
+    "isEmailConfirmed": false,
+    "isPhoneNumberConfirmed": false,
+    "lastActiveAt": "2024-03-12T18:14:38.553Z",
+    "createdAt": "2024-03-04T18:43:37.776Z",
+    "updatedAt": "2024-03-04T18:43:37.776Z",
+    "tenant": {
+        "tenantId": "xbp876mb",
+        "name": "qr-builder (test)",
+        "image": "https://res.cloudinary.com/component/image/upload/avatars/icon-26.png",
+        "loginRedirectPath": "",
+        "logoutRedirectPath": "/login"
+    },
+    "authorization": {},
+    "tenantId": "xbp876mb",
+    "isConfirmed": false,
+    "uuid": "a484eafa-c95a-4c02-b97d-2afb3ff0cd24",
+    "authentication": {
+        "firstFactors": [
+            {
+                "channel": "email",
+                "strategy": "password"
+            },
+            {
+                "channel": "email",
+                "strategy": "link"
+            }
+        ],
+        "secondFactors": []
+    },
+    "chatHmac": "50f1a385709bb3cf3b3f27d7e628afc28138ddc3bf1a82f3444b181e0526d44b",
+    "requestParams": {}
+}
+*/
+export type UserfrontProps = {
+  mode: string,
+  userId: number,
+  userUuid: string,
+  username: string,
+  email: string,
+  name: string,
+  image: string,
+  phoneNumber: string,
+  data: {},
+  locked: boolean,
+  isMfaRequired: boolean,
+  preferredFirstFactor: {
+    channel: string,
+    strategy: string,
+  },
+  preferredSecondFactor: {
+    channel: string,
+    strategy: string
+  },
+  isEmailConfirmed: boolean,
+  isPhoneNumberConfirmed: boolean,
+  lastActiveAt: string,
+  createdAt: string,
+  updatedAt: string,
+  tenant: {
+    tenantId: string,
+    name: string,
+    image: string,
+    loginRedirectPath: string,
+    logoutRedirectPath: string
+  },
+  authorization: {},
+  tenantId: string,
+  isConfirmed: boolean,
+  uuid: string,
+  authentication: {
+    firstFactors: [
+      {
+        channel: string,
+        strategy: string
+      },
+      {
+        channel: string,
+        strategy: string
+      }
+    ],
+    secondFactors: [{}]
+  },
+  chatHmac: string,
+  requestParams: {}
+}
+
+
+
 export const defaultSession: SessionProps = {
   id: 0,
   login: '',
@@ -128,59 +241,59 @@ export const defaultSession: SessionProps = {
 };
 
 export const defaultBitlyConfig: BitlyConfig = {
-  useValue: false,
-  label: 'Shorten Link',
-  ariaLabel: 'Shorten Link with Bitly',
+  use_value: false,
+  label: 'Shorten',
+  aria_label: 'Shorten Link with Bitly',
   tooltip: 'Shorten Link with Bitly',
   error: 'No Bitly Token Found',
-  bitlyToken: '',
-  bitlyDomain: '',
-  bitlyAddr: 'https://api-ssl.bitly.com/v4/shorten',
-  bitlyEnabled: false,
+  bitly_token: '',
+  bitly_domain: '',
+  bitly_addr: 'https://api-ssl.bitly.com/v4/shorten',
+  bitly_enabled: false,
   type: 'bitly',
 };
 
 export const defaultUTMTarget: UtmObj = {
-  useValue: true,
-  isChooser: false,
-  showName: true,
+  use_value: true,
+  is_chooser: false,
+  show_name: true,
   label: 'URL to encode',
   tooltip: 'Complete URL to encode',
   error: 'Please enter a valid URL',
-  ariaLabel: 'This must be a valid URL',
+  aria_label: 'This must be a valid URL',
   value: [{ key: '', value: '' }],
 };
 
 export const defaultUTMKeyword: UtmObj = {
-  useValue: true,
-  isChooser: false,
-  showName: true,
+  use_value: true,
+  is_chooser: false,
+  show_name: true,
   label: 'Keywords',
   tooltip: 'Additional keywords to append to the link',
   error: 'Please enter a valid Keyword',
-  ariaLabel: 'Add any additional keywords',
+  aria_label: 'Add any additional keywords',
   value: [{ key: '', value: '' }],
 };
 
 export const defaultUTMContent: UtmObj = {
-  useValue: true,
-  isChooser: false,
-  showName: true,
+  use_value: true,
+  is_chooser: false,
+  show_name: true,
   label: 'Content',
   tooltip: 'Additional content to append to the link',
   error: 'Please enter a valid content value',
-  ariaLabel: 'Add any additional content',
+  aria_label: 'Add any additional content',
   value: [{ key: '', value: '' }],
 };
 
 export const defaultUTMTerm: UtmObj = {
-  useValue: true,
-  isChooser: false,
-  showName: true,
+  use_value: true,
+  is_chooser: false,
+  show_name: true,
   label: 'Term',
   tooltip: `What's the Campaign Term?`,
   error: 'Please choose a valid Term',
-  ariaLabel: `What's the Campaign Term?`,
+  aria_label: `What's the Campaign Term?`,
   value: [
     { key: 'adwords', value: 'Adwords' },
     { key: 'angel', value: 'Angel' },
@@ -210,14 +323,14 @@ export const defaultUTMTerm: UtmObj = {
 };
 
 export const defaultUTMMedium: UtmObj = {
-  useValue: true,
-  isChooser: false,
-  showName: true,
+  use_value: true,
+  is_chooser: false,
+  show_name: true,
   label: 'Referral Medium',
   tooltip:
     "What kind of referral link is this? This is usually how you're distributing the link.",
   error: 'Please choose a valid referral medium',
-  ariaLabel: 'Referral medium',
+  aria_label: 'Referral medium',
   value: [
     { key: 'cpc', value: 'Cost Per Click' },
     { key: 'direct', value: 'Direct' },
@@ -237,24 +350,24 @@ export const defaultUTMMedium: UtmObj = {
 };
 
 export const defaultUTMSource: UtmObj = {
-  useValue: true,
-  isChooser: false,
-  showName: true,
+  use_value: true,
+  is_chooser: false,
+  show_name: true,
   label: 'Referral Source',
   tooltip: 'Where will you be posting this link?',
   error: 'Please enter a valid referral source',
-  ariaLabel: 'Referral Source',
+  aria_label: 'Referral Source',
   value: [{ key: '', value: '' }],
 };
 
 export const defaultUTMCampaign: UtmObj = {
-  useValue: true,
-  isChooser: false,
-  showName: true,
+  use_value: true,
+  is_chooser: false,
+  show_name: true,
   label: 'Campaign',
   tooltip: 'Enter a campaign name',
   error: 'Please enter a valid campaign name',
-  ariaLabel: 'Campaign Name',
+  aria_label: 'Campaign Name',
   value: [{ key: '', value: '' }],
 };
 
@@ -268,10 +381,10 @@ export const defaultUTMParams: UtmParams = {
   utm_keyword: defaultUTMKeyword,
 };
 
-export type QRSettings = {
-  QRType: string;
-  XParent: boolean;
-};
+// export type QRSettings = {
+//   QRType: string;
+//   XParent: boolean;
+// };
 
 export type MainSettings = {
   brandImage?: string;
@@ -279,6 +392,7 @@ export type MainSettings = {
   brandWidth: number;
   brandOpacity: number;
   formType: 'simple' | 'encoded' | 'wifi';
+  dark: boolean;
 };
 
 export type WiFiSettings = {
@@ -399,7 +513,7 @@ export const defaultWiFiSettings: WiFiSettings = {
   },
 };
 
-export const DefaultQRStyle: IProps = {
+export const DefaultQRStyle: QProps = {
   value: 'https://www.example.com/',
   ecLevel: 'H',
   size: 220,
@@ -420,15 +534,17 @@ export const DefaultQRStyle: IProps = {
     [0, 0, 0, 0],
   ],
   logoPadding: 0,
-  logoPaddingStyle: 'none',
+  logoPaddingStyle: undefined,
   style: { height: '100%', width: '100%' },
   id: '',
-};
-
-export const defaultQRSettings: QRSettings = {
   QRType: 'png',
   XParent: false,
 };
+
+// export const defaultQRSettings: QRSettings = {
+//   QRType: 'png',
+//   XParent: false,
+// };
 
 export const defaultMainSettings: MainSettings = {
   brandImage: '',
@@ -436,6 +552,60 @@ export const defaultMainSettings: MainSettings = {
   brandWidth: 200,
   brandOpacity: 1.0,
   formType: 'simple',
+  dark: false,
+};
+
+export const defaultUserFront: UserfrontProps = {
+  mode: 'test',
+  userId: 0,
+  userUuid: '',
+  username: '',
+  email: '',
+  name: '',
+  image: '',
+  phoneNumber: '',
+  data: {},
+  locked: false,
+  isMfaRequired: false,
+  preferredFirstFactor: {
+    channel: '',
+    strategy: ''
+  },
+  preferredSecondFactor: {
+    channel: '',
+    strategy: ''
+  },
+  isEmailConfirmed: false,
+  isPhoneNumberConfirmed: false,
+  lastActiveAt: '',
+  createdAt: '',
+  updatedAt: '',
+  tenant: {
+    tenantId: '',
+    name: '',
+    image: '',
+    loginRedirectPath: '',
+    logoutRedirectPath: ''
+  },
+  authorization: {},
+  tenantId: '',
+  isConfirmed: false,
+  uuid: '',
+  authentication: {
+    firstFactors: [
+      {
+        channel: '',
+        strategy: ''
+      },
+      {
+        channel: '',
+        strategy: ''
+      }
+    ],
+    secondFactors: [{}]
+  },
+  chatHmac: '',
+  requestParams: {}
 };
 
 export const knobConfig = {
@@ -458,3 +628,5 @@ export const qrImageSettings = {
   minHeight: 50,
   minWidth: 50,
 };
+
+export const settingsServer = "http://localhost:4242/";

@@ -24,25 +24,26 @@ import { configureStore } from '@reduxjs/toolkit';
 import qrCodeReducer from '../reducers/qr/qrCodeSettingsSlice';
 import wifiReducer from '../reducers/wifi/wifiSlice';
 import utmReducer from '../reducers/utm/utmSlice';
-import darkReducer from '../reducers/dark/darkSlice';
 import historyReducer from '../reducers/history/historySlice';
 import bitlyReducer from '../reducers/bitly/bitlySlice';
 import mainReducer from '../reducers/main/mainSlice';
-import qrReducer from '../reducers/qr/qrSlice';
 import sessionReducer from '../reducers/session/sessionSlice';
+import loginReducer from '../reducers/session/loginSlice';
+import userFrontReducer from '../reducers/session/userFrontSlice';
 
 export const mainStore = configureStore({
   reducer: {
     bitly: bitlyReducer,
     main: mainReducer,
-    qr: qrReducer,
     qrCode: qrCodeReducer,
     utmConfigs: utmReducer,
     wifi: wifiReducer,
-    dark: darkReducer,
     history: historyReducer,
     session: sessionReducer,
+    login: loginReducer,
+    userFront: userFrontReducer,
   },
 });
 
 export type RootState = ReturnType<typeof mainStore.getState>;
+export type AppDispatch = typeof mainStore.dispatch;

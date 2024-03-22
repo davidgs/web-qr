@@ -21,7 +21,7 @@
  * SOFTWARE.
  */
 import React, { SyntheticEvent, useState } from "react";
-import { useSelector, useDispatch } from "react-redux";
+import { useDispatch } from "react-redux";
 import {
   Accordion,
   Form,
@@ -41,19 +41,21 @@ import Checker from "../../components/buttons/Checker";
 import ImgElement from "../../components/ImgElement";
 import { RootState } from "../../stores/store";
 import "../../css/MainConfig.css";
+import store from "store2";
+import { useAppSelector } from "../../stores/hooks";
 export default function BrandingConfigurator({
   targetValidated,
 }: {
   targetValidated: boolean;
 }) {
   const dispatch = useDispatch();
-  const settings = useSelector((state: RootState) => state.main.settings);
+  const settings = useAppSelector((state: RootState) => state.main.settings);
   const [showMainLogo, setShowMainLogo] = useState<boolean>(
     settings.brandImage !== undefined &&
       settings.brandImage !== null &&
       settings.brandImage !== ""
   );
-  const dark = useSelector((state: RootState) => state.dark.dark);
+  const dark = useAppSelector((state: RootState) => state.main.settings.dark);
   const darkClass = dark ? "header-stuff-dark" : "header-stuff";
   const [isMainAspectLocked, setIsMainAspectLocked] = useState<boolean>(true);
   const [aspect, setAspect] = useState<number>(1);
@@ -311,7 +313,11 @@ export default function BrandingConfigurator({
                       onClick={setLockMainAspectRatio}
                       disabled={!showMainLogo}
                     >
-                      {isMainAspectLocked ? <i className="bi bi-lock-fill" /> : <i className="bi bi-unlock-fill" />}
+                      {isMainAspectLocked ? (
+                        <i className="bi bi-lock-fill" />
+                      ) : (
+                        <i className="bi bi-unlock-fill" />
+                      )}
                     </Button>
                   </OverlayTrigger>
                 </div>

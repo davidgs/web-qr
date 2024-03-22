@@ -22,16 +22,16 @@
  * SOFTWARE.
  */
 import { JSX } from "react";
+import { OverlayTrigger, Tooltip, Button, Form, Col } from "react-bootstrap";
+import { useDispatch } from "react-redux";
 import {
-  OverlayTrigger,
-  Tooltip,
-  Button,
-  Form,
-  Row,
-  Col,
-} from "react-bootstrap";
-import { useSelector, useDispatch } from "react-redux";
-import { SaveFill, Save, XCircleFill, XCircle } from "react-bootstrap-icons";
+  SaveFill,
+  Save,
+  XCircleFill,
+  XCircle,
+  Hourglass,
+  HourglassSplit,
+} from "react-bootstrap-icons";
 import store from "store2";
 import BitlyCheck from "./buttons/BitlyCheck";
 import HistoryChooser from "./choosers/HistoryChooser";
@@ -46,25 +46,26 @@ import {
   setWifiLinkHistory,
 } from "../reducers/history/historySlice";
 import { updateQRValue } from "../reducers/qr/qrCodeSettingsSlice";
-import QRConfigButton from "./buttons/QRConfigButton";
+// import QRConfigButton from "./buttons/QRConfigButton";
 import DownloadButton from "./buttons/DownloadButton";
 import "../css/Toolbar.css";
+import { useAppSelector } from "../stores/hooks";
 
 export default function LinkToolbar(): JSX.Element {
   const dispatch = useDispatch();
-  const dark = useSelector((state: RootState) => state.dark?.dark);
+  const dark = useAppSelector((state: RootState) => state.main.settings.dark);
   const darkClass = dark ? "header-stuff-dark" : "header-stuff";
-  const mainSet = useSelector((state: RootState) => state.main?.settings);
-  const bitlySettings = useSelector(
-    (state: RootState) => state.bitly?.settings
+  const mainSet = useAppSelector((state: RootState) => state.main.settings);
+  const bitlySettings = useAppSelector(
+    (state: RootState) => state.bitly.settings
   );
-  const session = useSelector((state: RootState) => state.session?.settings);
+  const session = useAppSelector((state: RootState) => state.session);
   // fence for basic license
-  const linkHistory = useSelector(
-    (state: RootState) => state.history?.linkHistory
+  const linkHistory = useAppSelector(
+    (state: RootState) => state.history.linkHistory
   );
-  const activeLink = useSelector(
-    (state: RootState) => state.history?.activeLink
+  const activeLink = useAppSelector(
+    (state: RootState) => state.history.activeLink
   );
 
   /**
@@ -174,46 +175,36 @@ export default function LinkToolbar(): JSX.Element {
   const saveFormType = (value: string) => {
     const ms = { ...mainSet };
     ms.formType = value as "simple" | "encoded" | "wifi";
-    dispatch(updateFormType(value));
+    dispatch(updateFormType(value as "simple" | "encoded" | "wifi"));
     store.set("main-config", ms);
   };
 
   return (
     <>
       <Form>
-        <Row className="mb-3">
+        <div className="fullrow">
           {/* fence for basic & free licenses */}
           {/* bitly enable */}
           {session.license_type !== "basic" &&
           session.license_type !== "free" &&
-          bitlySettings.useValue &&
+          bitlySettings.use_value &&
           mainSet?.formType !== "wifi" ? (
-            <Col md="auto">
+            <div className="col15">
               <BitlyCheck />
-            </Col>
+            </div>
           ) : null}
           {/* end fence */}
           {/* QR Type selector */}
-          {/* <Col
-            className="mb-3"
-            style={{ paddingTop: "0px" }}
-            md={bitlySettings.useValue ? "8" : "12"}
-          > */}
-          {/* <Row style={{ paddingTop: "0px" }}> */}
-          {/* <Col md="auto" style={{ marginTop: "2px" }}>
-                <Form.Label className={darkClass}>Link Type</Form.Label>
-              </Col> */}
-          <Form.Group as={Col} md="auto" sm={5} xs={6} style={{ fontSize: 14 }}>
+          <div className="col30" style={{ fontSize: 14 }}>
             <Form.Select
               className={darkClass}
-              size="sm"
+              // size="lg"
               required
               aria-label="What kind of link do you want to make?"
               id="link-type"
               disabled={false}
               onChange={(e) => {
                 if (e.target.value === "Choose one ...") {
-                  // returnVal('');
                   return;
                 }
                 saveFormType(e.target.value);
@@ -233,74 +224,74 @@ export default function LinkToolbar(): JSX.Element {
                 WiFi QR Code
               </option>
             </Form.Select>
-          </Form.Group>
+          </div>
           {/* fence for Basic License */}
           {/* history button */}
-          <Form.Group as={Col} md="auto" sm={5} xs={6}>
+          <div className="col30">
             {session.license_type !== "free" && <HistoryChooser />}
-          </Form.Group>
+          </div>
           {/* end fence */}
-          <Form.Group as={Col} md={4} >
-          <div className="button-row">
-            {/* download QR Code BUtton */}
-            <div className="button-column">
-              <DownloadButton />
-            </div>
-            {/* config button */}
-            <div className="button-column">
-              <QRConfigButton />
-            </div>
-            {/* fence for basic license */}
-            {/* save button */}
-            {session.license_type !== "free" && (
+          <div className="col30">
+            <div className="button-row">
+              {/* download QR Code BUtton */}
+              <div className="button-column">
+                <DownloadButton />
+              </div>
+              {/* config button */}
+              {/* <div className="button-column">
+                <QRConfigButton />
+              </div> */}
+              {/* fence for basic license */}
+              {/* save button */}
+              {session.license_type !== "free" && (
+                <div className="button-column">
+                  <OverlayTrigger
+                    placement="top"
+                    delay={{ show: 250, hide: 300 }}
+                    overlay={
+                      <Tooltip id="save-btn-tooltip">
+                        Save the current link to your history.
+                      </Tooltip>
+                    }
+                  >
+                    <Button
+                      // size="sm"
+                      id="save-btn"
+                      variant={dark ? "icon-only-dark" : "icon-only"}
+                      onClick={() => saveLink()}
+                      className={darkClass}
+                    >
+                      {dark ? <Hourglass /> : <HourglassSplit />}
+                    </Button>
+                  </OverlayTrigger>
+                </div>
+              )}
+              {/* end fence */}
+              {/* clear button */}
               <div className="button-column">
                 <OverlayTrigger
                   placement="top"
                   delay={{ show: 250, hide: 300 }}
                   overlay={
-                    <Tooltip id="save-btn-tooltip">
-                      Save the current link to your history.
+                    <Tooltip id="clear-btn-tooltip">
+                      Clear the form and start over.
                     </Tooltip>
                   }
                 >
                   <Button
-                    size="sm"
-                    id="save-btn"
+                    // size="sm"
                     variant={dark ? "icon-only-dark" : "icon-only"}
-                    onClick={() => saveLink()}
-                    // className={darkClass}
+                    color={dark ? "#adb5bd" : "#0B3665"}
+                    className={dark ? "header-stuff-dark" : "header-stuff"}
+                    onClick={clearForm}
                   >
-                    {dark ? <Save /> : <SaveFill />}
+                    {dark ? <XCircle /> : <XCircleFill />}
                   </Button>
                 </OverlayTrigger>
               </div>
-            )}
-            {/* end fence */}
-            {/* clear button */}
-            <div className="button-column">
-              <OverlayTrigger
-                placement="top"
-                delay={{ show: 250, hide: 300 }}
-                overlay={
-                  <Tooltip id="clear-btn-tooltip">
-                    Clear the form and start over.
-                  </Tooltip>
-                }
-              >
-                <Button
-                  size="sm"
-                  variant={dark ? "icon-only-dark" : "icon-only"}
-                  color={dark ? "#adb5bd" : "#0B3665"}
-                  className={dark ? "header-stuff-dark" : "header-stuff"}
-                  onClick={clearForm}
-                >
-                  {dark ? <XCircle /> : <XCircleFill />}
-                </Button>
-              </OverlayTrigger>
             </div>
           </div>
-          </Form.Group>
-        </Row>
+        </div>
         {/* </Col> */}
         {/* </Row> */}
       </Form>

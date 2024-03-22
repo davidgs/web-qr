@@ -20,21 +20,22 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-import { JSX } from 'react';
-import { RootState } from '../../stores/store';
-import { useSelector, useDispatch } from 'react-redux';
-import { check } from '../../reducers/bitly/bitlySlice';
-import axios from 'axios';
-import { makeLongLink } from '../../utils/LongLink';
-import { setActiveLink } from '../../reducers/history/historySlice';
-import { updateQRValue } from '../../reducers/qr/qrCodeSettingsSlice';
-import Checker from './Checker';
+import { JSX } from "react";
+import { RootState } from "../../stores/store";
+import { useDispatch } from "react-redux";
+import { check } from "../../reducers/bitly/bitlySlice";
+import axios from "axios";
+import { makeLongLink } from "../../utils/LongLink";
+import { setActiveLink } from "../../reducers/history/historySlice";
+import { updateQRValue } from "../../reducers/qr/qrCodeSettingsSlice";
+import Checker from "./Checker";
+import { useAppSelector } from "../../stores/hooks";
 
 export default function BitlyCheck(): JSX.Element {
   const dispatch = useDispatch();
-  const bitlyConfig = useSelector((state: RootState) => state.bitly.settings);
-  const activeLink = useSelector(
-    (state: RootState) => state.history.activeLink,
+  const bitlyConfig = useAppSelector((state: RootState) => state.bitly.settings);
+  const activeLink = useAppSelector(
+    (state: RootState) => state.history.activeLink
   );
 
   const bitlyChecked = (isChecked: boolean) => {
@@ -42,13 +43,15 @@ export default function BitlyCheck(): JSX.Element {
     if (isChecked) {
       // only call bitly if the link is complete.
       const headers = {
-        Authorization: `Bearer ${bitlyConfig.bitlyToken}`,
-        Accept: 'application/json',
-        ContentType: 'application/json; charset=utf-8',
+        Authorization: `Bearer ${bitlyConfig.bitly_token}`,
+        Accept: "application/json",
+        ContentType: "application/json; charset=utf-8",
       };
       const bDom =
-        bitlyConfig && bitlyConfig.bitlyDomain && bitlyConfig.bitlyDomain !== ''
-          ? `"domain": "${bitlyConfig.bitlyDomain}"`
+        bitlyConfig &&
+        bitlyConfig.bitly_domain &&
+        bitlyConfig.bitly_domain !== ""
+          ? `"domain": "${bitlyConfig.bitly_domain}"`
           : null;
       const link = makeLongLink(activeLink);
       const data =
@@ -56,7 +59,7 @@ export default function BitlyCheck(): JSX.Element {
           ? JSON.parse(`{"long_url": "${link}", ${bDom}}`)
           : JSON.parse(`{"long_url": "${link}"}`);
       axios
-        .post(`${bitlyConfig.bitlyAddr}`, data, {
+        .post(`${bitlyConfig.bitly_addr}`, data, {
           headers,
         })
         .then((response: any) => {
@@ -83,11 +86,11 @@ export default function BitlyCheck(): JSX.Element {
         cState={false}
         label={bitlyConfig.label}
         tooltip={
-          activeLink.short_link && activeLink.short_link !== ''
+          activeLink.short_link && activeLink.short_link !== ""
             ? "Your link appears to already be shortened. Don't shorten it again!"
             : bitlyConfig.tooltip
         }
-        disabled={bitlyConfig.bitlyEnabled}
+        disabled={bitlyConfig.bitly_enabled}
         callback={bitlyChecked}
       />
     </div>

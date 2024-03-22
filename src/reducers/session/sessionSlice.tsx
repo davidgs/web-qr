@@ -20,55 +20,66 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-import { createSlice } from '@reduxjs/toolkit';
+import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 import { SessionProps, defaultSession } from '../../types';
 
-const initialState = {
-  settings: defaultSession,
+const initialState: SessionProps = {
+  id: defaultSession.id,
+  login: defaultSession.login,
+  stripe_id: defaultSession.stripe_id,
+  first_name: defaultSession.first_name,
+  last_name: defaultSession.last_name,
+  organization: defaultSession.organization,
+  active: defaultSession.active,
+  email: defaultSession.email,
+  license_type: defaultSession.license_type,
+  expiry_date: defaultSession.expiry_date,
 };
 
 export const sessionSlice = createSlice({
-  name: 'session',
+  name: "session",
   initialState,
   reducers: {
-    updateSession: (state, action) => {
-      const newSession: SessionProps = action.payload;
-      state.settings = newSession;
+    updateSession: (state, action: PayloadAction<SessionProps>) => {
+      state = action.payload;
     },
     returnSession: (state) => {
-      return state.settings as any;
+      return state as SessionProps;
     },
-    updateSessionId: (state, action) => {
-      state.settings.id = action.payload;
+    updateSessionId: (state, action: PayloadAction<number>) => {
+      state.id = action.payload;
     },
-    updateSessionLogin: (state, action) => {
-      state.settings.login = action.payload;
+    updateSessionLogin: (state, action: PayloadAction<string>) => {
+      state.login = action.payload;
     },
-    updateSessionStripeId: (state, action) => {
-      state.settings.stripe_id = action.payload;
+    updateSessionStripeId: (state, action: PayloadAction<string>) => {
+      state.stripe_id = action.payload;
     },
-    updateSessionFirstName: (state, action) => {
-      state.settings.first_name = action.payload;
+    updateSessionFirstName: (state, action: PayloadAction<string>) => {
+      state.first_name = action.payload;
     },
-    updateSessionLastName: (state, action) => {
-      state.settings.last_name = action.payload;
+    updateSessionLastName: (state, action: PayloadAction<string>) => {
+      state.last_name = action.payload;
     },
-    updateSessionOrganization: (state, action) => {
-      state.settings.organization = action.payload;
+    updateSessionOrganization: (state, action: PayloadAction<string>) => {
+      state.organization = action.payload;
     },
-    updateSessionActive: (state, action) => {
-      state.settings.active = action.payload;
+    updateSessionActive: (state, action: PayloadAction<boolean>) => {
+      state.active = action.payload;
     },
-    updateSessionEmail: (state, action) => {
-      state.settings.email = action.payload;
+    updateSessionEmail: (state, action: PayloadAction<string>) => {
+      state.email = action.payload;
     },
-    updateSessionLicenseType: (state, action) => {
-      state.settings.license_type = action.payload;
+    updateSessionLicenseType: (state, action: PayloadAction<string>) => {
+      state.license_type = action.payload;
     },
-    updateSessionExpiryDate: (state, action) => {
-      state.settings.expiry_date = action.payload;
+    updateSessionExpiryDate: (
+      state,
+      action: PayloadAction<string | Date | undefined>
+    ) => {
+      state.expiry_date = action.payload;
     },
-  }
+  },
 });
 
 export const {

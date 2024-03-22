@@ -29,23 +29,24 @@ import {
   OverlayTrigger,
   Tooltip,
 } from "react-bootstrap";
-import { useSelector, useDispatch } from "react-redux";
+import { useDispatch } from "react-redux";
 import { RootState } from "../stores/store";
 import { updateQRValue } from "../reducers/qr/qrCodeSettingsSlice";
 import { Eye, EyeSlashFill } from "react-bootstrap-icons";
 import { setActiveLink } from "../reducers/history/historySlice";
 import Checker from "../components/buttons/Checker";
 import "../css/MainConfig.css";
+import { useAppSelector } from "../stores/hooks";
 
 export default function WifiForm() {
   // WIFI:S:<SSID>;T:<WEP|WPA|nopass>;P:<PASSWORD>;H:<true|false|blank>;;
   const dispatch = useDispatch();
-  const dark = useSelector((state: RootState) => state.dark.dark);
+  const dark = useAppSelector((state: RootState) => state.main.settings.dark);
   const darkClass = dark ? "header-stuff-dark" : "header-stuff";
-  const settings = useSelector((state: RootState) => state.wifi.settings);
+  const settings = useAppSelector((state: RootState) => state.wifi);
   const [passwordShown, setPasswordShown] = useState<boolean>(false);
   const pwField = document.getElementById("wifi-passwd");
-  const activeLink = useSelector(
+  const activeLink = useAppSelector(
     (state: RootState) => state.history.activeLink
   );
   const wifiString = `WIFI:S:${activeLink.ssid};T:${activeLink.encryption};P:${activeLink.password};H:${activeLink.hidden};;`;

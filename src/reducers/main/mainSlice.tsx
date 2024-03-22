@@ -20,39 +20,127 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-import { createSlice } from '@reduxjs/toolkit';
-import { MainSettings, defaultMainSettings } from '../../types';
+import { PayloadAction, createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { MainSettings, defaultMainSettings, settingsServer } from "../../types";
 
-const initialState = {
-  settings: defaultMainSettings,
+
+interface MainSliceSettings {
+  settings: MainSettings;
+  loading: boolean;
+  error: string | undefined;
+}
+const initialState: MainSliceSettings = {
+  settings: {
+    brandImage: defaultMainSettings.brandImage,
+    brandHeight: defaultMainSettings.brandHeight,
+    brandWidth: defaultMainSettings.brandWidth,
+    brandOpacity: defaultMainSettings.brandOpacity,
+    formType: defaultMainSettings.formType,
+    dark: false,
+  },
+  loading: false,
+  error: undefined,
 };
 
+export const fetchMain = createAsyncThunk(
+  "bitly/fetchMain",
+  async ({ username }: { username: string }) => {
+    const data = { username: username, data_fetch: "main_settings" };
+    if (username === "") {
+      return defaultMainSettings as MainSettings;
+    }
+    const session = fetch(`${settingsServer}user-data`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        return data;
+      })
+      .catch((err) => {
+        return err;
+      });
+    return session;
+  }
+);
+
+export const saveMain = createAsyncThunk(
+  "main/saveMain",
+  async ({ settings, username }: { settings: MainSettings, username: string }) => {
+    const data = { username: username, settings: settings };
+    const session = fetch(`${settingsServer}update-main-settings`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        return data;
+      })
+      .catch((err) => {
+        return err;
+      });
+    return session;
+  }
+);
+
 export const mainSlice = createSlice({
-  name: 'main',
+  name: "main",
   initialState,
   reducers: {
-    updateBrandImage: (state, action) => {
-      state.settings.brandImage = action.payload as string;
+    updateBrandImage: (state, action: PayloadAction<string>) => {
+      state.settings.brandImage = action.payload;
     },
-    updateHeight: (state, action) => {
-      state.settings.brandHeight = action.payload as number;
+    updateHeight: (state, action: PayloadAction<number>) => {
+      state.settings.brandHeight = action.payload;
     },
-    updateWidth: (state, action) => {
+    updateWidth: (state, action: PayloadAction<number>) => {
       state.settings.brandWidth = action.payload as number;
     },
-    updateBrandOpacity: (state, action) => {
+    updateBrandOpacity: (state, action: PayloadAction<number>) => {
       state.settings.brandOpacity = action.payload as number;
     },
-    updateFormType: (state, action) => {
-      state.settings.formType = action.payload as 'wifi' | 'simple' | 'encoded';
+    updateFormType: (
+      state,
+      action: PayloadAction<"wifi" | "simple" | "encoded">
+    ) => {
+      state.settings.formType = action.payload;
     },
-    updateMainSettings: (state, action) => {
-      const mSet: MainSettings = action.payload;
-      state.settings = mSet;
+    updateMainSettings: (state, action: PayloadAction<MainSettings>) => {
+      state.settings = action.payload;
     },
-    returnMainSettings: (state) => {
-      return state.settings as any;
+    updateDark: (state, action: PayloadAction<boolean>) => {
+      state.settings.dark = action.payload;
     },
+  },
+  extraReducers: (builder) => {
+    builder.addCase(fetchMain.pending, (state) => {
+      state.loading = true;
+    });
+    builder.addCase(fetchMain.fulfilled, (state, action) => {
+      state.loading = false;
+      state.settings = action.payload as MainSettings;
+    });
+    builder.addCase(fetchMain.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.error.message as string | undefined;
+    });
+    builder.addCase(saveMain.pending, (state) => {
+      state.loading = true;
+    });
+    builder.addCase(saveMain.fulfilled, (state, action) => {
+      state.loading = false;
+      state.settings = action.payload as MainSettings;
+    });
+    builder.addCase(saveMain.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.error.message as string | undefined;
+    });
   },
 });
 
@@ -63,7 +151,8 @@ export const {
   updateBrandOpacity,
   updateFormType,
   updateMainSettings,
-  returnMainSettings,
+  updateDark,
 } = mainSlice.actions;
+// export const userSelector = (state: RootState) => state.mainSliceReducer;
 
 export default mainSlice.reducer;

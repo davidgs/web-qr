@@ -34,7 +34,7 @@ export default function AboutModal({
   showMe: boolean;
   callback: (res: boolean) => void;
 }): React.JSX.Element {
-  const dark = useSelector((state: RootState) => state.dark.dark);
+  const dark = useSelector((state: RootState) => state.main.dark);
   const darkClass = dark ? "header-stuff-dark" : "header-stuff";
 
   const handleClose = () => {

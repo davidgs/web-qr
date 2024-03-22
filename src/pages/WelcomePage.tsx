@@ -33,11 +33,12 @@ import Logo from "../images/NewLinkerLogo.png";
 import qCode1 from "../images/qcode1.png";
 import qCode2 from "../images/qcode2.png";
 import qCode3 from "../images/qcode3.png";
-import { useSelector } from "react-redux";
+import { RootState } from "../stores/store";
+import { useAppSelector } from "../stores/hooks";
 
 export default function WelcomePage() {
   const navigate = useNavigate();
-  const dark = useSelector((state: any) => state.dark.dark);
+  const dark = useAppSelector((state: RootState) => state.main.settings.dark);
   const darkClass = dark ? "header-stuff-dark" : "header-stuff";
 
   const go = () => {

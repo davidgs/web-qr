@@ -1,10 +1,11 @@
 import React, { SyntheticEvent, useState } from "react";
 import { Modal, Button, Form, InputGroup } from "react-bootstrap";
 import Logo from "../../images/NewLinkerLogo.png";
-import { useSelector } from "react-redux";
 import { RootState } from "../../stores/store";
 import "../../css/MainConfig.css";
 import "../../css/AccountModal.css";
+import store from "store2";
+import { useAppSelector } from "../../stores/hooks";
 
 interface NewAccountModalProps {
   show: boolean;
@@ -14,7 +15,8 @@ interface NewAccountModalProps {
 }
 export default function NewAccountModal(props: NewAccountModalProps) {
   const [showMe, setShowMe] = useState(props.show);
-  const dark: boolean = useSelector((state: RootState) => state.dark.dark);
+  const dark = useAppSelector((state: RootState) => state.main.settings.dark);
+
   const darkClass: string = dark ? "header-stuff-dark" : "header-stuff";
 
   const handleClose = () => setShowMe(false);

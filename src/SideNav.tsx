@@ -22,31 +22,67 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-import './css/hyde.css';
-import { useEffect, useState } from 'react';
-import store from 'store2';
-import { useSelector, useDispatch } from 'react-redux';
-import Logo from './images/NewLinkerLogo.png';
-import { RootState } from './stores/store';
-import { setDark } from './reducers/dark/darkSlice';
-import { updateMainSettings } from './reducers/main/mainSlice';
-import { SessionResponse } from '@userfront/core';
-import Userfront from '@userfront/core';
+import "./css/hyde.css";
+import store from "store2";
+import { useDispatch } from "react-redux";
+import Logo from "./images/NewLinkerLogo.png";
+import { RootState } from "./stores/store";
+import { updateDark, updateMainSettings } from "./reducers/main/mainSlice";
+import { SessionResponse } from "@userfront/core";
+import Userfront from "@userfront/core";
+import axios from "axios";
+import { setLogin } from "./reducers/session/loginSlice";
+import { Link } from "react-router-dom";
+import { useEffect } from "react";
+import { useAppSelector } from "./stores/hooks";
+import { settingsServer } from "./types";
 
 export default function SideNav() {
-  const dark = useSelector((state: RootState) => state.dark);
+  // const navigate = useNavigate();
+  const dark: boolean = useAppSelector(
+    (state: RootState) => state.main.settings.dark
+  );
+  const loggedIn = useAppSelector((state: RootState) => state.login.login);
+  const username = useAppSelector(
+    (state: RootState) => state.userFront.settings.username
+  );
   const dispatch = useDispatch();
   // const [editConfig, setEditConfig] = useState(false);
-  const mainSet = useSelector((state: RootState) => state.main.settings);
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const mainSet = useAppSelector((state: RootState) => state.main);
   Userfront.init("xbp876mb");
 
+  /**
+   * Set the dark mode
+   */
+  const setSaveDark = () => {
+    const d = !dark;
+    const newSet = { ...mainSet, dark: d };
+    const payload = { username: username, settings: newSet };
+    axios
+      .post(`${settingsServer}update-main-settings`, payload)
+      .then((res) => {
+        console.log(`res`, res);
+        dispatch(updateMainSettings(res.data.main_settings));
+      })
+      .catch((err) => {
+        console.log(`err`, err);
+      });
+    dispatch(updateDark(d));
+  };
+
   useEffect(() => {
+    console.log(`SideNav Logged in: ${loggedIn}`);
+  }, [loggedIn]);
+  /**
+   * Logout the user
+   */
+  const logout = () => {
+    Userfront.logout();
     Userfront.getSession()
       .then((session: SessionResponse) => {
         if (session) {
           console.log(`session`, session.isLoggedIn);
-          setIsLoggedIn(session.isLoggedIn);
+          dispatch(setLogin(session.isLoggedIn));
           return true;
         } else {
           return false;
@@ -56,24 +92,7 @@ export default function SideNav() {
         console.log(`err`, err);
         return false;
       });
-  }, []);
-  /**
-   * toggle the sidebar open or closed
-   */
-  const toggleOpen = () => {
-    const ms = { ...mainSet };
-    dispatch(updateMainSettings(ms));
-    store.set("main-config", ms);
   };
-
-  const setSaveDark = () => {
-    const d = { ...dark, dark: !dark.dark };
-    store.set("dark", d);
-    dispatch(setDark(d.dark));
-    console.log(`Dark Mode: ${store.get("dark").dark}`);
-  };
-
-
 
   return (
     // eslint-disable-next-line react/jsx-filename-extension
@@ -94,27 +113,25 @@ export default function SideNav() {
         </a>
         <ul>
           <li className="hamburger">
-            <a href="#" onClick={toggleOpen}>
+            <a href="#">
               <i className="bi bi-justify-left bi-4x"></i>
             </a>
           </li>
           <li>
-            <a href="/build">
+            <Link to="/build">
               <i className="bi bi-qr-code bi-2x"></i>
-              <span className="nav-text">Home</span>
-            </a>
+              <span className="nav-text">Create</span>
+            </Link>
           </li>
           <li className="has-subnav" onClick={setSaveDark}>
-            <a href="#">
-              <i
-                className={
-                  dark.dark ? "bi bi-sun bi-2x" : "bi bi-moon-stars bi-2x"
-                }
-              ></i>
-              <span className="nav-text">
-                {dark.dark ? "Light Mode" : "Dark Mode"}
-              </span>
-            </a>
+            {/* <a href="#"> */}
+            <i
+              className={dark ? "bi bi-sun bi-2x" : "bi bi-moon-stars bi-2x"}
+            ></i>
+            <span className="nav-text">
+              {dark ? "Light Mode" : "Dark Mode"}
+            </span>
+            {/* </a> */}
           </li>
           {/* <li className="has-subnav">
             <a href="/register">
@@ -123,52 +140,63 @@ export default function SideNav() {
             </a>
           </li> */}
           <li>
-            {" "}
-            {/* className="has-subnav"> */}
-            <a href="/pricing">
+            <Link to="/pricing">
               <i className="bi bi-bag bi-2x"></i>
               <span className="nav-text">Purchase</span>
-            </a>
+            </Link>
           </li>
           <li>
-            <a href="/config">
+            <Link to="/config">
               <i className="fa fa-cogs fa-2x"></i>
               <span className="nav-text">Configuration & Settings</span>
-            </a>
+            </Link>
           </li>
           <li>
-            <a href="/welcome">
+            <Link to="/welcome">
               <i className="bi bi-info-circle bi-2x"></i>
               <span className="nav-text">About</span>
-            </a>
+            </Link>
           </li>
           <li>
-            <a href="/tos">
+            <Link to="/faq">
+              <i className="bi bi-patch-question bi-2x"></i>
+              <span className="nav-text">FAQ</span>
+            </Link>
+          </li>
+          <li>
+            <Link to="/tos">
               <i className="bi bi-file-earmark-text bi-2x"></i>
               <span className="nav-text">Terms of Service</span>
-            </a>
+            </Link>
           </li>
           <li>
-            <a href="/privacy">
+            <Link to="/privacy">
               <i className="bi bi-shield-lock bi-2x"></i>
               <span className="nav-text">Privacy Policy</span>
-            </a>
+            </Link>
           </li>
           <li className="has-subnav">
-            <a href="#">
+            <a href="https://dgs.st/bug" rel="noreferrer" target="_blank">
               <i className="bi bi-bug bi-2x"></i>
               <span className="nav-text">Rebort a Bug</span>
             </a>
           </li>
           <li>
-            <a href="/account">
-              {isLoggedIn ? <i className="bi bi-power bi-2x"></i> : <i className="bi bi-power off bi-2x"></i>}
-
-              <span className="nav-text">{isLoggedIn ? "Logout" : "Login/Sign up"}</span>
-            </a>
+            {loggedIn ? (
+              <span className="logout" onClick={logout}>
+                <i className="bi bi-power bi-2x off"></i>
+                <span className="nav-text">Logout</span>
+              </span>
+            ) : (
+              <Link to="/login">
+                <span className="login">
+                  <i className="bi bi-person bi-2x on"></i>
+                  <span className="nav-text">Login/Signup</span>
+                </span>
+              </Link>
+            )}
           </li>
         </ul>
-
         <div className={`copyright-sticky-closed`}>
           <p
             style={{
@@ -190,26 +218,6 @@ export default function SideNav() {
           </p>
         </div>
       </nav>
-      {/* {sidebar !== "top" && ( */}
-
-      {/* )} */}
-      {/* {editConfig && (
-        <ConfigEditor showMe={editConfig} callback={setEditConfig} />
-      )}
-      {showAboutModal && (
-        <AboutModal showMe={showAboutModal} callback={setShowAboutModal} />
-      )}
-      {mainSet.firstRun && (
-        <WelcomeModal
-          showMe={mainSet.firstRun}
-          callback={(res: boolean) => {
-            const ms = { ...mainSet, firstRun: false };
-            store.set("main", ms);
-            dispatch(updateMainSettings(ms));
-          }}
-        />
-      )} */}
     </div>
-    // </div>
   );
 }

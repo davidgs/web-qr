@@ -1,4 +1,5 @@
 /* The MIT License (MIT)
+process.env.NODE_ENV = "development";
  *
  * Copyright (c) 2022-present David G. Simmons
  *
@@ -20,22 +21,22 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-import { createSlice } from '@reduxjs/toolkit';
 
-const initialState = {
-  dark: false,
-};
-
-export const darkSlice = createSlice({
-  name: 'bitly',
-  initialState,
-  reducers: {
-    setDark: (state, action) => {
-      state.dark = action.payload as boolean;
-    },
-  },
-});
-
-export const { setDark } = darkSlice.actions;
-
-export default darkSlice.reducer;
+import { PricingTable } from "../components/StripePricing";
+export default function BuyPage() {
+  
+  return (
+    <div
+      className={`main-column`}
+      style={{
+        backgroundColor: "#131518",
+        borderRadius: "10px",
+        padding: "20px",
+        margin: "20px",
+        boxShadow: "0 0 10px 0 #000",
+      }}
+    >
+      <PricingTable />
+    </div>
+  );
+}

@@ -1,14 +1,32 @@
+-- CreateEnum
+CREATE TYPE "qr_style" AS ENUM ('squares', 'dots');
+
+-- CreateEnum
+CREATE TYPE "padding_style" AS ENUM ('square', 'circle');
+
+-- CreateEnum
+CREATE TYPE "qr_image_type" AS ENUM ('svg', 'png', 'jpg');
+
+-- CreateEnum
+CREATE TYPE "ec_values" AS ENUM ('L', 'M', 'Q', 'H');
+
 -- CreateTable
 CREATE TABLE "User" (
     "id" SERIAL NOT NULL,
     "login" VARCHAR(255) NOT NULL,
     "password" VARCHAR(255) NOT NULL,
+    "stipe_id" TEXT,
+    "userfront_id" VARCHAR(255),
     "first_name" TEXT,
     "last_name" TEXT,
     "created_at" TIMESTAMP(6) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at" TIMESTAMP(6),
     "deleted_at" TIMESTAMP(6),
     "organization" TEXT,
+    "address" VARCHAR(255),
+    "city" VARCHAR(255),
+    "state" VARCHAR(25),
+    "zip" VARCHAR(25),
     "active" BOOLEAN,
     "confirmed" BOOLEAN,
     "email" VARCHAR(255) NOT NULL,
@@ -175,8 +193,11 @@ CREATE TABLE "UtmTerm" (
 -- CreateTable
 CREATE TABLE "Licensing" (
     "id" SERIAL NOT NULL,
+    "cust_id" VARCHAR(255),
     "license_type" TEXT,
     "license_key" TEXT,
+    "active" BOOLEAN DEFAULT false,
+    "confirmed" BOOLEAN DEFAULT false,
     "expire_date" TIMESTAMP(3),
     "created_at" TIMESTAMP(6) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at" TIMESTAMP(6),
@@ -203,6 +224,40 @@ CREATE TABLE "MainSettings" (
 
     CONSTRAINT "MainSettings_pkey" PRIMARY KEY ("id")
 );
+
+-- CreateTable
+CREATE TABLE "QrSettings" (
+    "id" SERIAL NOT NULL,
+    "value" TEXT,
+    "ec_level" "ec_values" NOT NULL DEFAULT 'M',
+    "enable_CORS" BOOLEAN NOT NULL DEFAULT true,
+    "size" INTEGER NOT NULL DEFAULT 220,
+    "quiet_zone" INTEGER NOT NULL DEFAULT 10,
+    "bg_color" TEXT NOT NULL DEFAULT 'rgba(255, 255, 255, 1)',
+    "fg_color" TEXT NOT NULL DEFAULT 'rgba(0, 0, 0, 1)',
+    "logo_image" TEXT,
+    "logo_width" INTEGER NOT NULL DEFAULT 60,
+    "logo_height" INTEGER NOT NULL DEFAULT 60,
+    "logo_opacity" DOUBLE PRECISION NOT NULL DEFAULT 1,
+    "remove_qr_code_behind_logo" BOOLEAN NOT NULL DEFAULT true,
+    "logo_padding" INTEGER NOT NULL DEFAULT 0,
+    "logo_padding_style" "padding_style" NOT NULL DEFAULT 'square',
+    "top_l_eye_radius" INTEGER[] DEFAULT ARRAY[0, 0, 0, 0]::INTEGER[],
+    "top_r_eye_radius" INTEGER[] DEFAULT ARRAY[0, 0, 0, 0]::INTEGER[],
+    "bottom_l_eye_radius" INTEGER[] DEFAULT ARRAY[0, 0, 0, 0]::INTEGER[],
+    "eye_color" TEXT NOT NULL DEFAULT 'rgba(0, 0, 0, 1)',
+    "qr_style" "qr_style" NOT NULL DEFAULT 'squares',
+    "qr_type" "qr_image_type" NOT NULL DEFAULT 'png',
+    "x_parent" BOOLEAN NOT NULL DEFAULT false,
+    "created_at" TIMESTAMP(6) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updated_at" TIMESTAMP(6),
+    "qr_id" INTEGER NOT NULL,
+
+    CONSTRAINT "QrSettings_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateIndex
+CREATE UNIQUE INDEX "User_login_key" ON "User"("login");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "BitlySettings_bitly_id_key" ON "BitlySettings"("bitly_id");
@@ -234,6 +289,9 @@ CREATE UNIQUE INDEX "Licensing_license_id_key" ON "Licensing"("license_id");
 -- CreateIndex
 CREATE UNIQUE INDEX "MainSettings_main_id_key" ON "MainSettings"("main_id");
 
+-- CreateIndex
+CREATE UNIQUE INDEX "QrSettings_qr_id_key" ON "QrSettings"("qr_id");
+
 -- AddForeignKey
 ALTER TABLE "BitlySettings" ADD CONSTRAINT "BitlySettings_bitly_id_fkey" FOREIGN KEY ("bitly_id") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
@@ -263,3 +321,6 @@ ALTER TABLE "Licensing" ADD CONSTRAINT "Licensing_license_id_fkey" FOREIGN KEY (
 
 -- AddForeignKey
 ALTER TABLE "MainSettings" ADD CONSTRAINT "MainSettings_main_id_fkey" FOREIGN KEY ("main_id") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "QrSettings" ADD CONSTRAINT "QrSettings_qr_id_fkey" FOREIGN KEY ("qr_id") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;

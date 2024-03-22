@@ -26,7 +26,7 @@ import { Accordion, Form, OverlayTrigger, Tooltip } from "react-bootstrap";
 import { UtmKeyValue, UtmObj } from "../../types";
 import Checker from "../buttons/Checker";
 import { RootState } from "../../stores/store";
-import { useSelector, useDispatch } from "react-redux";
+import { useDispatch } from "react-redux";
 import {
   updateTermLabel,
   updateTermValue,
@@ -38,22 +38,27 @@ import {
   updateTermUseValue,
 } from "../../reducers/utm/utmSlice";
 import PillArea from "../pills/PillArea";
+import store from "store2";
+import { useAppSelector } from "../../stores/hooks";
+import { setSettingsUpdated } from "../../reducers/session/loginSlice";
 
 export default function UTMTermAccordian(): JSX.Element {
   const dispatch = useDispatch();
-  const dark = useSelector((state: RootState) => state.dark.dark);
+  const dark = useAppSelector((state: RootState) => state.main.settings.dark);
   const darkClass = dark ? "header-stuff-dark" : "header-stuff";
   const valKind: string = "utm_term";
   const itemNo: string = "5";
   const type: string = "UTM Term";
-  const accValue = useSelector(
+  const accValue = useAppSelector(
     (state: RootState) => state.utmConfigs.settings.utm_term as UtmObj
   );
   const [kvValue, setKvValue] = useState<string>("");
   const [valValid, setValValid] = useState<boolean>(true);
 
   const [fieldValue, setFieldValue] = useState<string>(
-    accValue.showName ? `${accValue?.label} (${valKind})` : `${accValue.label}`
+    accValue?.show_name
+      ? `${accValue?.label} (${valKind})`
+      : `${accValue?.label}`
   );
 
   const updateFieldValue = (eventKey: SyntheticEvent) => {
@@ -61,13 +66,14 @@ export default function UTMTermAccordian(): JSX.Element {
     const v = target.value;
     if (v.indexOf(`(${valKind})`) !== -1) {
       setFieldValue(v);
-    } else if (accValue.showName) {
+    } else if (accValue?.show_name) {
       setFieldValue(`${v} (${valKind})`);
     } else {
       setFieldValue(v);
     }
     const newV = v.replace(`(${valKind})`, "").trim();
     dispatch(updateTermLabel(newV));
+    dispatch(setSettingsUpdated(true));
   };
   /**
    * delete a pill value
@@ -82,6 +88,7 @@ export default function UTMTermAccordian(): JSX.Element {
       }
     });
     dispatch(updateTermValue(newVal));
+    dispatch(setSettingsUpdated(true));
   };
 
   /**
@@ -111,6 +118,7 @@ export default function UTMTermAccordian(): JSX.Element {
     });
     newVals.push(newTrmPill);
     dispatch(updateTermValue(newVals));
+    dispatch(setSettingsUpdated(true));
   };
 
   return (
@@ -138,23 +146,24 @@ export default function UTMTermAccordian(): JSX.Element {
             </div>
             <div className="col10">
               <Checker
-                cState={accValue.useValue}
+                cState={accValue?.use_value}
                 disabled={false}
                 label=""
                 tooltip={
-                  accValue.useValue
+                  accValue?.use_value
                     ? `Uncheck to not the use the '${valKind}' value`
                     : `Check to use the '${valKind}' value`
                 }
                 callback={(value) => {
                   console.log("Term use value value", value);
                   dispatch(updateTermUseValue(value));
+                  dispatch(setSettingsUpdated(accValue?.use_value !== value));
                 }}
               />
             </div>
             <div className="col60" />
           </div>
-          {accValue?.useValue && (
+          {accValue?.use_value && (
             <>
               {/* item Label */}
               <div className="fullrow">
@@ -188,18 +197,18 @@ export default function UTMTermAccordian(): JSX.Element {
               <div className="fullrow">
                 <div className="col30">
                   <Form.Label className={darkClass}>
-                    {accValue.showName
+                    {accValue?.show_name
                       ? `Hide '${type}' in Field Label?`
                       : `Show '${type}' in Field Label`}
                   </Form.Label>
                 </div>
                 <div className="col10">
                   <Checker
-                    cState={accValue.showName ? accValue.showName : false}
+                    cState={accValue?.show_name ? accValue?.show_name : false}
                     disabled={false}
                     label=""
                     tooltip={
-                      accValue.showName
+                      accValue?.show_name
                         ? "Uncheck to hide the field name in the field label"
                         : "Check to show the field name in the field label"
                     }
@@ -210,6 +219,7 @@ export default function UTMTermAccordian(): JSX.Element {
                         setFieldValue(`${accValue?.label}`);
                       }
                       dispatch(updateTermShowName(value));
+                      dispatch(setSettingsUpdated(accValue?.show_name !== value));
                     }}
                   />
                 </div>
@@ -237,9 +247,10 @@ export default function UTMTermAccordian(): JSX.Element {
                     type="text"
                     id={`${valKind}-tooltip`}
                     placeholder={`Enter ${valKind} field tooltip`}
-                    value={accValue.tooltip ? accValue.tooltip : ""}
+                    value={accValue?.tooltip ? accValue?.tooltip : ""}
                     onChange={(e) => {
                       dispatch(updateTermTooltip(e.target.value));
+                      dispatch(setSettingsUpdated(accValue?.tooltip !== e.target.value));
                     }}
                   />
                 </OverlayTrigger>
@@ -268,9 +279,10 @@ export default function UTMTermAccordian(): JSX.Element {
                     id={`${valKind}-aria`}
                     placeholder={`Enter ${valKind} field ARIA (Accessibility) label`}
                     required
-                    value={accValue.ariaLabel}
+                    value={accValue?.aria_label}
                     onChange={(e) => {
                       dispatch(updateTermAriaLabel(e.target.value));
+                      dispatch(setSettingsUpdated(accValue?.aria_label !== e.target.value));
                     }}
                   />
                 </OverlayTrigger>
@@ -297,28 +309,30 @@ export default function UTMTermAccordian(): JSX.Element {
                     type="text"
                     id={`${valKind}-error`}
                     placeholder={`Enter ${valKind} field error text`}
-                    value={accValue.error}
+                    value={accValue?.error}
                     onChange={(e) => {
                       dispatch(updateTermError(e.target.value));
+                      dispatch(setSettingsUpdated(accValue?.error !== e.target.value));
                     }}
                   />
                 </OverlayTrigger>
               </div>
               {/* use chooser or txt */}
               <div className="fullrow">
-                {accValue?.useValue ? (
+                {accValue?.use_value ? (
                   <div className="fullrow">
                     <div className="col15">
                       <Form.Label className={darkClass}>Use Chooser</Form.Label>
                     </div>
                     <div className="col10">
                       <Checker
-                        cState={accValue.isChooser}
+                        cState={accValue?.is_chooser}
                         disabled={false}
                         label=""
                         tooltip={`Use a chooser to create a pre-defined list of allowed values for ${valKind}`}
                         callback={(value) => {
                           dispatch(updateTermIsChooser(value));
+                          dispatch(setSettingsUpdated(accValue?.is_chooser !== value));
                         }}
                       />
                     </div>
@@ -330,12 +344,13 @@ export default function UTMTermAccordian(): JSX.Element {
                     </div>
                     <div className="col10">
                       <Checker
-                        cState={!accValue.isChooser}
+                        cState={!accValue?.is_chooser}
                         disabled={false}
                         label=""
                         tooltip={`Use a Text Field to allow the user to enter any value for ${valKind}`}
                         callback={(value) => {
                           dispatch(updateTermIsChooser(!value));
+                          dispatch(setSettingsUpdated(accValue?.is_chooser !== !value));
                         }}
                       />
                     </div>
@@ -351,7 +366,7 @@ export default function UTMTermAccordian(): JSX.Element {
                 )} */}
               </div>
               {/* item Values */}
-              {accValue.isChooser && (
+              {accValue?.is_chooser && (
                 <>
                   <div className="fullrow">
                     <Form.Label className={darkClass}>
@@ -389,8 +404,8 @@ export default function UTMTermAccordian(): JSX.Element {
                   <div className="fullrow">
                     <PillArea
                       pills={
-                        accValue.value
-                          ? (accValue.value as UtmKeyValue[])
+                        accValue?.value
+                          ? (accValue?.value as UtmKeyValue[])
                           : ([] as UtmKeyValue[])
                       }
                       type={valKind}

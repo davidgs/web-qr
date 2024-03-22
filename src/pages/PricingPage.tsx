@@ -31,11 +31,13 @@ import {
   Mastodon,
 } from "react-bootstrap-icons";
 import Logo from "../images/NewLinkerLogo.png";
-import { useSelector } from "react-redux";
+import { RootState } from "../stores/store";
+import { PricingTable } from "../components/StripePricing";
+import { useAppSelector } from "../stores/hooks";
 
 export default function PricingPage() {
   const navigate = useNavigate();
-  const dark = useSelector((state) => state.dark.dark);
+  const dark = useAppSelector((state: RootState) => state.main.settings.dark);
   const darkClass = dark ? "header-stuff-dark" : "header-stuff";
 
   const go = () => {
@@ -128,19 +130,39 @@ export default function PricingPage() {
         </Row>
         <Row>
           <Col size="sm8" style={{ alignItems: "middle" }}>
+            Code Scans
+          </Col>
+          <Col size="sm1">
+            <span style={{ color: "green" }}>Unlimited</span>
+          </Col>
+          <Col size="sm1">
+            <span style={{ color: "green" }}>Unlimited</span>
+          </Col>
+          <Col size="sm1">
+            <span style={{ color: "green" }}>Unlimited</span>
+          </Col>
+          <Col size="sm1">
+            <span style={{ color: "green" }}>Unlimited</span>
+          </Col>
+        </Row>
+        <div className="fullrow">
+          <hr style={{ marginLeft: "10%", width: "80%" }} />
+        </div>
+        <Row>
+          <Col size="sm8" style={{ alignItems: "middle" }}>
             Simple URL Codes
           </Col>
           <Col size="sm1">
-            <i className="bi-2x bi bi-check" style={{ color: "green" }} />
+            <span style={{ color: "green" }}>Unlimited</span>
           </Col>
           <Col size="sm1">
-            <i className="bi-2x bi bi-check" style={{ color: "green" }} />
+            <span style={{ color: "green" }}>Unlimited</span>
           </Col>
           <Col size="sm1">
-            <i className="bi-2x bi bi-check" style={{ color: "green" }} />
+            <span style={{ color: "green" }}>Unlimited</span>
           </Col>
           <Col size="sm1">
-            <i className="bi-2x bi bi-check" style={{ color: "green" }} />
+            <span style={{ color: "green" }}>Unlimited</span>
           </Col>
         </Row>
         <div className="fullrow">
@@ -151,16 +173,16 @@ export default function PricingPage() {
             WiFi codes to allow for automatic signon to your networks
           </Col>
           <Col size="sm1">
-            <i className="bi-2x bi bi-check" style={{ color: "green" }} />
+            <span style={{ color: "green" }}>Unlimited</span>
           </Col>
           <Col size="sm1">
-            <i className="bi-2x bi bi-check" style={{ color: "green" }} />
+            <span style={{ color: "green" }}>Unlimited</span>
           </Col>
           <Col size="sm1">
-            <i className="bi-2x bi bi-check" style={{ color: "green" }} />
+            <span style={{ color: "green" }}>Unlimited</span>
           </Col>
           <Col size="sm1">
-            <i className="bi-2x bi bi-check" style={{ color: "green" }} />
+            <span style={{ color: "green" }}>Unlimited</span>
           </Col>
         </Row>
         <div className="fullrow">
@@ -168,39 +190,19 @@ export default function PricingPage() {
         </div>
         <Row>
           <Col size="sm4" style={{ alignItems: "middle" }}>
-            Encode your links for tracking
+            Encoded links for tracking
           </Col>
           <Col size="sm4">
-            <i className="bi-2x bi bi-check" style={{ color: "green" }} />
+            <span style={{ color: "green" }}>Unlimited</span>
           </Col>
           <Col size="sm4">
-            <i className="bi-2x bi bi-check" style={{ color: "green" }} />
+            <span style={{ color: "green" }}>Unlimited</span>
           </Col>
           <Col size="sm4">
-            <i className="bi-2x bi bi-check" style={{ color: "green" }} />
+            <span style={{ color: "green" }}>Unlimited</span>
           </Col>
           <Col size="sm4">
-            <i className="bi-2x bi bi-check" style={{ color: "green" }} />
-          </Col>
-        </Row>
-        <div className="fullrow">
-          <hr style={{ marginLeft: "10%", width: "80%" }} />
-        </div>
-        <Row>
-          <Col size="sm4" style={{ alignItems: "middle" }}>
-            Encode your links for tracking
-          </Col>
-          <Col size="sm4">
-            <i className="bi-2x bi bi-check" style={{ color: "green" }} />
-          </Col>
-          <Col size="sm4">
-            <i className="bi-2x bi bi-check" style={{ color: "green" }} />
-          </Col>
-          <Col size="sm4">
-            <i className="bi-2x bi bi-check" style={{ color: "green" }} />
-          </Col>
-          <Col size="sm4">
-            <i className="bi-2x bi bi-check" style={{ color: "green" }} />
+            <span style={{ color: "green" }}>Unlimited</span>
           </Col>
         </Row>
         <div className="fullrow">
@@ -418,7 +420,54 @@ export default function PricingPage() {
         <div className="fullrow">
           <hr style={{ width: "100%" }} />
         </div>
-
+        <Row className="justify-content-md-center">
+          <Col md="auto" style={{ fontSize: "24px", color: "grey" }}>
+            Coming features
+          </Col>
+        </Row>
+        <div className="fullrow">
+          <hr style={{ width: "100%" }} />
+        </div>
+        <Row>
+          <Col size="sm4">API Access</Col>
+          <Col size="sm4">Limited</Col>
+          <Col size="sm4">
+            <i className="bi-2x bi bi-check" style={{ color: "green" }} />
+          </Col>
+          <Col size="sm4">
+            <i className="bi-2x bi bi-check" style={{ color: "green" }} />
+          </Col>
+          <Col size="sm4">
+            <i className="bi-2x bi bi-check" style={{ color: "green" }} />
+          </Col>
+        </Row>
+        <div className="fullrow">
+          <hr style={{ marginLeft: "10%", width: "80%" }} />
+        </div>
+        <Row>
+          <Col size="sm4">
+            <a href="https://dub.co" target="_blank">
+              dub.co
+            </a>{" "}
+            Link Shortener
+          </Col>
+          <Col size="sm4">
+            {" "}
+            <i className="bi-2x bi bi-x" style={{ color: "red" }} />
+          </Col>
+          <Col size="sm4">
+            <i className="bi-2x bi bi-check" style={{ color: "green" }} />
+          </Col>
+          <Col size="sm4">
+            <i className="bi-2x bi bi-check" style={{ color: "green" }} />
+          </Col>
+          <Col size="sm4">
+            <i className="bi-2x bi bi-check" style={{ color: "green" }} />
+          </Col>
+        </Row>
+        <div className="fullrow">
+          <hr style={{ width: "100%" }} />
+        </div>
         <Row style={{ fontSize: "2x", fontWeight: "bold" }}>
           <Col size="sm4">
             <strong>Price</strong>
@@ -440,10 +489,11 @@ export default function PricingPage() {
             $499/yr
           </Col>
         </Row>
-        <stripe-pricing-table
-          pricing-table-id="prctbl_1OgV8HGuKQxVPasTQ9Cm8EPf"
-          publishable-key="pk_test_51OYEejGuKQxVPasTmIP0YpYi6bMc5YxPdbTODK6FO0quQ9clYbr9TC9Kihv3o2zV8ErBY2xRD4OwnLNoxgE265B600yqy7eDkN"
-        ></stripe-pricing-table>
+        <div className="fullrow">&nbsp;</div>
+        <PricingTable />
+        {/* // pricing-table-id="prctbl_1OgV8HGuKQxVPasTQ9Cm8EPf"
+          // publishable-key="pk_test_51OYEejGuKQxVPasTmIP0YpYi6bMc5YxPdbTODK6FO0quQ9clYbr9TC9Kihv3o2zV8ErBY2xRD4OwnLNoxgE265B600yqy7eDkN"
+        // ></StripePricing> */}
         <div className="fullrow">
           <p></p>
           <hr style={{ width: "100%" }} />

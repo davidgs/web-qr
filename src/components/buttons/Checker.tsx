@@ -21,11 +21,12 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-import { JSX } from 'react';
-import { OverlayTrigger, Tooltip } from 'react-bootstrap';
-import { useSelector } from 'react-redux';
-import ReactId from '../../utils/ReactId';
-import { RootState } from '../../stores/store';
+import { JSX } from "react";
+import { OverlayTrigger, Tooltip } from "react-bootstrap";
+import ReactId from "../../utils/ReactId";
+import { RootState } from "../../stores/store";
+import store from "store2";
+import { useAppSelector } from "../../stores/hooks";
 
 interface ICallback {
   // eslint-disable-next-line no-unused-vars
@@ -42,43 +43,44 @@ interface CheckerProps {
 export default function Checker(props: CheckerProps): JSX.Element {
   const { cState, label, tooltip, disabled, callback } = props;
   const myuid = ReactId();
-  const dark = useSelector((state: RootState) => state.dark.dark);
-  const darkClass = dark ? 'header-stuff-dark' : 'header-stuff';
+  const dark = useAppSelector((state: RootState) => state.main.settings.dark);
+  const darkClass = dark ? "header-stuff-dark" : "header-stuff";
   return (
     <div
       style={{
-        display: 'flex',
-        flexDirection: 'row',
-        justifyContent: 'space-between',
+        display: "flex",
+        flexDirection: "row",
+        justifyContent: "space-between",
       }}
     >
       <div
         style={{
-          display: 'flex',
-          flexDirection: 'column',
-          justifyContent: 'space-between',
-          width: 'auto',
-          fontSize: '14px',
-          paddingTop: '2px',
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "space-between",
+          width: "auto",
+          fontSize: "14px",
+          paddingTop: "2px",
         }}
         className={darkClass}
       >
         <strong>{label}</strong>
       </div>
-      <div className='darkClass'
+      <div
+        className="darkClass"
         style={{
-          display: 'flex',
-          flexDirection: 'column',
-          justifyContent: 'space-between',
-          width: '20px',
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "space-between",
+          width: "20px",
         }}
       />
       <div
         style={{
-          display: 'flex',
-          flexDirection: 'column',
-          justifyContent: 'space-between',
-          width: 'auto',
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "space-between",
+          width: "auto",
         }}
         className={darkClass}
       >
@@ -103,10 +105,10 @@ export default function Checker(props: CheckerProps): JSX.Element {
       </div>
       <div
         style={{
-          display: 'flex',
-          flexDirection: 'column',
-          justifyContent: 'space-between',
-          width: '20px',
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "space-between",
+          width: "20px",
         }}
       />
     </div>

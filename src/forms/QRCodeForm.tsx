@@ -26,22 +26,20 @@ import { QRCode } from "react-qrcode-logo";
 import { OverlayTrigger, Tooltip } from "react-bootstrap";
 import { ClipboardData, Clipboard2CheckFill } from "react-bootstrap-icons";
 import potrace from "potrace";
-import { useSelector } from "react-redux";
 import { RootState } from "../stores/store";
 import ReactId from "../utils/ReactId";
 import "../css/QRForm.css";
+import { useAppSelector } from "../stores/hooks";
+import { RGBColor } from "react-color";
 
 export default function QCode() {
   const [copied, setCopied] = useState<boolean>(false);
-  const qSet = useSelector((state: RootState) => state.qr.settings);
-  const settings = useSelector((state: RootState) => state.main.settings);
-  const qrSettings = useSelector((state: RootState) => state.qrCode.settings);
+  const settings = useAppSelector((state: RootState) => state.main.settings);
+  const qrSettings = useAppSelector((state: RootState) => state.qrCode.settings);
   const [qrState, setQrState] = useState<boolean>(false);
-  const dark = useSelector((state: RootState) => state.dark.dark);
+  const dark = useAppSelector((state: RootState) => state.main.settings.dark);
   const darkClass = dark ? "header-stuff-dark" : "header-stuff";
-  const darkIconClass = dark
-    ? "copy-icon header-stuff-dark"
-    : "copy-icon header-stuff";
+
   /**
    * Saving as an SVG is a pain in the ass, so we do (most)
    * of that here but it requires Node.js to actually accomplish it, for unknown reasons.
@@ -51,10 +49,10 @@ export default function QCode() {
       "react-qrcode-logo"
     ) as HTMLCanvasElement;
     const params = {
-      background: qSet.XParent ? "none" : qrSettings.bgColor,
+      background: qrSettings.XParent ? "none" : qrSettings.bgColor,
       color: qrSettings.fgColor,
     };
-    const dataURL = canvas?.toDataURL(`image/${qSet.QRType}`);
+    const dataURL = canvas?.toDataURL(`image/${qrSettings.QRType}`);
     // eslint-disable-next-line func-names
     potrace.trace(dataURL, params, function (err: any, svg: any) {
       if (err) throw err;
@@ -65,24 +63,62 @@ export default function QCode() {
     });
   };
 
+  console.log(`fgColor: ${qrSettings.fgColor}`);
   /**
    * Handle the 'download' click. and save the image
    */
   const onDownloadClick = (): void => {
-    if (qSet.QRType === "svg") {
+    if (qrSettings.QRType === "svg") {
       saveSVG();
       return;
     }
     const canvas = document.getElementById(
       "react-qrcode-logo"
     ) as HTMLCanvasElement;
-    const dataURL = canvas?.toDataURL(`image/${qSet.QRType}`);
+    const dataURL = canvas?.toDataURL(`image/${qrSettings.QRType}`);
     const a = document.createElement("a");
     a.href = dataURL;
-    a.download = `qrcode-${ReactId()}.${qSet.QRType}`;
+    a.download = `qrcode-${ReactId()}.${qrSettings.QRType}`;
     a.click();
   };
 
+  const rgbFromString = (rgb: string): RGBColor => {
+    const sep = rgb.indexOf(",") > -1 ? "," : " ";
+    const rgbArray = rgb
+      .substr(4)
+      .split(")")[0]
+      .split(sep);
+    return {
+      r: parseInt(rgbArray[0], 10),
+      g: parseInt(rgbArray[1], 10),
+      b: parseInt(rgbArray[2], 10),
+      a: 1,
+    };
+  }
+  const rgbsToHex = (rgb: string): string => {
+    const sep = rgb.indexOf(",") > -1 ? "," : " ";
+    const rgbArray = rgb
+      .substr(4)
+      .split(")")[0]
+      .split(sep);
+    let r = parseInt(rgbArray[0], 10).toString(16);
+    let g = parseInt(rgbArray[1], 10).toString(16);
+    let b = parseInt(rgbArray[2], 10).toString(16);
+
+    if (r.length === 1) r = `0${r}`;
+    if (g.length === 1) g = `0${g}`;
+    if (b.length === 1) b = `0${b}`;
+
+    return `#${r}${g}${b}`;
+  }
+  const stringToColor = (str: string): string => {
+    let hash = 0;
+    for (let i = 0; i < str.length; i += 1) {
+      hash = str.charCodeAt(i) + ((hash << 5) - hash);
+    }
+    const c = (hash & 0x00ffffff).toString(16).toUpperCase();
+    return `#${"00000".substring(0, 6 - c.length)}${c}`;
+  }
   /**
    * Copy link to the clipboard and change the icon to a checkmark
    * */
@@ -117,7 +153,7 @@ export default function QCode() {
                 }
               >
                 <Clipboard2CheckFill
-                  className={darkIconClass}
+                  className={`copy-icon ${darkClass}`}
                   style={{
                     fontSize: "2rem",
                   }}
@@ -136,7 +172,7 @@ export default function QCode() {
                 }
               >
                 <ClipboardData
-                  className={darkIconClass}
+                  className={`copy-icon ${darkClass}`}
                   style={{
                     fontSize: "2rem",
                   }}
@@ -208,27 +244,26 @@ export default function QCode() {
             <QRCode
               id="react-qrcode-logo"
               value={
-                qrSettings?.value
-                  ? qrSettings?.value
-                  : "http://www.example.com/"
+                qrSettings.value ? qrSettings.value : "http://www.example.com/"
               }
-              size={qrSettings?.size}
-              bgColor={qrSettings?.bgColor}
-              fgColor={qrSettings?.fgColor}
-              logoImage={qrSettings?.logoImage}
-              qrStyle={qrSettings?.qrStyle}
-              logoWidth={qrSettings?.logoWidth}
-              logoHeight={qrSettings?.logoHeight}
-              logoOpacity={qrSettings?.logoOpacity}
-              eyeColor={qrSettings?.eyeColor}
-              eyeRadius={qrSettings?.eyeRadius}
-              quietZone={qrSettings?.quietZone}
-              enableCORS={qrSettings?.enableCORS}
-              ecLevel={qrSettings?.ecLevel}
-              logoPadding={qrSettings?.logoPadding}
+              size={qrSettings.size}
+              bgColor={qrSettings.bgColor}
+              fgColor={qrSettings.fgColor}
+              logoImage={qrSettings.logoImage}
+              qrStyle={qrSettings.qrStyle}
+              logoWidth={qrSettings.logoWidth}
+              logoHeight={qrSettings.logoHeight}
+              logoOpacity={qrSettings.logoOpacity}
+              eyeColor={qrSettings.eyeColor}
+              eyeRadius={qrSettings.eyeRadius}
+              quietZone={qrSettings.quietZone}
+              enableCORS={qrSettings.enableCORS}
+              ecLevel={qrSettings.ecLevel}
+              logoPadding={qrSettings.logoPadding}
               logoPaddingStyle={
-                qrSettings?.logoPaddingStyle !== "none"
-                  ? qrSettings?.logoPaddingStyle
+                qrSettings.logoPaddingStyle !== "circle" &&
+                qrSettings.logoPaddingStyle !== "square"
+                  ? qrSettings.logoPaddingStyle
                   : undefined
               }
             />

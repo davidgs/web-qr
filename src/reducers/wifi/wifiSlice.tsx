@@ -20,82 +20,122 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-import { createSlice } from '@reduxjs/toolkit';
-import { defaultWiFiSettings } from '../../types';
+import { PayloadAction, createSlice } from '@reduxjs/toolkit';
+import { WiFiSettings, defaultWiFiSettings } from '../../types';
 
-const initialState = {
-  settings: defaultWiFiSettings,
+const initialState: WiFiSettings = {
+    ssid: {
+      label: defaultWiFiSettings.ssid.label,
+      tooltip: defaultWiFiSettings.ssid.tooltip,
+      ariaLabel: defaultWiFiSettings.ssid.ariaLabel,
+      error: defaultWiFiSettings.ssid.error,
+      value: defaultWiFiSettings.ssid.value,
+    },
+    password: {
+      label: defaultWiFiSettings.password.label,
+      tooltip: defaultWiFiSettings.password.tooltip,
+      ariaLabel: defaultWiFiSettings.password.ariaLabel,
+      error: defaultWiFiSettings.password.error,
+      value: defaultWiFiSettings.password.value,
+    },
+    encryption: {
+      label: defaultWiFiSettings.encryption.label,
+      tooltip: defaultWiFiSettings.encryption.tooltip,
+      ariaLabel: defaultWiFiSettings.encryption.ariaLabel,
+      error: defaultWiFiSettings.encryption.error,
+      value: defaultWiFiSettings.encryption.value,
+    },
+    hidden: {
+      label: defaultWiFiSettings.hidden.label,
+      tooltip: defaultWiFiSettings.hidden.tooltip,
+      ariaLabel: defaultWiFiSettings.hidden.ariaLabel,
+      error: defaultWiFiSettings.hidden.error,
+      value: defaultWiFiSettings.hidden.value,
+    },
 };
 
 export const wifiSlice = createSlice({
-  name: 'wifi',
+  name: "wifi",
   initialState,
   reducers: {
-    updateSSIDLabel: (state, action) => {
-      state.settings.ssid.label = action.payload;
+    updateSSIDLabel: (state, action: PayloadAction<string>) => {
+      state.ssid.label = action.payload;
     },
-    updateSSIDTooltip: (state, action) => {
-      state.settings.ssid.tooltip = action.payload;
+    updateSSIDTooltip: (state, action: PayloadAction<string>) => {
+      state.ssid.tooltip = action.payload;
     },
-    updateSSIDAriaLabel: (state, action) => {
-      state.settings.ssid.ariaLabel = action.payload;
+    updateSSIDAriaLabel: (state, action: PayloadAction<string>) => {
+      state.ssid.ariaLabel = action.payload;
     },
-    updateSSIDError: (state, action) => {
-      state.settings.ssid.error = action.payload;
+    updateSSIDError: (state, action: PayloadAction<string>) => {
+      state.ssid.error = action.payload;
     },
-    updateSSIDValue: (state, action) => {
-      state.settings.ssid.value = action.payload;
+    updateSSIDValue: (state, action: PayloadAction<string>) => {
+      state.ssid.value = action.payload;
     },
-    updatePasswordLabel: (state, action) => {
-      state.settings.password.label = action.payload;
+    updatePasswordLabel: (state, action: PayloadAction<string>) => {
+      state.password.label = action.payload;
     },
-    updatePasswordTooltip: (state, action) => {
-      state.settings.password.tooltip = action.payload;
+    updatePasswordTooltip: (state, action: PayloadAction<string>) => {
+      state.password.tooltip = action.payload;
     },
-    updatePasswordAriaLabel: (state, action) => {
-      state.settings.password.ariaLabel = action.payload;
+    updatePasswordAriaLabel: (state, action: PayloadAction<string>) => {
+      state.password.ariaLabel = action.payload;
     },
-    updatePasswordError: (state, action) => {
-      state.settings.password.error = action.payload;
+    updatePasswordError: (state, action: PayloadAction<string>) => {
+      state.password.error = action.payload;
     },
-    updatePasswordValue: (state, action) => {
-      state.settings.password.value = action.payload;
+    updatePasswordValue: (state, action: PayloadAction<string>) => {
+      state.password.value = action.payload;
     },
-    updateEncryptionLabel: (state, action) => {
-      state.settings.encryption.label = action.payload;
+    updateEncryptionLabel: (state, action: PayloadAction<string>) => {
+      state.encryption.label = action.payload;
     },
-    updateEncryptionTooltip: (state, action) => {
-      state.settings.encryption.tooltip = action.payload;
+    updateEncryptionTooltip: (state, action: PayloadAction<string>) => {
+      state.encryption.tooltip = action.payload;
     },
-    updateEncryptionAriaLabel: (state, action) => {
-      state.settings.encryption.ariaLabel = action.payload;
+    updateEncryptionAriaLabel: (state, action: PayloadAction<string>) => {
+      state.encryption.ariaLabel = action.payload;
     },
-    updateEncryptionError: (state, action) => {
-      state.settings.encryption.error = action.payload;
+    updateEncryptionError: (state, action: PayloadAction<string>) => {
+      state.encryption.error = action.payload;
     },
-    updateEncryptionValue: (state, action) => {
-      state.settings.encryption.value = action.payload;
+    updateEncryptionValue: (
+      state,
+      action: PayloadAction<"" | "WPA/WPA2" | "WEP" | "None"
+      >
+    ) => {
+      state.encryption.value = action.payload;
     },
-    updateHiddenLabel: (state, action) => {
-      state.settings.hidden.label = action.payload;
+    updateHiddenLabel: (state, action: PayloadAction<string>) => {
+      state.hidden.label = action.payload;
     },
-    updateHiddenTooltip: (state, action) => {
-      state.settings.hidden.tooltip = action.payload;
+    updateHiddenTooltip: (state, action: PayloadAction<string>) => {
+      state.hidden.tooltip = action.payload;
     },
-    updateHiddenAriaLabel: (state, action) => {
-      state.settings.hidden.ariaLabel = action.payload;
+    updateHiddenAriaLabel: (state, action: PayloadAction<string>) => {
+      state.hidden.ariaLabel = action.payload;
     },
-    updateHiddenError: (state, action) => {
-      state.settings.hidden.error = action.payload;
+    updateHiddenError: (state, action: PayloadAction<string>) => {
+      state.hidden.error = action.payload;
     },
-    updateHiddenValue: (state, action) => {
-      state.settings.hidden.value = action.payload;
+    updateHiddenValue: (state, action: PayloadAction<boolean>) => {
+      state.hidden.value = action.payload;
     },
-    updateEncryption: (state, action) => {
-      state.settings.encryption = action.payload;
+    updateEncryption: (
+      state,
+      action: PayloadAction<{
+        label: string;
+        tooltip: string;
+        ariaLabel: string;
+        error: string;
+        value: "" | "WPA/WPA2" | "WEP" | "None"
+      }>
+    ) => {
+      state.encryption = action.payload;
     },
-    updateWifi: (state, action) => {
-      state.settings = action.payload;
+    updateWifi: (state, action: PayloadAction<WiFiSettings>) => {
+      state = action.payload;
     },
   },
 });

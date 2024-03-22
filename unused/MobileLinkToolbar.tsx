@@ -38,17 +38,17 @@ import {
   setWifiLinkHistory,
 } from "../src/reducers/history/historySlice";
 import { updateQRValue } from "../src/reducers/qr/qrCodeSettingsSlice";
-import QRConfigButton from "../src/components/buttons/QRConfigButton";
+import QRConfigButton from "./QRConfigButton";
 import DownloadButton from "../src/components/buttons/DownloadButton";
 import FormChooser from "../src/components/choosers/FormChooser";
 
 export default function MobileLinkToolbar(): JSX.Element {
   const dispatch = useDispatch();
-  const dark = useSelector((state: RootState) => state.dark?.dark);
+  const dark = useSelector((state: RootState) => state.main.dark);
   const darkClass = dark ? "header-stuff-dark" : "header-stuff";
   const mainSet = useSelector((state: RootState) => state.main?.settings);
   const useBitly = useSelector(
-    (state: RootState) => state.bitly?.settings?.useValue
+    (state: RootState) => state.bitly?.settings?.use_value
   );
   // fence for basic license
   const linkHistory = useSelector(

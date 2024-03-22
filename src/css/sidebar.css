@@ -64,6 +64,10 @@ nav.main-menu.expanded {
   overflow: visible;
 }
 
+.logout {
+  pointer-events: all;
+  cursor: pointer;
+}
 .main-menu {
   background: rgb(10, 28, 46);
   position: fixed;
@@ -103,6 +107,8 @@ nav.main-menu.expanded {
   width: 250px;
   justify-content: left;
   align-items: center;
+    color: #999;
+
 }
 
 .main-menu .hamburger {
@@ -110,6 +116,22 @@ nav.main-menu.expanded {
 }
 
 .main-menu li>a {
+  position: relative;
+  display: table;
+  border-collapse: collapse;
+  border-spacing: 0;
+  color: #999;
+  font-family: arial;
+  font-size: 14px;
+  text-decoration: none;
+  -webkit-transform: translateZ(0) scale(1, 1);
+  transform: translateZ(0) scale(1, 1);
+  -webkit-transition: all .1s linear;
+  transition: all .1s linear;
+
+}
+
+.main-menu li .logout {
   position: relative;
   display: table;
   border-collapse: collapse;
@@ -210,7 +232,8 @@ nav li {
   padding: 0;
 }
 
-.main-menu li:hover>a,
+.main-menu li .logout:hover,
+.main-menu li:hover,
 nav.main-menu li.active>a,
 .dropdown-menu>li>a:hover,
 .dropdown-menu>li>a:focus,

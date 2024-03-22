@@ -1,5 +1,4 @@
 /* The MIT License (MIT)
-process.env.NODE_ENV = "development";
  *
  * Copyright (c) 2022-present David G. Simmons
  *
@@ -21,30 +20,31 @@ process.env.NODE_ENV = "development";
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
+import { createSlice } from "@reduxjs/toolkit";
+import { QRSettings } from "../src/types";
 
-export default function BuyPage() {
-  // const navigate = useNavigate();
-  // const dark = useSelector((state) => state.dark.dark);
-  // const mainSet = useSelector((state) => state.main.settings);
+const initialState = {
+  settings: defaultQRSettings,
+};
 
-  // const darkClass = dark ? "header-stuff-dark" : "header-stuff";
+export const qrSlice = createSlice({
+  name: "qr",
+  initialState,
+  reducers: {
+    updateQRType: (state, action) => {
+      state.settings.QRType = action.payload;
+    },
+    updateXParent: (state, action) => {
+      state.settings.XParent = action.payload;
+    },
+    updateQRSettings: (state, action) => {
+      const qSet: QRSettings = action.payload;
+      state.settings = qSet;
+    },
+  },
+});
 
-  // Paste the stripe-pricing-table snippet in your React component
-  return (
-    <div
-      className={`main-column`}
-      style={{
-        backgroundColor: "#131518",
-        borderRadius: "10px",
-        padding: "20px",
-        margin: "20px",
-        boxShadow: "0 0 10px 0 #000",
-      }}
-    >
-      <stripe-pricing-table
-        pricing-table-id="prctbl_1OgV8HGuKQxVPasTQ9Cm8EPf"
-        publishable-key="pk_test_51OYEejGuKQxVPasTmIP0YpYi6bMc5YxPdbTODK6FO0quQ9clYbr9TC9Kihv3o2zV8ErBY2xRD4OwnLNoxgE265B600yqy7eDkN"
-      ></stripe-pricing-table>
-    </div>
-  );
-}
+export const { updateQRType, updateXParent, updateQRSettings } =
+  qrSlice.actions;
+
+export default qrSlice.reducer;

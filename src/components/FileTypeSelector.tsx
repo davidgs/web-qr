@@ -23,8 +23,8 @@
 import React, { JSX, useState } from "react";
 import { OverlayTrigger, Tooltip } from "react-bootstrap";
 import { FiletypeSvg, FiletypeJpg, FiletypePng } from "react-bootstrap-icons";
-import { useSelector } from "react-redux";
 import { RootState } from "../stores/store";
+import { useAppSelector } from "../stores/hooks";
 
 interface FileTypeProps {
   // eslint-disable-next-line no-unused-vars
@@ -36,7 +36,7 @@ interface FileTypeProps {
 function FileTypeSelector(props: FileTypeProps): JSX.Element {
   const { onSelectionChange, fileType } = props;
   const [selectedFileType, setSelectedFileType] = useState(fileType);
-  const dark = useSelector((state: RootState) => state.dark.dark);
+  const dark = useAppSelector((state: RootState) => state.main.settings.dark);
   const darkClass = dark ? "header-stuff-dark" : "header-stuff";
 
   const handleSelectionChange = (event: React.MouseEvent<SVGSVGElement>) => {

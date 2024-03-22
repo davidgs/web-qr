@@ -24,7 +24,7 @@ export default function WelcomeModal({
 }): React.JSX.Element {
   const dispatch = useDispatch();
   const mainSet = useSelector((state: any) => state.main.settings);
-  const dark = useSelector((state: any) => state.dark.dark);
+  const dark = useSelector((state: any) => state.main.dark);
   const darkClass = dark ? "header-stuff-dark" : "header-stuff";
 
   const handleClose = () => {

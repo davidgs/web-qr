@@ -46,10 +46,11 @@ import {
   updateLogoPadding,
   updateLogoPaddingStyle,
   updateQrStyle,
+  updateQRType,
+  updateXParent,
 } from "../../reducers/qr/qrCodeSettingsSlice";
 import { ColorResult, RGBColor } from "react-color";
-import { useSelector, useDispatch } from "react-redux";
-import { updateQRType, updateXParent } from "../../reducers/qr/qrSlice";
+import { useDispatch } from "react-redux";
 import AdjusterKnob from "../../components/knobs/AdjusterKnob";
 import Checker from "../../components/buttons/Checker";
 import ColorPicker from "../../components/choosers/ColorPicker";
@@ -59,20 +60,21 @@ import { RootState } from "../../stores/store";
 import FileTypeSelector from "../../components/FileTypeSelector";
 import "../../css/QRConfig.css";
 import "../../css/MainConfig.css";
+import { useAppSelector } from "../../stores/hooks";
+import { setSettingsUpdated } from "../../reducers/session/loginSlice";
 
 export default function QRConfigurator() {
-  const dark = useSelector((state: RootState) => state.dark.dark);
+  const dark = useAppSelector((state: RootState) => state.main.settings.dark);
   const darkClass = dark ? "header-stuff-dark" : "header-stuff";
   const [imgAspect, setImgAspec] = useState(1);
   const dispatch = useDispatch();
-  const qrSettings = useSelector((state: RootState) => state.qrCode.settings);
-  const qSet = useSelector((state: RootState) => state.qr.settings);
+  const qrSettings = useAppSelector((state: RootState) => state.qrCode.settings);
   const [isAspectLocked, setIsAspectLocked] = useState(false);
   const [showLogo, setShowLogo] = useState(qrSettings.logoImage !== "");
   const maxQrHeight = qrSettings.size * 0.3;
   const maxQrWidth = qrSettings.size * 0.3;
   const logoWidth = Math.round(qrSettings.logoWidth + 10);
-  const session = useSelector((state: RootState) => state.session.settings);
+  const session = useAppSelector((state: RootState) => state.session);
 
   /**
    *  set the aspect ratio of the image
@@ -88,6 +90,25 @@ export default function QRConfigurator() {
     setIsAspectLocked(!isAspectLocked);
   };
 
+  const hexToRgb = (hex: string): RGBColor => {
+    if (hex === undefined) {
+      return {
+        r: 0,
+        g: 0,
+        b: 0,
+        a: 255,
+      };
+    }
+    const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(
+      hex
+    ) as RegExpExecArray;
+    return {
+      r: parseInt(result[1], 16),
+      g: parseInt(result[2], 16),
+      b: parseInt(result[3], 16),
+      a: 255,
+    };
+  };
   /**
    * make an rgba() color from a string
    * @param color the color to convert to an RGBColor
@@ -101,6 +122,9 @@ export default function QRConfigurator() {
         b: 0,
         a: 255,
       };
+    }
+    if (color.indexOf("rgb") === -1) {
+      return hexToRgb(color);
     }
     const frgb = color
       .substring(color.indexOf("(") + 1, color?.indexOf(")"))
@@ -139,6 +163,7 @@ export default function QRConfigurator() {
       }
       dispatch(updateLogoHeight(newH));
       dispatch(updateLogoWidth(newW));
+      dispatch(setSettingsUpdated(true));
       return;
     }
     const newWidth = width > maxQrWidth ? maxQrWidth : width;
@@ -147,6 +172,7 @@ export default function QRConfigurator() {
       const newHeight = Math.round(height * scaleW);
       dispatch(updateLogoHeight(newHeight));
       dispatch(updateLogoWidth(newWidth));
+      dispatch(setSettingsUpdated(true));
     }
   };
 
@@ -170,10 +196,13 @@ export default function QRConfigurator() {
           setImageSize(h, w);
           dispatch(updateLogoImage(fi.src));
           dispatch(updateLogoOpacity(1.0));
-          dispatch(updateQRType(fName.split(".").pop()));
+          dispatch(
+            updateQRType(fName.split(".").pop() as "png" | "jpg" | "svg")
+          );
           setAspectRatio(w, h);
           setIsAspectLocked(true);
           setShowLogo(true);
+          dispatch(setSettingsUpdated(true));
         };
       };
     }
@@ -187,24 +216,21 @@ export default function QRConfigurator() {
     switch (name) {
       case "bgColor":
         dispatch(
-          updateBgColor(
-            `rgba(${color.rgb.r}, ${color.rgb.g}, ${color.rgb.b}, ${color.rgb.a})`
-          )
+          updateBgColor(color.hex === undefined ? "#ffffff" : `${color.hex}`)
         );
+        dispatch(setSettingsUpdated(true));
         break;
       case "eyeColor":
         dispatch(
-          updateEyeColor(
-            `rgba(${color.rgb.r}, ${color.rgb.g}, ${color.rgb.b}, ${color.rgb.a})`
-          )
+          updateEyeColor(color.hex === undefined ? "#000000" : `${color.hex}`)
         );
+        dispatch(setSettingsUpdated(true));
         break;
       case "fgColor":
         dispatch(
-          updateFgColor(
-            `rgba(${color.rgb.r}, ${color.rgb.g}, ${color.rgb.b}, ${color.rgb.a})`
-          )
+          updateFgColor(color.hex === undefined ? "#000000" : `${color.hex}`)
         );
+        dispatch(setSettingsUpdated(true));
         break;
       default:
         break;
@@ -225,16 +251,19 @@ export default function QRConfigurator() {
               <div className={`qr-control ${darkClass}`}>
                 <FileTypeSelector
                   onSelectionChange={(val) => {
-                    dispatch(updateQRType(val));
+                    if (val !== qrSettings.QRType) {
+                      dispatch(setSettingsUpdated(true));
+                    }
+                    dispatch(updateQRType(val as "png" | "svg" | "jpg"));
                   }}
-                  fileType={qSet.QRType}
+                  fileType={qrSettings.QRType}
                 />
               </div>
             </div>
           </div>
         </div>
       </div>
-      {qSet?.QRType === "svg" && session.license_type !== "free" ? (
+      {qrSettings.QRType === "svg" && session.license_type !== "free" ? (
         <>
           <div className="main-settings-row">
             <div className="main-settings-settings">
@@ -247,12 +276,14 @@ export default function QRConfigurator() {
                   </div>
                   <div className="control-column">
                     <Checker
-                      cState={qSet?.XParent}
+                      cState={qrSettings.XParent}
                       label=""
                       tooltip="Set the svg background to transparent"
                       disabled={false}
                       callback={(value) => {
-                        dispatch(updateXParent(value));
+                        if (qrSettings.XParent !== value)
+                          dispatch(setSettingsUpdated(true));
+                          dispatch(updateXParent(value));
                       }}
                     />
                   </div>
@@ -372,6 +403,8 @@ export default function QRConfigurator() {
                     defaultValue={qrSettings.qrStyle as "dots" | "squares"}
                     onChange={(e) => {
                       const ds = e.target.value as "dots" | "squares";
+                      if (e.target.value !== qrSettings.qrStyle)
+                        dispatch(setSettingsUpdated(true));
                       dispatch(updateQrStyle(ds));
                     }}
                   >
@@ -407,6 +440,8 @@ export default function QRConfigurator() {
                     aria-label="Error correction selection"
                     onChange={(e) => {
                       const eq = e.target.value as "L" | "M" | "Q" | "H";
+                      if (e.target.value !== qrSettings.ecLevel)
+                        dispatch(setSettingsUpdated(true));
                       dispatch(updateECLevel(eq));
                     }}
                     defaultValue={qrSettings.ecLevel as "L" | "M" | "Q" | "H"}
@@ -433,6 +468,8 @@ export default function QRConfigurator() {
                   tooltip="Enable Cross Origin Resource Sharing (CORS) for the QR Code"
                   disabled={false}
                   callback={(e) => {
+                    if (e !== qrSettings.enableCORS)
+                      dispatch(setSettingsUpdated(true));
                     dispatch(updateEnableCors(e));
                   }}
                 />
@@ -466,6 +503,8 @@ export default function QRConfigurator() {
                     step={10}
                     disabled={false}
                     callback={(e) => {
+                      if (e !== qrSettings.size)
+                        dispatch(setSettingsUpdated(true));
                       dispatch(updateSize(e));
                     }}
                   />
@@ -497,6 +536,8 @@ export default function QRConfigurator() {
                     step={1}
                     disabled={false}
                     callback={(e) => {
+                      if (e !== qrSettings.quietZone)
+                        dispatch(setSettingsUpdated(true));
                       dispatch(updateQuietZone(e));
                     }}
                   />
@@ -540,14 +581,14 @@ export default function QRConfigurator() {
                     logoWidth={qrSettings.logoWidth as number | 80}
                     logoHeight={qrSettings.logoHeight as number | 80}
                     logoOpacity={qrSettings.logoOpacity as number | 1}
-                    eyeColor={qrSettings.eyeColor as string | "#000000"}
+                    eyeColor={qrSettings.eyeColor}
                     eyeRadius={qrSettings.eyeRadius}
                     quietZone={qrSettings.quietZone as number | 0}
                     enableCORS={qrSettings.enableCORS as boolean | false}
                     ecLevel={qrSettings.ecLevel as "L" | "M" | "Q" | "H" | "L"}
                     logoPadding={qrSettings.logoPadding as number | 0}
                     logoPaddingStyle={
-                      (qrSettings.logoPaddingStyle !== "none"
+                      (qrSettings.logoPaddingStyle !== undefined
                         ? qrSettings.logoPaddingStyle
                         : undefined) as "circle" | "square" | undefined
                     }
@@ -621,6 +662,8 @@ export default function QRConfigurator() {
                           label=""
                           tooltip="Hide QR Code behind the logo"
                           callback={(value) => {
+                            if (value !== qrSettings.removeQrCodeBehindLogo)
+                              dispatch(setSettingsUpdated(true));
                             dispatch(updateRemoveQrCodeBehindLogo(value));
                           }}
                         />
@@ -628,10 +671,10 @@ export default function QRConfigurator() {
                     </div>
                   </div>
                   {qrSettings.logoImage !== "" &&
-                    qrSettings.logoImage !== null &&
-                    qrSettings.logoImage !== undefined ? (
-                      <div className="main-settings-row">
-                        <div className="controls-row">
+                  qrSettings.logoImage !== null &&
+                  qrSettings.logoImage !== undefined ? (
+                    <div className="main-settings-row">
+                      <div className="controls-row">
                         <div className="label-column">
                           <Form.Label className={darkClass}>
                             Delete QR Code Logo
@@ -643,18 +686,20 @@ export default function QRConfigurator() {
                             disabled={false}
                             label=""
                             tooltip="Delete QR Code Logo"
-                            callback={() => {
+                              callback={() => {
+                                if (qrSettings.logoImage !== "")
+                                dispatch(setSettingsUpdated(true));
                               dispatch(updateLogoImage(""));
                               setShowLogo(false);
                             }}
                           />
-                          </div>
-                          </div>
+                        </div>
                       </div>
-                    ) : (
-                      // eslint-disable-next-line react/jsx-no-useless-fragment
-                      <></>
-                    )}
+                    </div>
+                  ) : (
+                    // eslint-disable-next-line react/jsx-no-useless-fragment
+                    <></>
+                  )}
 
                   {/* QR Code Logo Size */}
                   <div className="main-settings-row">
@@ -792,6 +837,8 @@ export default function QRConfigurator() {
                             val={qrSettings.logoOpacity}
                             disabled={showLogo}
                             callback={(value) => {
+                              if (value !== qrSettings.logoOpacity)
+                                dispatch(setSettingsUpdated(true));
                               dispatch(updateLogoOpacity(value));
                             }}
                           />
@@ -829,6 +876,8 @@ export default function QRConfigurator() {
                             step={1}
                             disabled={!showLogo}
                             callback={(e) => {
+                              if (e !== qrSettings.logoPadding)
+                                dispatch(setSettingsUpdated(true));
                               dispatch(updateLogoPadding(e));
                             }}
                           />
@@ -861,7 +910,11 @@ export default function QRConfigurator() {
                             if (eq === "None") {
                               eq = undefined;
                             }
-                            dispatch(updateLogoPaddingStyle(eq));
+                            dispatch(
+                              updateLogoPaddingStyle(
+                                eq as "circle" | "square" | undefined
+                              )
+                            );
                             if (
                               eq !== undefined &&
                               qrSettings.logoPadding === 0
@@ -870,6 +923,7 @@ export default function QRConfigurator() {
                             } else if (eq === undefined) {
                               dispatch(updateLogoPadding(0));
                             }
+                            dispatch(setSettingsUpdated(true));
                           }}
                           disabled={!showLogo}
                           defaultValue={

@@ -21,7 +21,6 @@
  * SOFTWARE.
  */
 import "../css/sidebar.css";
-import { LogoutButton } from "@userfront/toolkit";
 import Userfront from "@userfront/core";
 import { SessionResponse } from "@userfront/core";
 import { SyntheticEvent, useEffect, useState } from "react";
@@ -38,7 +37,7 @@ import NewAccountModal from "../components/Modals/NewAccountModal";
 import { EyeSlashFill, Eye, Check } from "react-bootstrap-icons";
 import "../css/MainConfig.css";
 import PassChecker from "../components/PassChecker";
-
+import axios from "axios";
 Userfront.init("xbp876mb");
 
 type goodBad = {
@@ -80,7 +79,7 @@ export default function Account() {
     lowerGood: true,
     specialGood: true,
   });
-
+  const db_url = "localhost:4242/create-user";
   /**
    * toggle the password visibility
    */
@@ -209,6 +208,28 @@ export default function Account() {
       .then((response) => {
         console.log("User registered", response);
         setRegisterSuccess(true);
+        const session = {
+          customer: `${firstName}_${lastName}`,
+          customer_details: {
+            name: `${firstName} ${lastName}`,
+            address: {
+              state: "",
+              line_1: "",
+              city: "",
+              zip: "",
+            },
+            email: email,
+          },
+        };
+        axios.post(db_url, session)
+          .then((response) => {
+            console.log("User added to database", response);
+          })
+          .catch((error: Error) => {
+            console.error("User not added to database", error);
+          });
+
+
         // create new local user here
       })
       .catch((error: Error) => {

@@ -20,16 +20,18 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-import { useSelector } from "react-redux";
 import LinkToolbar from "../components/LinkToolbar";
 import QCode from "../forms/QRCodeForm";
 import URLForm from "../forms/URLForm";
 import WifiForm from "../forms/WiFiForm";
 import { RootState } from "../stores/store";
+import { useAppSelector } from "../stores/hooks";
+
 import Logo from "../images/NewLinkerLogo.png";
 
 export default function MainPage() {
-  const mainSet = useSelector((state: RootState) => state.main.settings);
+  const mainSet = useAppSelector((state: RootState) => state.main.settings);
+  const name = useAppSelector((state: RootState) => state.userFront.settings.name);
 
   return (
     <>
@@ -51,6 +53,12 @@ export default function MainPage() {
             </h2>
           </div>
         </div>
+        {name && (
+          <div style={{ margin: "auto", textAlign: "center" }}>
+            Welcome back {name}
+          </div>
+        )}
+
         <div className="link-form">
           <QCode />
           {/* {mainSet.sidebar !== "top" ? <QCode /> : <MobileQCode />} */}

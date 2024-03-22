@@ -24,39 +24,38 @@
 import { InputGroup } from "react-bootstrap";
 import { useEffect } from "react";
 import { makeLongLink } from "../utils/LongLink";
-import { useSelector, useDispatch } from "react-redux";
+import { useDispatch } from "react-redux";
 import { RootState } from "../stores/store";
 import { updateQRValue } from "../reducers/qr/qrCodeSettingsSlice";
 import { setActiveLink } from "../reducers/history/historySlice";
 import UTMTextField from "../components/UTMTextField";
 import UTMChoice from "../components/choosers/UTMChoice";
 import "../css/URLForm.css";
+import { useAppSelector } from "../stores/hooks";
 
 export default function URLForm() {
   const dispatch = useDispatch();
-  const mainConfig = useSelector((state: RootState) => state.main.settings);
-  const utmTarget = useSelector(
+  const mainConfig = useAppSelector((state: RootState) => state.main.settings);
+  const utmTarget = useAppSelector(
     (state: RootState) => state.utmConfigs.settings.utm_target
   );
-  const utmCampaign = useSelector(
+  const utmCampaign = useAppSelector(
     (state: RootState) => state.utmConfigs.settings.utm_campaign
   );
-  const utmSource = useSelector(
+  const utmSource = useAppSelector(
     (state: RootState) => state.utmConfigs.settings.utm_source
   );
-  const utmMedium = useSelector(
+  const utmMedium = useAppSelector(
     (state: RootState) => state.utmConfigs.settings.utm_medium
   );
-  const utmTerm = useSelector(
-    (state: RootState) => state.utmConfigs.settings.utm_term
-  );
-  const utmContent = useSelector(
+  const utmTerm = useAppSelector((state: RootState) => state.utmConfigs.settings.utm_term);
+  const utmContent = useAppSelector(
     (state: RootState) => state.utmConfigs.settings.utm_content
   );
-  const activeLink = useSelector(
+  const activeLink = useAppSelector(
     (state: RootState) => state.history.activeLink
   );
-  const utmKeyword = useSelector(
+  const utmKeyword = useAppSelector(
     (state: RootState) => state.utmConfigs.settings.utm_keyword
   );
   dispatch(
@@ -65,7 +64,6 @@ export default function URLForm() {
     )
   );
 
-  console.log("Use Keyword: ", utmKeyword.useValue);
   useEffect(() => {
     if (mainConfig?.formType === "simple") {
       dispatch(
@@ -142,14 +140,19 @@ export default function URLForm() {
           />
         </InputGroup>
       </div>
+      {mainConfig.formType === "simple" && (
+        <div className="fullrow">
+          <p></p>
+        </div>
+      )}
       {/* </Row> */}
       {/* utm_source & utm_medium */}
       {mainConfig.formType === "encoded" && (
         <div className="fullrow">
           {/* utm_source */}
-          {utmSource?.useValue ? (
-            <div className={utmMedium?.useValue ? "col50" : "col100"}>
-              {utmSource?.isChooser ? (
+          {utmSource?.use_value ? (
+            <div className={utmMedium?.use_value ? "col50" : "col100"}>
+              {utmSource?.is_chooser ? (
                 <InputGroup size="lg">
                   <UTMChoice
                     valueChanged={linkPartChanged}
@@ -172,10 +175,10 @@ export default function URLForm() {
             <></>
           )}
           {/* utm_medium */}
-          {utmMedium?.useValue ? (
-            <div className={utmSource?.useValue ? "col50" : "col100"}>
+          {utmMedium?.use_value ? (
+            <div className={utmSource?.use_value ? "col50" : "col100"}>
               <InputGroup size="lg">
-                {utmMedium.isChooser ? (
+                {utmMedium.is_chooser ? (
                   <UTMChoice
                     valueChanged={linkPartChanged}
                     targetType="utm_medium"
@@ -200,10 +203,10 @@ export default function URLForm() {
       {mainConfig?.formType === "encoded" && (
         <div className="fullrow">
           {/* utm_campaign */}
-          {utmCampaign?.useValue ? (
-            <div className={utmTerm?.useValue ? "col50" : "col100"}>
+          {utmCampaign?.use_value ? (
+            <div className={utmTerm?.use_value ? "col50" : "col100"}>
               <InputGroup size="lg">
-                {utmCampaign?.isChooser ? (
+                {utmCampaign?.is_chooser ? (
                   <UTMChoice
                     valueChanged={linkPartChanged}
                     targetType="utm_campaign"
@@ -225,10 +228,10 @@ export default function URLForm() {
             <></>
           )}
           {/* utm_term */}
-          {utmTerm?.useValue ? (
-            <div className={utmCampaign?.useValue ? "col50" : "col100"}>
+          {utmTerm?.use_value ? (
+            <div className={utmCampaign?.use_value ? "col50" : "col100"}>
               <InputGroup size="lg">
-                {utmTerm?.isChooser ? (
+                {utmTerm?.is_chooser ? (
                   <UTMChoice
                     valueChanged={linkPartChanged}
                     targetType="utm_term"
@@ -253,10 +256,10 @@ export default function URLForm() {
       {mainConfig?.formType === "encoded" && (
         <div className="fullrow">
           {/* utm_content */}
-          {utmContent?.useValue ? (
-            <div className={utmKeyword?.useValue ? "col50" : "col100"}>
+          {utmContent?.use_value ? (
+            <div className={utmKeyword?.use_value ? "col50" : "col100"}>
               <InputGroup size="lg">
-                {utmContent?.isChooser ? (
+                {utmContent?.is_chooser ? (
                   <UTMChoice
                     valueChanged={linkPartChanged}
                     targetType="utm_content"
@@ -278,10 +281,10 @@ export default function URLForm() {
             <></>
           )}
           {/* utm_keyword */}
-          {utmKeyword?.useValue ? (
-            <div className={utmContent?.useValue ? "col50" : "col100"}>
+          {utmKeyword?.use_value ? (
+            <div className={utmContent?.use_value ? "col50" : "col100"}>
               <InputGroup size="lg">
-                {utmKeyword?.isChooser ? (
+                {utmKeyword?.is_chooser ? (
                   <UTMChoice
                     valueChanged={linkPartChanged}
                     targetType="utm_keyword"

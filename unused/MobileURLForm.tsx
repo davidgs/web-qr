@@ -35,7 +35,7 @@ export default function MobileURLForm() {
   const dispatch = useDispatch();
   const mainConfig = useSelector((state: RootState) => state.main.settings);
   const utmTarget = useSelector(
-    (state: RootState) => state.utmConfigs.settings.utm_target
+    (state: RootState) => state.utmConfigs.utm_target
   );
   const utmCampaign = useSelector(
     (state: RootState) => state.utmConfigs?.settings.utm_campaign
@@ -137,9 +137,9 @@ export default function MobileURLForm() {
       {/* utm_source & utm_medium */}
       {mainConfig.formType === "encoded" && (
         <>
-          {utmSource?.useValue && (
+          {utmSource?.use_value && (
             <>
-              {utmSource?.isChooser ? (
+              {utmSource?.is_chooser ? (
                 <InputGroup size="lg">
                   <UTMChoice
                     valueChanged={linkPartChanged}
@@ -160,10 +160,10 @@ export default function MobileURLForm() {
             </>
           )}
           {/* utm_medium */}
-          {utmMedium?.useValue && (
+          {utmMedium?.use_value && (
             <>
               <InputGroup size="lg">
-                {utmMedium.isChooser ? (
+                {utmMedium.is_chooser ? (
                   <UTMChoice
                     valueChanged={linkPartChanged}
                     targetType="utm_medium"
@@ -181,9 +181,9 @@ export default function MobileURLForm() {
             </>
           )}
           {/* utm_campaign */}
-          {utmCampaign?.useValue && (
+          {utmCampaign?.use_value && (
             <>
-              {utmCampaign?.isChooser ? (
+              {utmCampaign?.is_chooser ? (
                 <UTMChoice
                   valueChanged={linkPartChanged}
                   targetType="utm_campaign"
@@ -202,9 +202,9 @@ export default function MobileURLForm() {
             </>
           )}
           {/* utm_term */}
-          {utmTerm?.useValue && (
+          {utmTerm?.use_value && (
             <>
-              {utmTerm?.isChooser ? (
+              {utmTerm?.is_chooser ? (
                 <UTMChoice
                   valueChanged={linkPartChanged}
                   targetType="utm_term"
@@ -222,9 +222,9 @@ export default function MobileURLForm() {
           )}
           {/*  utm_content, utm_keyword */}
           {/* utm_content */}
-          {utmContent?.useValue && (
+          {utmContent?.use_value && (
             <>
-              {utmContent?.isChooser ? (
+              {utmContent?.is_chooser ? (
                 <UTMChoice
                   valueChanged={linkPartChanged}
                   targetType="utm_content"
@@ -241,9 +241,9 @@ export default function MobileURLForm() {
             </>
           )}
           {/* utm_keyword */}
-          {utmKeyword?.useValue && (
+          {utmKeyword?.use_value && (
             <>
-              {utmKeyword?.isChooser ? (
+              {utmKeyword?.is_chooser ? (
                 <UTMChoice
                   valueChanged={linkPartChanged}
                   targetType="utm_keyword"

@@ -20,13 +20,14 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-import { useEffect, useState } from 'react';
-import { Knob, KnobChangeEvent } from 'primereact/knob';
+import { useEffect, useState } from "react";
+import { Knob, KnobChangeEvent } from "primereact/knob";
 import { useDebounce } from "@uidotdev/usehooks";
-import { knobConfig } from '../../types';
-import ReactId from '../../utils/ReactId';
-import { useSelector } from 'react-redux';
-import { RootState } from '../../stores/store';
+import { knobConfig } from "../../types";
+import ReactId from "../../utils/ReactId";
+import { RootState } from "../../stores/store";
+import store from "store2";
+import { useAppSelector } from "../../stores/hooks";
 
 export default function AdjusterKnob({
   name,
@@ -46,14 +47,14 @@ export default function AdjusterKnob({
   // eslint-disable-next-line no-unused-vars
   callback: (arg0: number) => void;
 }) {
-  const dark = useSelector((state: RootState) => state.dark.dark);
-  const darkClass = dark ? 'header-stuff-dark' : 'header-stuff';
+  const dark = useAppSelector((state: RootState) => state.main.settings.dark);
+  const darkClass = dark ? "header-stuff-dark" : "header-stuff";
   const [thisVal, setThisVal] = useState<number>(value);
-  const debouncedValue = useDebounce(thisVal, 100);
+  const debouncedValue = useDebounce((thisVal ? thisVal : 0 ), 100);
 
   useEffect(() => {
     callback(debouncedValue);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [debouncedValue]);
 
   return (
@@ -61,10 +62,10 @@ export default function AdjusterKnob({
       id={ReactId()}
       size={knobConfig.knobSize}
       name={name}
-      className={`${disabled ? 'not-allowed' : 'allowed'} p-knob ${darkClass}`}
+      className={`${disabled ? "not-allowed" : "allowed"} p-knob ${darkClass}`}
       style={{
-        margin: 'auto',
-        cursor: disabled ? 'not-allowed !important' : 'pointer',
+        margin: "auto",
+        cursor: disabled ? "not-allowed !important" : "pointer",
       }}
       step={step}
       value={debouncedValue}
@@ -75,11 +76,11 @@ export default function AdjusterKnob({
         // eslint-disable-next-line no-nested-ternary
         dark
           ? disabled
-            ? 'grey'
-            : '#adb5bd'
+            ? "grey"
+            : "#adb5bd"
           : disabled
-            ? '#adb5bd'
-            : '#0B3665'
+          ? "#adb5bd"
+          : "#0B3665"
       }
       valueColor="#0B3665"
       rangeColor="#21C6DC"

@@ -20,12 +20,13 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-import React, { JSX, useState, useMemo } from 'react';
-import Form from 'react-bootstrap/Form';
-import { FloatingLabel, OverlayTrigger, Tooltip } from 'react-bootstrap';
-import { useSelector } from 'react-redux';
-import { RootState } from '../../stores/store';
-import { UtmObj, UtmKeyValue } from '../../types';
+import React, { JSX, useState, useMemo } from "react";
+import Form from "react-bootstrap/Form";
+import { FloatingLabel, OverlayTrigger, Tooltip } from "react-bootstrap";
+import { RootState } from "../../stores/store";
+import { UtmObj, UtmKeyValue } from "../../types";
+import store from "store2";
+import { useAppSelector } from "../../stores/hooks";
 
 interface UTMChoiceProps {
   // eslint-disable-next-line no-unused-vars
@@ -36,9 +37,9 @@ interface UTMChoiceProps {
 
 export default function UTMChoice(props: UTMChoiceProps): JSX.Element {
   const { valueChanged, targetType, settings } = props;
-  const [displayValue, setDisplayValue] = useState<string>('Choose one ...');
-  const dark = useSelector((state: RootState) => state.dark.dark);
-  const darkClass = dark ? 'header-stuff-dark' : 'header-stuff';
+  const [displayValue, setDisplayValue] = useState<string>("Choose one ...");
+  const dark = useAppSelector((state: RootState) => state.main.settings.dark);
+  const darkClass = dark ? "header-stuff-dark" : "header-stuff";
   /**
    * Create the choices for the select element
    */
@@ -48,14 +49,14 @@ export default function UTMChoice(props: UTMChoiceProps): JSX.Element {
     groups.push(
       <option key={`${targetType}-default`} value="">
         Choose one ...
-      </option>,
+      </option>
     );
     // eslint-disable-next-line array-callback-return
     settings.value?.map((val: UtmKeyValue) => {
       groups.push(
         <option key={`${targetType}-${val.key}`} id={val.key} value={val.value}>
           {val.value}
-        </option>,
+        </option>
       );
     });
     return groups;
@@ -64,7 +65,7 @@ export default function UTMChoice(props: UTMChoiceProps): JSX.Element {
   const selectedValue = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const v: number = e.target?.selectedIndex;
     if (v === 0) {
-      valueChanged('', targetType);
+      valueChanged("", targetType);
       return;
     }
     const txtVal: string = settings?.value[v - 1].value;
@@ -85,7 +86,7 @@ export default function UTMChoice(props: UTMChoiceProps): JSX.Element {
     >
       <FloatingLabel
         label={
-          settings?.showName
+          settings?.show_name
             ? `${settings?.label} (${targetType})`
             : settings?.label
         }
@@ -95,18 +96,18 @@ export default function UTMChoice(props: UTMChoiceProps): JSX.Element {
           size="sm"
           required
           aria-label={
-            settings?.showName
-              ? `${settings?.ariaLabel} (${targetType})`
-              : settings?.ariaLabel
+            settings?.show_name
+              ? `${settings?.aria_label} (${targetType})`
+              : settings?.aria_label
           }
           id={targetType}
           onChange={(eventKey) => {
-            if (eventKey.target.value === 'Choose one ...') {
-              returnVal('');
+            if (eventKey.target.value === "Choose one ...") {
+              returnVal("");
               return;
             }
-            if (eventKey.target.value === 'Choose a Term first') {
-              returnVal('');
+            if (eventKey.target.value === "Choose a Term first") {
+              returnVal("");
               return;
             }
 

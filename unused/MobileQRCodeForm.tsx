@@ -34,9 +34,9 @@ export default function MobileQCode() {
   const [copied, setCopied] = useState<boolean>(false);
   const qSet = useSelector((state: RootState) => state.qr.settings);
   const settings = useSelector((state: RootState) => state.main.settings);
-  const qrSettings = useSelector((state: RootState) => state.qrCode.settings);
+  const qrSettings = useSelector((state: RootState) => state.qrCode);
   const [qrState, setQrState] = useState<boolean>(false);
-  const dark = useSelector((state: RootState) => state.dark.dark);
+  const dark = useSelector((state: RootState) => state.main.dark);
   const darkClass = dark ? "header-stuff-dark" : "header-stuff";
   const darkIconClass = dark
     ? "copy-icon header-stuff-dark"
@@ -128,12 +128,12 @@ export default function MobileQCode() {
                     : "http://www.example.com/"
                 }
                 size={qrSettings?.size}
-                bgColor={qrSettings?.bgColor}
+                bgolor={qrSettings?.bgColor}
                 fgColor={qrSettings?.fgColor}
-                logoImage={qrSettings?.logoImage}
+                logoImage={qrSettings?.logo_image}
                 qrStyle={qrSettings?.qrStyle}
-                logoWidth={qrSettings?.logoWidth}
-                logoHeight={qrSettings?.logoHeight}
+                logoWidth={qrSettings?.logo_width}
+                logoHeight={qrSettings?.logo_height}
                 logoOpacity={qrSettings?.logoOpacity}
                 eyeColor={qrSettings?.eyeColor}
                 eyeRadius={qrSettings?.eyeRadius}
