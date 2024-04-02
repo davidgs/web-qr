@@ -34,10 +34,13 @@ import {
   Tooltip,
 } from "react-bootstrap";
 import NewAccountModal from "../components/Modals/NewAccountModal";
-import { EyeSlashFill, Eye, Check } from "react-bootstrap-icons";
+import { EyeSlashFill, Eye } from "react-bootstrap-icons";
 import "../css/MainConfig.css";
 import PassChecker from "../components/PassChecker";
-import axios from "axios";
+import { settingsServer } from "../types";
+import { setLogin } from "../reducers/session/loginSlice";
+import { useAppDispatch, useAppSelector } from "../stores/hooks";
+import Footer from "../components/Footer";
 Userfront.init("xbp876mb");
 
 type goodBad = {
@@ -57,9 +60,11 @@ const regExes = {
 };
 
 export default function Account() {
+  const dispatch = useAppDispatch();
+  const dark = useAppSelector((state) => state.main.settings.dark);
+  const darkClass = dark ? "header-stuff-dark" : "header-stuff";
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [registerSuccess, setRegisterSuccess] = useState(false);
-  const [signup, setSignup] = useState(false);
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
@@ -73,13 +78,13 @@ export default function Account() {
   const [passwordShown, setPasswordShown] = useState(false);
   const [confPasswordShown, setConfPasswordShown] = useState(false);
   const [passGood, setPassGood] = useState<goodBad>({
-    lengthGood: true,
-    numberGood: true,
-    upperGood: true,
-    lowerGood: true,
-    specialGood: true,
+    lengthGood: false,
+    numberGood: false,
+    upperGood: false,
+    lowerGood: false,
+    specialGood: false,
   });
-  const db_url = "localhost:4242/create-user";
+  const db_url = `${settingsServer}create-user`;
   /**
    * toggle the password visibility
    */
@@ -94,10 +99,6 @@ export default function Account() {
     setConfPasswordShown(!confPasswordShown);
   };
 
-  const enableSignup = () => {
-    setSignup(!signup);
-  };
-
   const logout = () => {
     Userfront.logout();
     Userfront.getSession()
@@ -105,6 +106,7 @@ export default function Account() {
         if (session) {
           console.log(`session`, session.isLoggedIn);
           setIsLoggedIn(session.isLoggedIn);
+          dispatch(setLogin(session.isLoggedIn));
           return true;
         } else {
           return false;
@@ -114,7 +116,6 @@ export default function Account() {
         console.log(`err`, err);
         return false;
       });
-
   };
 
   const checkName = (e: SyntheticEvent) => {
@@ -132,7 +133,7 @@ export default function Account() {
         setLastNameValid(false);
       }
     }
-  }
+  };
   /**
    *
    * @param e Event for input that changed
@@ -198,46 +199,68 @@ export default function Account() {
     console.log(
       `Registering ${firstName} ${lastName} with email ${email} and password ${passwd}`
     );
-    Userfront.signup({
-      method: "password",
+    const u_data = {
+      username: `${firstName.toLocaleLowerCase()}_${lastName.toLocaleLowerCase()}`,
+      name: `${firstName} ${lastName}`,
       email: email,
       password: passwd,
-      username: `${firstName}_${lastName}`,
-      name: `${firstName} ${lastName}`,
+    };
+    const session = fetch(`${settingsServer}create-user`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(u_data),
     })
-      .then((response) => {
-        console.log("User registered", response);
-        setRegisterSuccess(true);
-        const session = {
-          customer: `${firstName}_${lastName}`,
-          customer_details: {
-            name: `${firstName} ${lastName}`,
-            address: {
-              state: "",
-              line_1: "",
-              city: "",
-              zip: "",
-            },
-            email: email,
-          },
-        };
-        axios.post(db_url, session)
-          .then((response) => {
-            console.log("User added to database", response);
-          })
-          .catch((error: Error) => {
-            console.error("User not added to database", error);
-          });
-
-
-        // create new local user here
+      .then((res) => res.json())
+      .then((data) => {
+        return data;
       })
-      .catch((error: Error) => {
-        console.error("Registration failed", error);
-        setErrorMessage(error.message);
-        setShowError(true);
+      .catch((err) => {
+        return err;
       });
+    return session;
   };
+  // Userfront.signup({
+  //   method: "password",
+  //   email: email,
+  //   password: passwd,
+  //   username: `${firstName}_${lastName}`,
+  //   name: `${firstName} ${lastName}`,
+  // })
+  //   .then((response) => {
+  //     console.log("User registered", response);
+  //     setRegisterSuccess(true);
+  //     const session = {
+  //       customer: `${firstName}_${lastName}`,
+  //       customer_details: {
+  //         name: `${firstName} ${lastName}`,
+  //         address: {
+  //           state: "",
+  //           line_1: "",
+  //           city: "",
+  //           zip: "",
+  //         },
+  //         email: email,
+  //       },
+  //     };
+  //     axios
+  //       .post(db_url, session)
+  //       .then((response) => {
+  //         console.log("User added to database", response);
+  //       })
+  //       .catch((error: Error) => {
+  //         console.error("User not added to database", error);
+  //       });
+
+  //     // create new local user here
+  //   })
+  //   .catch((error: Error) => {
+  //     console.error("Registration failed", error);
+  //     setErrorMessage(error.message);
+  //     setShowError(true);
+  //   });
+  // };
 
   /**
    * check if user is already logged in
@@ -260,249 +283,272 @@ export default function Account() {
   }, []);
 
   return (
-    <div className="main-column">
-      {!isLoggedIn ? (
-      <Form onSubmit={registerMe} noValidate>
-        <InputGroup hasValidation>
-          <div className="main-settings-row">
-            <div className="controls-row">
-              <div className="text-label">
-                <Form.Label className="field-label">First Name: </Form.Label>
+    <>
+      <div className="main-column">
+        {!isLoggedIn ? (
+          <Form onSubmit={registerMe} noValidate>
+            <InputGroup hasValidation>
+              <div className="main-settings-row">
+                <div className="controls-row">
+                  <div className="text-label">
+                    <Form.Label className={`field-label ${darkClass}`}>
+                      First Name:{" "}
+                    </Form.Label>
+                  </div>
+                  <div className="text-column">
+                    <Form.Control
+                      size="lg"
+                      type="text"
+                      id="firstName"
+                      required
+                      placeholder="Elmer"
+                      value={firstName}
+                      onChange={(e) => {
+                        valueChanged(e);
+                      }}
+                      onBlur={(e) => {
+                        checkName(e);
+                      }}
+                      isInvalid={!firstNameValid}
+                    />
+                  </div>
+                </div>
               </div>
-              <div className="text-column">
-                <Form.Control
-                  size="lg"
-                  type="text"
-                  id="firstName"
-                  required
-                  placeholder="Elmer"
-                  value={firstName}
-                  onChange={(e) => {
-                    valueChanged(e);
-                  }}
-                  onBlur={(e) => {
-                    checkName(e);
-                  }}
-                  isInvalid={!firstNameValid}
-                />
+              <div className="main-settings-row">
+                <div className="controls-row">
+                  <div className="text-label">
+                    <Form.Label className={`field-label ${darkClass}`}>
+                      Last Name:{" "}
+                    </Form.Label>
+                  </div>
+                  <div className="text-column">
+                    <Form.Control
+                      size="lg"
+                      type="text"
+                      id="lastName"
+                      required
+                      value={lastName}
+                      placeholder="Fudd"
+                      onChange={(e) => {
+                        valueChanged(e);
+                      }}
+                      onBlur={(e) => {
+                        checkName(e);
+                      }}
+                      isInvalid={!lastNameValid}
+                    />
+                    <Form.Control.Feedback type="invalid">
+                      Please enter a valid last name
+                    </Form.Control.Feedback>
+                  </div>
+                </div>
               </div>
-            </div>
-          </div>
-          <div className="main-settings-row">
-            <div className="controls-row">
-              <div className="text-label">
-                <Form.Label className="field-label">Last Name: </Form.Label>
-              </div>
-              <div className="text-column">
-                <Form.Control
-                  size="lg"
-                  type="text"
-                  id="lastName"
-                  required
-                  value={lastName}
-                  placeholder="Fudd"
-                  onChange={(e) => {
-                    valueChanged(e);
-                  }}
-                  onBlur={(e) => {
-                    checkName(e);
-                  }}
-                  isInvalid={!lastNameValid}
-                />
-                <Form.Control.Feedback type="invalid">
-                  Please enter a valid last name
-                </Form.Control.Feedback>
-              </div>
-            </div>
-          </div>
-        </InputGroup>
-        <InputGroup hasValidation>
-          <div className="main-settings-row">
-            <div className="controls-row">
-              <div className="text-label">
-                <Form.Label className="field-label">Email: </Form.Label>
-              </div>
-              <div className="text-column">
-                <Form.Group>
-                  <Form.Control
-                    size="lg"
-                    type="email"
-                    id="email"
-                    value={email}
-                    required
-                    placeholder="wabbits@fudd.com"
-                    onChange={(e) => {
-                      valueChanged(e);
-                    }}
-                  />
-                  <Form.Control.Feedback type="invalid">
-                    Please enter a valid email address
-                  </Form.Control.Feedback>
-                  <Form.Text className="text-muted">
-                    We'll never share your email.
-                  </Form.Text>
-                </Form.Group>
-              </div>
-            </div>
-          </div>
-        </InputGroup>
-        <InputGroup hasValidation>
-          <div className="main-settings-row">
-            <div className="controls-row">
-              <div className="text-label">
-                <Form.Label className="field-label">Password: </Form.Label>
-              </div>
-              <div className="text-column">
-                <OverlayTrigger
-                  placement="auto"
-                  delay={{ show: 250, hide: 300 }}
-                  overlay={
-                    <Tooltip id="ssid-label-tooltip">
-                      Enter a password for the new account
-                    </Tooltip>
-                  }
-                >
-                  <InputGroup hasValidation>
-                    <FloatingLabel label="Password">
-                      <FormControl
+            </InputGroup>
+            <InputGroup hasValidation>
+              <div className="main-settings-row">
+                <div className="controls-row">
+                  <div className="text-label">
+                    <Form.Label className={`field-label ${darkClass}`}>
+                      Email:{" "}
+                    </Form.Label>
+                  </div>
+                  <div className="text-column">
+                    <Form.Group>
+                      <Form.Control
                         size="lg"
+                        type="email"
+                        id="email"
+                        value={email}
                         required
-                        type={!passwordShown ? "password" : "text"}
-                        id="passwd"
-                        placeholder="Enter password"
-                        value={passwd}
-                        autoComplete="password"
+                        placeholder="wabbits@fudd.com"
                         onChange={(e) => {
                           valueChanged(e);
                         }}
-                        style={{
-                          borderTopRightRadius: "0px",
-                          borderBottomRightRadius: "0px",
-                        }}
-                        {...(passGood.lengthGood &&
-                        passGood.numberGood &&
-                        passGood.upperGood &&
-                        passGood.lowerGood &&
-                        passGood.specialGood
-                          ? { isValid: true }
-                          : { isInvalid: true })}
                       />
-                    </FloatingLabel>
-                    <InputGroup.Text
-                      onClick={toggle}
-                      style={{
-                        borderTopLeftRadius: "0px",
-                        borderBottomLeftRadius: "0px",
-                        cursor: "pointer",
-                      }}
+                      <Form.Control.Feedback type="invalid">
+                        Please enter a valid email address
+                      </Form.Control.Feedback>
+                      <Form.Text className="text-muted">
+                        We'll never share your email.
+                      </Form.Text>
+                    </Form.Group>
+                  </div>
+                </div>
+              </div>
+            </InputGroup>
+            <InputGroup hasValidation>
+              <div className="main-settings-row">
+                <div className="controls-row">
+                  <div className="text-label">
+                    <Form.Label className={`field-label ${darkClass}`}>
+                      Password:{" "}
+                    </Form.Label>
+                  </div>
+                  <div className="text-column">
+                    <OverlayTrigger
+                      placement="auto"
+                      delay={{ show: 250, hide: 300 }}
+                      overlay={
+                        <Tooltip
+                          id="ssid-label-tooltip"
+                          style={{ textAlign: "left" }}
+                        >
+                          <PassChecker
+                            len={passGood.lengthGood}
+                            num={passGood.numberGood}
+                            upper={passGood.upperGood}
+                            lower={passGood.lowerGood}
+                            special={passGood.specialGood}
+                            matches={passwd === passConfirm}
+                          />
+                        </Tooltip>
+                      }
                     >
-                      {!passwordShown ? <EyeSlashFill /> : <Eye />}
-                    </InputGroup.Text>
-                  </InputGroup>
-                </OverlayTrigger>
+                      <InputGroup hasValidation>
+                        <FloatingLabel label="Password">
+                          <FormControl
+                            size="lg"
+                            required
+                            type={!passwordShown ? "password" : "text"}
+                            id="passwd"
+                            placeholder="Enter password"
+                            value={passwd}
+                            autoComplete="password"
+                            onChange={(e) => {
+                              valueChanged(e);
+                            }}
+                            style={{
+                              borderTopRightRadius: "0px",
+                              borderBottomRightRadius: "0px",
+                            }}
+                            {...(passGood.lengthGood &&
+                            passGood.numberGood &&
+                            passGood.upperGood &&
+                            passGood.lowerGood &&
+                            passGood.specialGood
+                              ? { isValid: true }
+                              : { isInvalid: true })}
+                          />
+                        </FloatingLabel>
+                        <InputGroup.Text
+                          onClick={toggle}
+                          style={{
+                            borderTopLeftRadius: "0px",
+                            borderBottomLeftRadius: "0px",
+                            cursor: "pointer",
+                          }}
+                        >
+                          {!passwordShown ? <EyeSlashFill /> : <Eye />}
+                        </InputGroup.Text>
+                      </InputGroup>
+                    </OverlayTrigger>
+                  </div>
+                </div>
               </div>
+              <div className="main-settings-row">
+                <div className="controls-row">
+                  <div className="text-label">
+                    <Form.Label className={`field-label ${darkClass}`}>
+                      Confirm Password:{" "}
+                    </Form.Label>
+                  </div>
+                  <div className="text-column">
+                    <OverlayTrigger
+                      placement="auto"
+                      delay={{ show: 250, hide: 300 }}
+                      overlay={
+                        <Tooltip id="ssid-label-tooltip">
+                          Re-Enter Password
+                          <PassChecker
+                            len={passGood.lengthGood}
+                            num={passGood.numberGood}
+                            upper={passGood.upperGood}
+                            lower={passGood.lowerGood}
+                            special={passGood.specialGood}
+                            matches={passwd === passConfirm}
+                          />
+                        </Tooltip>
+                      }
+                    >
+                      <InputGroup hasValidation>
+                        <FloatingLabel label="Re-enter Password">
+                          <FormControl
+                            required
+                            type={!confPasswordShown ? "password" : "text"}
+                            size="lg"
+                            id="passwdConfirm"
+                            placeholder="Confirm password"
+                            value={passConfirm}
+                            onChange={(e) => {
+                              valueChanged(e);
+                            }}
+                            style={{
+                              borderTopRightRadius: "0px",
+                              borderBottomRightRadius: "0px",
+                            }}
+                            {...(passwd.length >= 6 &&
+                            passConfirm.length >= 1 &&
+                            passwd !== passConfirm
+                              ? { isInvalid: true }
+                              : {})}
+                          />
+                        </FloatingLabel>
+                        <InputGroup.Text
+                          onClick={confToggle}
+                          style={{
+                            borderTopLeftRadius: "0px",
+                            borderBottomLeftRadius: "0px",
+                            cursor: "pointer",
+                          }}
+                        >
+                          {!confPasswordShown ? <EyeSlashFill /> : <Eye />}
+                        </InputGroup.Text>
+                      </InputGroup>
+                    </OverlayTrigger>
+                  </div>
+                </div>
+              </div>
+            </InputGroup>
+            <div className="fullrow">
+              <p />{" "}
             </div>
-          </div>
-          <div className="main-settings-row">
-            <div className="controls-row">
-              <div className="text-label">
-                <Form.Label className="field-label">
-                  Confirm Password:{" "}
-                </Form.Label>
-              </div>
-              <div className="text-column">
-                <OverlayTrigger
-                  placement="auto"
-                  delay={{ show: 250, hide: 300 }}
-                  overlay={
-                    <Tooltip id="ssid-label-tooltip">
-                      Re-Enter a password for the new account
-                    </Tooltip>
-                  }
+            <div style={{ textAlign: "center", margin: "auto" }}>
+              {errorMessage.length > 0 && showError ? (
+                <Form.Text
+                  style={{
+                    color: "red",
+                    fontSize: "larger",
+                    paddingTop: "20px",
+                    paddingBottom: "20px",
+                  }}
                 >
-                  <InputGroup hasValidation>
-                    <FloatingLabel label="Re-enter Password">
-                      <FormControl
-                        required
-                        type={!confPasswordShown ? "password" : "text"}
-                        size="lg"
-                        id="passwdConfirm"
-                        placeholder="Confirm password"
-                        value={passConfirm}
-                        onChange={(e) => {
-                          valueChanged(e);
-                        }}
-                        style={{
-                          borderTopRightRadius: "0px",
-                          borderBottomRightRadius: "0px",
-                        }}
-                        {...(passwd.length >= 6 &&
-                        passConfirm.length >= 1 &&
-                        passwd !== passConfirm
-                          ? { isInvalid: true }
-                          : {})}
-                      />
-                    </FloatingLabel>
-                    <InputGroup.Text
-                      onClick={confToggle}
-                      style={{
-                        borderTopLeftRadius: "0px",
-                        borderBottomLeftRadius: "0px",
-                        cursor: "pointer",
-                      }}
-                    >
-                      {!confPasswordShown ? <EyeSlashFill /> : <Eye />}
-                    </InputGroup.Text>
-                  </InputGroup>
-                </OverlayTrigger>
-              </div>
+                  {errorMessage}
+                </Form.Text>
+              ) : (
+                <Form.Text />
+              )}
             </div>
-          </div>
-        </InputGroup>
-        <PassChecker
-          len={passGood.lengthGood}
-          num={passGood.numberGood}
-          upper={passGood.upperGood}
-          lower={passGood.lowerGood}
-          special={passGood.specialGood}
-        />
-        <div className="fullrow">
-          <p />{" "}
-        </div>
-        <div style={{ textAlign: "center", margin: "auto" }}>
-          {errorMessage.length > 0 && showError ? (
-            <Form.Text
-              style={{
-                color: "red",
-                fontSize: "larger",
-                paddingTop: "20px",
-                paddingBottom: "20px",
-              }}
-            >
-              {errorMessage}
-            </Form.Text>
-          ) : (
-            <Form.Text />
-          )}
-        </div>
-        <div style={{ textAlign: "center", margin: "auto" }}>
-          <Button variant="primary" type="submit">
-            Register
-          </Button>
-        </div>
-      </Form> ) : (
-        <div>
-          <Button variant="danger" onClick={logout}>
+            <div style={{ textAlign: "center", margin: "auto" }}>
+              <Button variant="primary" type="submit">
+                Register
+              </Button>
+            </div>
+          </Form>
+        ) : (
+          <div>
+            <Button variant="danger" onClick={logout}>
               Logout
             </Button>
-        </div>
-      )}
-      <NewAccountModal
-        show={registerSuccess}
-        email={email}
-        password={passwd}
-        username={`${firstName}_${lastName}`}
-      />
-    </div>
+          </div>
+        )}
+        <NewAccountModal
+          show={registerSuccess}
+          email={email}
+          password={passwd}
+          username={`${firstName}_${lastName}`}
+        />
+        <Footer />
+      </div>
+    </>
   );
 }

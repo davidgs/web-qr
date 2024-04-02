@@ -1,13 +1,12 @@
 import React from "react";
 import { Form } from "react-bootstrap";
-import { useDispatch } from "react-redux";
 import store from "store2";
 import { RootState } from "../../stores/store";
 import { updateFormType } from "../../reducers/main/mainSlice";
-import { useAppSelector } from "../../stores/hooks";
+import { useAppDispatch, useAppSelector } from "../../stores/hooks";
 
 export default function FormChooser(): React.JSX.Element {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const dark = useAppSelector((state: RootState) => state.main.settings.dark);
   const darkClass = dark ? "header-stuff-dark" : "header-stuff";
   const mainSet = useAppSelector((state: RootState) => state.main.settings);

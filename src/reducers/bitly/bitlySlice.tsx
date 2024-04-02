@@ -23,8 +23,6 @@
 import { createAsyncThunk, PayloadAction, createSlice } from "@reduxjs/toolkit";
 import { BitlyConfig, defaultBitlyConfig, settingsServer } from "../../types";
 
-const db_url = "http://localhost:4242/user-data";
-
 export interface BitlyState {
   loading: boolean;
   settings: BitlyConfig;

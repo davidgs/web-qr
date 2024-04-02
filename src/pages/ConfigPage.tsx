@@ -31,34 +31,27 @@ import {
   Tooltip,
 } from "react-bootstrap";
 import "primereact/resources/primereact.min.css";
-import { useDispatch } from "react-redux";
 import "../css/hyde.css";
+import "../css/Config.css";
 import BitlyConfigurator from "../configuration/Configurators/BitlyConfigurator";
 import MainValuesConfigurator from "../configuration/Configurators/MainValuesConfigurator";
 import UTMConfigurator from "../configuration/Configurators/UTMConfigurator";
 import QRConfigurator from "../configuration/Configurators/QRConfigurator";
 import { RootState } from "../stores/store";
-import axios from "axios";
-import { SessionProps } from "../types";
-import {
-  saveUtm,
-  updateUTMCampaignSettings,
-  updateUTMContentSettings,
-  updateUTMKeywordSettings,
-  updateUTMMediumSettings,
-  updateUTMSourceSettings,
-  updateUTMTargetSettings,
-  updateUTMTermSettings,
-} from "../reducers/utm/utmSlice";
-import { useAppSelector } from "../stores/hooks";
+import { LicenseProps } from "../types";
+import { saveUtm } from "../reducers/utm/utmSlice";
+import { useAppDispatch, useAppSelector } from "../stores/hooks";
 import { Link } from "react-router-dom";
 import { saveQrCodeSettings } from "../reducers/qr/qrCodeSettingsSlice";
 import { saveBitly } from "../reducers/bitly/bitlySlice";
 import { setSettingsUpdated } from "../reducers/session/loginSlice";
+import Logo from "../images/NewLinkerLogo.png";
+import WiFiConfigurator from "../configuration/Configurators/WiFiConfigurator";
+import Footer from "../components/Footer";
 
 function ConfigPage(): JSX.Element {
   const [targetValidated] = useState(false);
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const dark = useAppSelector((state: RootState) => state.main.settings.dark);
   const settingsChanged = useAppSelector(
     (state: RootState) => state.login.settingsUpdated
@@ -67,9 +60,10 @@ function ConfigPage(): JSX.Element {
   const bitly = useAppSelector((state: RootState) => state.bitly);
   const qrC = useAppSelector((state: RootState) => state.qrCode.settings);
   const darkClass = dark ? "header-stuff-dark" : "header-stuff";
-  const session: SessionProps = useAppSelector(
-    (state: RootState) => state.session
+  const session: LicenseProps = useAppSelector(
+    (state: RootState) => state.license.settings
   );
+  const license = useAppSelector((state: RootState) => state.license.settings);
   const utmSettings = useAppSelector((state: RootState) => state.utmConfigs);
   const userfront = useAppSelector(
     (state: RootState) => state.userFront.settings
@@ -91,10 +85,12 @@ function ConfigPage(): JSX.Element {
       event.stopPropagation();
     }
     const newSet = { ...utmSettings };
-    dispatch(saveUtm({
-      username: userfront.username,
-      settings: newSet.settings
-    }) as any);
+    dispatch(
+      saveUtm({
+        username: userfront.username,
+        settings: newSet.settings,
+      }) as any
+    );
     const newBit = { ...bitly };
     dispatch(
       saveBitly({
@@ -124,105 +120,168 @@ function ConfigPage(): JSX.Element {
     <>
       <div className="main-column">
         <Row>
-          <h2
-            className={darkClass}
-            style={{ margin: "auto", paddingBottom: "10px" }}
-          >
-            Configuration Editor
-          </h2>
+          <h1 style={{ margin: "auto", textAlign: "center" }}>
+            <img src={Logo} alt="QR Builder Logo" width={40} height={40} />{" "}
+            &nbsp; &nbsp;
+            <strong>
+              <span className={darkClass}>QR Builder Settings</span>
+            </strong>
+          </h1>
+          <p></p>
         </Row>
-        {(session.license_type === "free" || !loggedIn) && (
+        {(license.license_type === "free" || !loggedIn) && (
           <Row>
             <h2 className={darkClass} style={{ margin: "auto" }}>
               No Changeable settings{" "}
               {!loggedIn ? `if not logged in` : `for Free version`}
             </h2>
+            <p></p>
           </Row>
         )}
         <Accordion>
           {/* Fence off for Basic/Enterprise license */}
           {/* General Config */}
-          {session.license_type !== "free" &&
-            loggedIn &&
-            session.license_type === "enterprise" && (
-              <Accordion.Item eventKey="0">
-                <OverlayTrigger
-                  placement="auto"
-                  delay={{ show: 250, hide: 300 }}
-                  overlay={
-                    <Tooltip id="general-tooltip">
-                      Configuration settings for Bit.ly integration
-                    </Tooltip>
-                  }
-                >
-                  <Accordion.Header className={darkClass}>
-                    <strong>General Configuration</strong>
-                  </Accordion.Header>
-                </OverlayTrigger>
-                <Accordion.Body id="general">
-                  <Accordion>
-                    {/* Bitly Configuration */}
-                    <BitlyConfigurator eKey="0" />
-                    {/* Fence off for Enterprise License */}
-                    {/* UI Images */}
-                    <MainValuesConfigurator targetValidated={targetValidated} />
-                  </Accordion>
-                </Accordion.Body>
-              </Accordion.Item>
-            )}
-          {(session.license_type === "basic" ||
-            session.license_type === "pro") && (
-            <Accordion>
-              <BitlyConfigurator eKey="0" />
-            </Accordion>
-          )}
+          <Accordion.Item eventKey="0">
+            <OverlayTrigger
+              placement="auto"
+              delay={{ show: 250, hide: 300 }}
+              overlay={
+                <Tooltip id="general-tooltip">
+                  Configuration settings for Bit.ly integration
+                </Tooltip>
+              }
+            >
+              <Accordion.Header className={darkClass}>
+                <strong>General Configuration</strong>
+                <span style={{ marginTop: ".5rem" }}>
+                  {session.license_type === "free" ? (
+                    <OverlayTrigger
+                      placement="auto"
+                      delay={{ show: 250, hide: 300 }}
+                      overlay={
+                        <Tooltip id="brand-tooltip">
+                          These Settings for paid Customers only.
+                        </Tooltip>
+                      }
+                    >
+                      <i className={`bi bi-ban ${session.license_type}`}></i>
+                    </OverlayTrigger>
+                  ) : (
+                    ""
+                  )}
+                </span>
+              </Accordion.Header>
+            </OverlayTrigger>
+            <Accordion.Body id="general">
+              <Accordion>
+                {/* Bitly Configuration */}
+                <BitlyConfigurator eKey="0" />
+                {/* Fence off for Enterprise License */}
+                {/* UI Images */}
+                <MainValuesConfigurator targetValidated={targetValidated} />
+              </Accordion>
+            </Accordion.Body>
+          </Accordion.Item>
           {/* End fence */}
           {/* Fence off for Basic/Enterprise License */}
           {/* QR Code Configuration */}
-          {session.license_type !== "free" && loggedIn && (
-            <Accordion.Item eventKey="1">
-              <OverlayTrigger
-                placement="auto"
-                delay={{ show: 250, hide: 300 }}
-                overlay={
-                  <Tooltip id="qr-tooltip">
-                    Configuration settings for the QR Code
-                  </Tooltip>
-                }
-              >
-                <Accordion.Header className={darkClass}>
-                  <strong>QR Code Configuration</strong>
-                </Accordion.Header>
-              </OverlayTrigger>
-              <QRConfigurator />
-            </Accordion.Item>
-          )}
+          <Accordion.Item eventKey="1">
+            <OverlayTrigger
+              placement="auto"
+              delay={{ show: 250, hide: 300 }}
+              overlay={
+                <Tooltip id="qr-tooltip">
+                  Configuration settings for the QR Code
+                </Tooltip>
+              }
+            >
+              <Accordion.Header className={darkClass}>
+                <strong>QR Code Configuration</strong>
+                <span style={{ marginTop: ".5rem" }}>
+                  {session.license_type === "free" ? (
+                    <OverlayTrigger
+                      placement="auto"
+                      delay={{ show: 250, hide: 300 }}
+                      overlay={
+                        <Tooltip id="brand-tooltip">
+                          QR Code Settings for paid Customers only.
+                        </Tooltip>
+                      }
+                    >
+                      <i className="bi bi-ban" style={{ color: "red" }}></i>
+                    </OverlayTrigger>
+                  ) : (
+                    ""
+                  )}
+                </span>
+              </Accordion.Header>
+            </OverlayTrigger>
+            <QRConfigurator />
+          </Accordion.Item>
           {/* End fence */}
           {/* UTM Codes */}
-          {session.license_type !== "free" && loggedIn && (
-            <Accordion.Item eventKey="2">
-              <OverlayTrigger
-                placement="auto"
-                delay={{ show: 250, hide: 300 }}
-                overlay={
-                  <Tooltip id="utm-tooltip">
-                    Configuration settings for the UTM Codes and how they are
-                    used
-                  </Tooltip>
-                }
-              >
-                <Accordion.Header>
-                  <strong>UTM Code Configuration</strong>
-                </Accordion.Header>
-              </OverlayTrigger>
-              <UTMConfigurator />
-            </Accordion.Item>
-          )}
+          <Accordion.Item eventKey="2">
+            <OverlayTrigger
+              placement="auto"
+              delay={{ show: 250, hide: 300 }}
+              overlay={
+                <Tooltip id="utm-tooltip">
+                  Configuration settings for the UTM Codes and how they are used
+                </Tooltip>
+              }
+            >
+              <Accordion.Header>
+                <strong>UTM Code Configuration</strong>
+                <span style={{ marginTop: ".5rem" }}>
+                  {session.license_type === "free" ? (
+                    <OverlayTrigger
+                      placement="auto"
+                      delay={{ show: 250, hide: 300 }}
+                      overlay={
+                        <Tooltip id="brand-tooltip">
+                          QR Code Settings for paid Customers only.
+                        </Tooltip>
+                      }
+                    >
+                      <i className="bi bi-ban" style={{ color: "red" }}></i>
+                    </OverlayTrigger>
+                  ) : (
+                    ""
+                  )}
+                </span>
+              </Accordion.Header>
+            </OverlayTrigger>
+            <UTMConfigurator />
+          </Accordion.Item>
+
           {/* End fence */}
+          {/* Fence off for Basic/Enterprise License */}
+          {/* {(session.license_type === "pro" || session.license_type === "enterprise") && (
+          <Accordion.Item eventKey="3">
+            <OverlayTrigger
+              placement="auto"
+              delay={{ show: 250, hide: 300 }}
+              overlay={
+                <Tooltip id="qr-tooltip">
+                  Configuration settings WiFi QR Code
+                </Tooltip>
+              }
+            >
+              <Accordion.Header className={darkClass}>
+                <strong>WiFi Form Configuration</strong>
+              </Accordion.Header>
+            </OverlayTrigger>
+            <WiFiConfigurator />
+            </Accordion.Item>
+          )} */}
+          {/* End Fence */}
         </Accordion>
-        <div className="fullrow" style={{ paddingBottom: "25px" }} />
+        <div className="fullrow" />
         {loggedIn ? (
-          <>
+          <div
+            className="fullrow"
+            style={{ justifyContent: "right", paddingBottom: "25px" }}
+          >
             <OverlayTrigger
               placement="auto"
               delay={{ show: 250, hide: 300 }}
@@ -236,6 +295,7 @@ function ConfigPage(): JSX.Element {
                 Cancel
               </Button>
             </OverlayTrigger>
+            &nbsp; &nbsp;
             <OverlayTrigger
               placement="auto"
               delay={{ show: 250, hide: 300 }}
@@ -254,7 +314,7 @@ function ConfigPage(): JSX.Element {
                 Save Changes
               </Button>
             </OverlayTrigger>
-          </>
+          </div>
         ) : (
           <Link to="/login">
             <Button type="button" variant="primary">
@@ -265,6 +325,7 @@ function ConfigPage(): JSX.Element {
         <div className="fullrow" style={{ paddingBottom: "25px" }} />
         <p />
         <p />
+        <Footer />
       </div>
     </>
   );

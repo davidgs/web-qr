@@ -22,11 +22,10 @@
  * SOFTWARE.
  */
 /* eslint-disable no-case-declarations */
-import { JSX, useState, SyntheticEvent, memo, useEffect } from "react";
+import { JSX, useState, SyntheticEvent, memo } from "react";
 import Button from "react-bootstrap/Button";
 import { Accordion, Modal, OverlayTrigger, Tooltip } from "react-bootstrap";
 import "primereact/resources/primereact.min.css";
-import { useDispatch,  } from "react-redux";
 import store from "store2";
 import "../css/hyde.css";
 import BitlyConfigurator from "../src/configuration/Configurators/BitlyConfigurator";
@@ -41,7 +40,6 @@ import {
   UtmParams,
   WiFiSettings,
   QProps,
-  defaultBitlyConfig,
 } from "../src/types";
 import { updateBitlySettings } from "../src/reducers/bitly/bitlySlice";
 import { updateMainSettings } from "../src/reducers/main/mainSlice";
@@ -55,7 +53,7 @@ import {
   updateUTMTargetSettings,
   updateUTMTermSettings,
 } from "../src/reducers/utm/utmSlice";
-import { useAppSelector } from "../src/stores/hooks";
+import { useAppDispatch, useAppSelector } from "../src/stores/hooks";
 
 interface ConfigEditorProps {
   showMe: boolean;
@@ -63,68 +61,40 @@ interface ConfigEditorProps {
   callback: (value: boolean) => void;
 }
 function ConfigEditor(props: ConfigEditorProps): JSX.Element {
-  const dispatch = useDispatch();
-  const [settingsChanged, setSettingsChanged] = useState(false);
+  const dispatch = useAppDispatch();
   const { showMe, callback } = props;
   const [targetValidated, setTargetValidated] = useState(false);
-  const dark = useAppSelector((state: RootState) => state.main.dark);
+  const dark = useAppSelector((state: RootState) => state.main.settings.dark);
   const darkClass = dark ? "header-stuff-dark" : "header-stuff";
   const main: MainSettings = useAppSelector(
     (state: RootState) => state.main.settings
   );
-  const qrConf: QProps = useAppSelector((state: RootState) => state.qrCode);
+  const qrConf: QProps = useAppSelector((state: RootState) => state.qrCode.settings);
   const wifi: WiFiSettings = useAppSelector(
     (state: RootState) => state.wifi.settings
   );
-  const bitly: BitlyConfig = useAppSelector((state: RootState) => state.bitly);
+  const bitly: BitlyConfig = useAppSelector((state: RootState) => state.bitly.settings);
   const utmTarget: UtmObj = useAppSelector(
-    (state: RootState) => state.utmConfigs.utm_target
+    (state: RootState) => state.utmConfigs.settings.utm_target
   );
   const utmSource: UtmObj = useAppSelector(
-    (state: RootState) => state.utmConfigs.utm_source
+    (state: RootState) => state.utmConfigs.settings.utm_source
   );
   const utmCampaign: UtmObj = useAppSelector(
-    (state: RootState) => state.utmConfigs.utm_campaign
+    (state: RootState) => state.utmConfigs.settings.utm_campaign
   );
   const utmMedium: UtmObj = useAppSelector(
-    (state: RootState) => state.utmConfigs.utm_medium
+    (state: RootState) => state.utmConfigs.settings.utm_medium
   );
   const utmContent: UtmObj = useAppSelector(
-    (state: RootState) => state.utmConfigs.utm_content
+    (state: RootState) => state.utmConfigs.settings.utm_content
   );
   const utmTerm: UtmObj = useAppSelector(
-    (state: RootState) => state.utmConfigs.utm_term
+    (state: RootState) => state.utmConfigs.settings.utm_term
   );
   const utmKeyword: UtmObj = useAppSelector(
-    (state: RootState) => state.utmConfigs.utm_keyword
+    (state: RootState) => state.utmConfigs.settings.utm_keyword
   );
-
-  const [currentMain, setCurrentMain] = useState<MainSettings>();
-  const [currentQR, setCurrentQR] = useState<QProps>();
-  const [currentWifi, setCurrentWifi] = useState<WiFiSettings>();
-  const [currentBitly, setCurrentBitly] =
-    useState<BitlyConfig>(defaultBitlyConfig);
-  const [currentUtmTarget, setCurrentUtmTarget] = useState<UtmObj>();
-  const [currentUtmSource, setCurrentUtmSource] = useState<UtmObj>();
-  const [currentUtmCampaign, setCurrentUtmCampaign] = useState<UtmObj>();
-  const [currentUtmMedium, setCurrentUtmMedium] = useState<UtmObj>();
-  const [currentUtmContent, setCurrentUtmContent] = useState<UtmObj>();
-  const [currentUtmTerm, setCurrentUtmTerm] = useState<UtmObj>();
-  const [currentUtmKeyword, setCurrentUtmKeyword] = useState<UtmObj>();
-
-  useEffect(() => {
-    setCurrentMain(main);
-    setCurrentQR(qrConf);
-    setCurrentWifi(wifi);
-    setCurrentBitly(bitly);
-    setCurrentUtmTarget(utmTarget);
-    setCurrentUtmSource(utmSource);
-    setCurrentUtmCampaign(utmCampaign);
-    setCurrentUtmMedium(utmMedium);
-    setCurrentUtmContent(utmContent);
-    setCurrentUtmTerm(utmTerm);
-    setCurrentUtmKeyword(utmKeyword);
-  }, []);
 
   /* handle closing without saving */
   const handleCancel = () => {
@@ -219,11 +189,7 @@ function ConfigEditor(props: ConfigEditorProps): JSX.Element {
                 <Accordion>
                   {/* Bitly Configuration */}
                   <BitlyConfigurator
-                    eKey="0"
-                    callback={(changed) => {
-                      setSettingsChanged(changed);
-                    }}
-                  />
+                    eKey="0" />
                   {/* Fence off for Enterprise License */}
                   {/* UI Images */}
                   <MainValuesConfigurator targetValidated={targetValidated} />

@@ -20,9 +20,10 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
+import Footer from "../components/Footer";
 export default function TermsOfService() {
   return (
-    <div className={`main-column`}>
+    <><div className={`main-column`}>
       <h1 style={{ textAlign: "center" }}>
         QR Builder<span className="tr">&trade;</span> Terms of Service
       </h1>
@@ -94,6 +95,7 @@ export default function TermsOfService() {
         to offensive material. If you have a paid license to QR Builder and are
         removed for this reason, you will not be refunded.
       </p>
-    </div>
+      <Footer />
+    </div></>
   );
 }

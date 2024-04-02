@@ -21,11 +21,11 @@
  * SOFTWARE.
  */
 import { JSX, useState, SyntheticEvent } from "react";
+import "../../css/Config.css";
 import { Accordion, Form, OverlayTrigger, Tooltip } from "react-bootstrap";
 import { UtmKeyValue, UtmObj } from "../../types";
 import Checker from "../buttons/Checker";
 import { RootState } from "../../stores/store";
-import { useDispatch } from "react-redux";
 import {
   updateCampaignLabel,
   updateCampaignValue,
@@ -37,12 +37,13 @@ import {
   updateCampaignUseValue,
 } from "../../reducers/utm/utmSlice";
 import PillArea from "../pills/PillArea";
-import { useAppSelector } from "../../stores/hooks";
+import { useAppDispatch, useAppSelector } from "../../stores/hooks";
 import { setSettingsUpdated } from "../../reducers/session/loginSlice";
 
 export default function UTMCampaignAccordian(): JSX.Element {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const dark = useAppSelector((state: RootState) => state.main.settings.dark);
+  const session = useAppSelector((state: RootState) => state.license.settings);
   const darkClass = dark ? "header-stuff-dark" : "header-stuff";
   const valKind: string = "utm_campaign";
   const itemNo: string = "4";
@@ -125,6 +126,23 @@ export default function UTMCampaignAccordian(): JSX.Element {
       >
         <Accordion.Header className={darkClass}>
           <strong>{type}</strong>
+          <span style={{ marginTop: ".5rem" }}>
+            {session.license_type === "free" ? (
+              <OverlayTrigger
+                placement="auto"
+                delay={{ show: 250, hide: 300 }}
+                overlay={
+                  <Tooltip id="brand-tooltip">
+                    UTM Code Settings for paid Customers only.
+                  </Tooltip>
+                }
+              >
+                <i className={`bi bi-ban ${session.license_type}`}></i>
+              </OverlayTrigger>
+            ) : (
+              ""
+            )}
+          </span>
         </Accordion.Header>
       </OverlayTrigger>
       <Accordion.Body id={type}>
@@ -138,7 +156,7 @@ export default function UTMCampaignAccordian(): JSX.Element {
             <div className="col10">
               <Checker
                 cState={accValue.use_value}
-                disabled={false}
+                disabled={session.license_type === "free"}
                 label=""
                 tooltip={
                   accValue.use_value
@@ -174,6 +192,7 @@ export default function UTMCampaignAccordian(): JSX.Element {
                 >
                   <Form.Control
                     className={darkClass}
+                    disabled={session.license_type !== "enterprise"}
                     type="text"
                     width="100%"
                     id={`${valKind}-label`}
@@ -195,7 +214,7 @@ export default function UTMCampaignAccordian(): JSX.Element {
                 <div className="col10">
                   <Checker
                     cState={accValue.show_name ? accValue.show_name : false}
-                    disabled={false}
+                    disabled={session.license_type !== "enterprise"}
                     label=""
                     tooltip={
                       accValue.show_name
@@ -209,7 +228,9 @@ export default function UTMCampaignAccordian(): JSX.Element {
                         setFieldValue(`${accValue?.label}`);
                       }
                       dispatch(updateCampaignShowName(value));
-                      dispatch(setSettingsUpdated(accValue.show_name !== value));
+                      dispatch(
+                        setSettingsUpdated(accValue.show_name !== value)
+                      );
                     }}
                   />
                 </div>
@@ -235,12 +256,15 @@ export default function UTMCampaignAccordian(): JSX.Element {
                   <Form.Control
                     className={darkClass}
                     type="text"
+                    disabled={session.license_type !== "enterprise"}
                     id={`${valKind}-tooltip`}
                     placeholder={`Enter ${valKind} field tooltip`}
                     value={accValue.tooltip ? accValue.tooltip : ""}
                     onChange={(e) => {
                       dispatch(updateCampaignTooltip(e.target.value));
-                      dispatch(setSettingsUpdated(accValue.tooltip !== e.target.value));
+                      dispatch(
+                        setSettingsUpdated(accValue.tooltip !== e.target.value)
+                      );
                     }}
                   />
                 </OverlayTrigger>
@@ -269,10 +293,15 @@ export default function UTMCampaignAccordian(): JSX.Element {
                     id={`${valKind}-aria`}
                     placeholder={`Enter ${valKind} field ARIA (Accessibility) label`}
                     required
+                    disabled={session.license_type !== "enterprise"}
                     value={accValue.aria_label}
                     onChange={(e) => {
                       dispatch(updateCampaignAriaLabel(e.target.value));
-                      dispatch(setSettingsUpdated(accValue.aria_label !== e.target.value));
+                      dispatch(
+                        setSettingsUpdated(
+                          accValue.aria_label !== e.target.value
+                        )
+                      );
                     }}
                   />
                 </OverlayTrigger>
@@ -297,12 +326,15 @@ export default function UTMCampaignAccordian(): JSX.Element {
                   <Form.Control
                     className={darkClass}
                     type="text"
+                    disabled={session.license_type !== "enterprise"}
                     id={`${valKind}-error`}
                     placeholder={`Enter ${valKind} field error text`}
                     value={accValue.error}
                     onChange={(e) => {
                       dispatch(updateCampaignError(e.target.value));
-                      dispatch(setSettingsUpdated(accValue.error !== e.target.value));
+                      dispatch(
+                        setSettingsUpdated(accValue.error !== e.target.value)
+                      );
                     }}
                   />
                 </OverlayTrigger>
@@ -318,12 +350,17 @@ export default function UTMCampaignAccordian(): JSX.Element {
                     <div className="col10">
                       <Checker
                         cState={accValue.is_chooser}
-                        disabled={false}
+                        disabled={
+                          session.license_type === "free" ||
+                          session.license_type === "basic"
+                        }
                         label=""
                         tooltip={`Use a chooser to create a pre-defined list of allowed values for ${valKind}`}
                         callback={(value) => {
                           dispatch(updateCampaignIsChooser(value));
-                          dispatch(setSettingsUpdated(accValue.is_chooser !== value));
+                          dispatch(
+                            setSettingsUpdated(accValue.is_chooser !== value)
+                          );
                         }}
                       />
                     </div>
@@ -336,12 +373,17 @@ export default function UTMCampaignAccordian(): JSX.Element {
                     <div className="col10">
                       <Checker
                         cState={!accValue.is_chooser}
-                        disabled={false}
+                        disabled={
+                          session.license_type === "free" ||
+                          session.license_type === "basic"
+                        }
                         label=""
                         tooltip={`Use a Text Field to allow the user to enter any value for ${valKind}`}
                         callback={(value) => {
                           dispatch(updateCampaignIsChooser(!value));
-                          dispatch(setSettingsUpdated(accValue.is_chooser !== !value));
+                          dispatch(
+                            setSettingsUpdated(accValue.is_chooser !== !value)
+                          );
                         }}
                       />
                     </div>
@@ -378,6 +420,10 @@ export default function UTMCampaignAccordian(): JSX.Element {
                     >
                       <Form.Control
                         className={darkClass}
+                        disabled={
+                          session.license_type === "free" ||
+                          session.license_type === "basic"
+                        }
                         type="text"
                         placeholder="Enter comma-separated list of key=value pairs to use"
                         value={kvValue || ""}

@@ -30,6 +30,8 @@ import mainReducer from '../reducers/main/mainSlice';
 import sessionReducer from '../reducers/session/sessionSlice';
 import loginReducer from '../reducers/session/loginSlice';
 import userFrontReducer from '../reducers/session/userFrontSlice';
+import userReducer from '../reducers/user/userSlice';
+import licenseReducer from '../reducers/licensing/licenseSlice';
 
 export const mainStore = configureStore({
   reducer: {
@@ -42,6 +44,8 @@ export const mainStore = configureStore({
     session: sessionReducer,
     login: loginReducer,
     userFront: userFrontReducer,
+    userSettings: userReducer,
+    license: licenseReducer,
   },
 });
 

@@ -25,7 +25,6 @@ import { JSX } from "react";
 import { OverlayTrigger, Tooltip } from "react-bootstrap";
 import ReactId from "../../utils/ReactId";
 import { RootState } from "../../stores/store";
-import store from "store2";
 import { useAppSelector } from "../../stores/hooks";
 
 interface ICallback {

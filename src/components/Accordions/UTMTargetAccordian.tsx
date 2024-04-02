@@ -25,7 +25,6 @@ import { Accordion, Form, OverlayTrigger, Tooltip } from "react-bootstrap";
 import { UtmKeyValue, UtmObj } from "../../types";
 import Checker from "../buttons/Checker";
 import { RootState } from "../../stores/store";
-import { useDispatch } from "react-redux";
 import {
   updateTargetLabel,
   updateTargetValue,
@@ -37,13 +36,13 @@ import {
   updateTargetUseValue,
 } from "../../reducers/utm/utmSlice";
 import PillArea from "../pills/PillArea";
-import store from "store2";
-import { useAppSelector } from "../../stores/hooks";
+import { useAppDispatch, useAppSelector } from "../../stores/hooks";
 import { setSettingsUpdated } from "../../reducers/session/loginSlice";
 
 export default function UTMTargetAccordian(): JSX.Element {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const dark = useAppSelector((state: RootState) => state.main.settings.dark);
+  const session = useAppSelector((state: RootState) => state.license.settings);
   const darkClass = dark ? "header-stuff-dark" : "header-stuff";
   const valKind: string = "utm_target";
   const itemNo: string = "0";
@@ -55,7 +54,9 @@ export default function UTMTargetAccordian(): JSX.Element {
   const [valValid, setValValid] = useState<boolean>(true);
 
   const [fieldValue, setFieldValue] = useState<string>(
-    accValue.show_name ? `${accValue?.label} (${valKind})` : `${accValue.label}`
+    accValue?.show_name
+      ? `${accValue?.label} (${valKind})`
+      : `${accValue?.label}`
   );
 
   const updateFieldValue = (eventKey: SyntheticEvent) => {
@@ -63,7 +64,7 @@ export default function UTMTargetAccordian(): JSX.Element {
     const v = target.value;
     if (v.indexOf(`(${valKind})`) !== -1) {
       setFieldValue(v);
-    } else if (accValue.show_name) {
+    } else if (accValue?.show_name) {
       setFieldValue(`${v} (${valKind})`);
     } else {
       setFieldValue(v);
@@ -126,6 +127,23 @@ export default function UTMTargetAccordian(): JSX.Element {
       >
         <Accordion.Header className={darkClass}>
           <strong>{type}</strong>
+          <span style={{ marginTop: ".5rem" }}>
+            {session.license_type === "free" ? (
+              <OverlayTrigger
+                placement="auto"
+                delay={{ show: 250, hide: 300 }}
+                overlay={
+                  <Tooltip id="brand-tooltip">
+                    QR Code Settings for paid Customers only.
+                  </Tooltip>
+                }
+              >
+                <i className="bi bi-ban" style={{ color: "red" }}></i>
+              </OverlayTrigger>
+            ) : (
+              ""
+            )}
+          </span>
         </Accordion.Header>
       </OverlayTrigger>
       <Accordion.Body id={type}>
@@ -138,17 +156,17 @@ export default function UTMTargetAccordian(): JSX.Element {
             </div>
             <div className="col10">
               <Checker
-                cState={accValue.use_value}
-                disabled={false}
+                cState={accValue?.use_value}
+                disabled={session.license_type === "free"}
                 label=""
                 tooltip={
-                  accValue.use_value
+                  accValue?.use_value
                     ? `Uncheck to not the use the '${valKind}' value`
                     : `Check to use the '${valKind}' value`
                 }
                 callback={(value) => {
                   dispatch(updateTargetUseValue(value));
-                  dispatch(setSettingsUpdated(accValue.use_value !== value));
+                  dispatch(setSettingsUpdated(accValue?.use_value !== value));
                 }}
               />
             </div>
@@ -175,6 +193,7 @@ export default function UTMTargetAccordian(): JSX.Element {
                 >
                   <Form.Control
                     className={darkClass}
+                    disabled={session.license_type !== "enterprise"}
                     type="text"
                     width="100%"
                     id={`${valKind}-label`}
@@ -188,18 +207,18 @@ export default function UTMTargetAccordian(): JSX.Element {
               <div className="fullrow">
                 <div className="col30">
                   <Form.Label className={darkClass}>
-                    {accValue.show_name
+                    {accValue?.show_name
                       ? `Hide '${type}' in Field Label?`
                       : `Show '${type}' in Field Label`}
                   </Form.Label>
                 </div>
                 <div className="col10">
                   <Checker
-                    cState={accValue.show_name ? accValue.show_name : false}
-                    disabled={false}
+                    cState={accValue?.show_name ? accValue?.show_name : false}
+                    disabled={session.license_type !== "enterprise"}
                     label=""
                     tooltip={
-                      accValue.show_name
+                      accValue?.show_name
                         ? "Uncheck to hide the field name in the field label"
                         : "Check to show the field name in the field label"
                     }
@@ -235,12 +254,15 @@ export default function UTMTargetAccordian(): JSX.Element {
                   <Form.Control
                     className={darkClass}
                     type="text"
+                    disabled={session.license_type !== "enterprise"}
                     id={`${valKind}-tooltip`}
                     placeholder={`Enter ${valKind} field tooltip`}
-                    value={accValue.tooltip ? accValue.tooltip : ""}
+                    value={accValue?.tooltip ? accValue?.tooltip : ""}
                     onChange={(e) => {
                       dispatch(updateTargetTooltip(e.target.value));
-                      dispatch(setSettingsUpdated(accValue.tooltip !== e.target.value));
+                      dispatch(
+                        setSettingsUpdated(accValue?.tooltip !== e.target.value)
+                      );
                     }}
                   />
                 </OverlayTrigger>
@@ -266,13 +288,18 @@ export default function UTMTargetAccordian(): JSX.Element {
                   <Form.Control
                     className={darkClass}
                     type="text"
+                    disabled={session.license_type !== "enterprise"}
                     id={`${valKind}-aria`}
                     placeholder={`Enter ${valKind} field ARIA (Accessibility) label`}
                     required
-                    value={accValue.aria_label}
+                    value={accValue?.aria_label}
                     onChange={(e) => {
                       dispatch(updateTargetAriaLabel(e.target.value));
-                      dispatch(setSettingsUpdated(accValue.aria_label !== e.target.value));
+                      dispatch(
+                        setSettingsUpdated(
+                          accValue?.aria_label !== e.target.value
+                        )
+                      );
                     }}
                   />
                 </OverlayTrigger>
@@ -297,12 +324,15 @@ export default function UTMTargetAccordian(): JSX.Element {
                   <Form.Control
                     className={darkClass}
                     type="text"
+                    disabled={session.license_type !== "enterprise"}
                     id={`${valKind}-error`}
                     placeholder={`Enter ${valKind} field error text`}
-                    value={accValue.error}
+                    value={accValue?.error}
                     onChange={(e) => {
                       dispatch(updateTargetError(e.target.value));
-                      dispatch(setSettingsUpdated(accValue.error !== e.target.value));
+                      dispatch(
+                        setSettingsUpdated(accValue?.error !== e.target.value)
+                      );
                     }}
                   />
                 </OverlayTrigger>
@@ -316,13 +346,18 @@ export default function UTMTargetAccordian(): JSX.Element {
                     </div>
                     <div className="col10">
                       <Checker
-                        cState={accValue.is_chooser}
-                        disabled={false}
+                        cState={accValue?.is_chooser}
+                        disabled={
+                          session.license_type === "free" ||
+                          session.license_type === "basic"
+                        }
                         label=""
                         tooltip={`Use a chooser to create a pre-defined list of allowed values for ${valKind}`}
                         callback={(value) => {
                           dispatch(updateTargetIsChooser(value));
-                          dispatch(setSettingsUpdated(accValue.is_chooser !== value));
+                          dispatch(
+                            setSettingsUpdated(accValue?.is_chooser !== value)
+                          );
                         }}
                       />
                     </div>
@@ -334,13 +369,18 @@ export default function UTMTargetAccordian(): JSX.Element {
                     </div>
                     <div className="col10">
                       <Checker
-                        cState={!accValue.is_chooser}
-                        disabled={false}
+                        cState={!accValue?.is_chooser}
+                        disabled={
+                          session.license_type === "free" ||
+                          session.license_type === "basic"
+                        }
                         label=""
                         tooltip={`Use a Text Field to allow the user to enter any value for ${valKind}`}
                         callback={(value) => {
                           dispatch(updateTargetIsChooser(!value));
-                          dispatch(setSettingsUpdated(accValue.is_chooser !== !value));
+                          dispatch(
+                            setSettingsUpdated(accValue?.is_chooser !== !value)
+                          );
                         }}
                       />
                     </div>
@@ -357,7 +397,7 @@ export default function UTMTargetAccordian(): JSX.Element {
                 )} */}
               </div>
               {/* item Values */}
-              {accValue.is_chooser && (
+              {accValue?.is_chooser && (
                 <>
                   <div className="fullrow">
                     <Form.Label className={darkClass}>
@@ -386,6 +426,10 @@ export default function UTMTargetAccordian(): JSX.Element {
                         onChange={(eventKey) => {
                           addPill(eventKey);
                         }}
+                        disabled={
+                          session.license_type === "free" ||
+                          session.license_type === "basic"
+                        }
                       />
                     </OverlayTrigger>
                     <Form.Control.Feedback type="invalid">
@@ -395,8 +439,8 @@ export default function UTMTargetAccordian(): JSX.Element {
                   <div className="fullrow">
                     <PillArea
                       pills={
-                        accValue.value
-                          ? (accValue.value as UtmKeyValue[])
+                        accValue?.value
+                          ? (accValue?.value as UtmKeyValue[])
                           : ([] as UtmKeyValue[])
                       }
                       type={valKind}

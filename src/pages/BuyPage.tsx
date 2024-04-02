@@ -22,11 +22,12 @@ process.env.NODE_ENV = "development";
  * SOFTWARE.
  */
 
+import Footer from "../components/Footer";
 import { PricingTable } from "../components/StripePricing";
 export default function BuyPage() {
-  
+
   return (
-    <div
+    <><div
       className={`main-column`}
       style={{
         backgroundColor: "#131518",
@@ -37,6 +38,6 @@ export default function BuyPage() {
       }}
     >
       <PricingTable />
-    </div>
+    </div><Footer /></>
   );
 }

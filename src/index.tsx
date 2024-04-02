@@ -33,12 +33,15 @@ import Login from "./pages/Login";
 import MainPage from "./pages/MainPage";
 import PricingPage from "./pages/PricingPage";
 import Privacy from "./pages/Privacy";
-import RegisterPage from "./pages/RegisterPage";
 import TermsOfService from "./pages/TermsOfService";
 import WelcomePage from "./pages/WelcomePage";
 import ErrorPage from "./ErrorPage";
 import { loader as rootLoader } from "./App";
 import FAQPage from "./pages/FAQ";
+import MyAccount from "./pages/MyAccount";
+import PayFailPage from "./pages/PaymentPages/PayFailPage";
+import PaySuccessPage from "./pages/PaymentPages/PaySuccessPage";
+import UserGuide from "./pages/UserGuide";
 
 const router = createBrowserRouter([
   {
@@ -72,8 +75,24 @@ const router = createBrowserRouter([
         element: <FAQPage />,
       },
       {
+        path: "guide",
+        element: <UserGuide />,
+      },
+      {
         path: "login",
         element: <Login />,
+      },
+      {
+        path: "myAccount",
+        element: <MyAccount />,
+      },
+      {
+        path: "payment-failed",
+        element: <PayFailPage />,
+      },
+      {
+        path: "payment-success",
+        element: <PaySuccessPage />,
       },
       {
         path: "pricing",
@@ -82,10 +101,6 @@ const router = createBrowserRouter([
       {
         path: "privacy",
         element: <Privacy />,
-      },
-      {
-        path: "register",
-        element: <RegisterPage />,
       },
       {
         path: "tos",

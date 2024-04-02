@@ -116,62 +116,11 @@ export type SessionProps = {
   email: string;
   license_type: string;
   expiry_date?: string | Date;
+  license_token?: string;
+  updated_at?: Date | undefined;
 };
 
-/*
-{
-    "mode": "test",
-    "userId": 11,
-    "userUuid": "a484eafa-c95a-4c02-b97d-2afb3ff0cd24",
-    "username": "tweety_bird",
-    "email": "tweety@bird.com",
-    "name": "Tweety Bird",
-    "image": "https://res.cloudinary.com/component/image/upload/avatars/avatar-plain-4.png",
-    "phoneNumber": null,
-    "data": {},
-    "locked": false,
-    "isMfaRequired": false,
-    "preferredFirstFactor": {
-        "channel": "email",
-        "strategy": "password"
-    },
-    "preferredSecondFactor": {
-        "channel": "authenticator",
-        "strategy": "totp"
-    },
-    "isEmailConfirmed": false,
-    "isPhoneNumberConfirmed": false,
-    "lastActiveAt": "2024-03-12T18:14:38.553Z",
-    "createdAt": "2024-03-04T18:43:37.776Z",
-    "updatedAt": "2024-03-04T18:43:37.776Z",
-    "tenant": {
-        "tenantId": "xbp876mb",
-        "name": "qr-builder (test)",
-        "image": "https://res.cloudinary.com/component/image/upload/avatars/icon-26.png",
-        "loginRedirectPath": "",
-        "logoutRedirectPath": "/login"
-    },
-    "authorization": {},
-    "tenantId": "xbp876mb",
-    "isConfirmed": false,
-    "uuid": "a484eafa-c95a-4c02-b97d-2afb3ff0cd24",
-    "authentication": {
-        "firstFactors": [
-            {
-                "channel": "email",
-                "strategy": "password"
-            },
-            {
-                "channel": "email",
-                "strategy": "link"
-            }
-        ],
-        "secondFactors": []
-    },
-    "chatHmac": "50f1a385709bb3cf3b3f27d7e628afc28138ddc3bf1a82f3444b181e0526d44b",
-    "requestParams": {}
-}
-*/
+
 export type UserfrontProps = {
   mode: string,
   userId: number,
@@ -225,7 +174,25 @@ export type UserfrontProps = {
   requestParams: {}
 }
 
+export type LicenseProps = {
+  cust_id: string;
+  license_type: string;
+  license_key: string;
+  active: boolean;
+  confirmed: boolean;
+  expire_date: Date;
+  license_status: string;
+}
 
+export const defaultLicense: LicenseProps = {
+  cust_id: '',
+  license_type: 'free',
+  license_key: '',
+  active: false,
+  confirmed: false,
+  expire_date: new Date(),
+  license_status: 'no license',
+};
 
 export const defaultSession: SessionProps = {
   id: 0,
@@ -236,8 +203,10 @@ export const defaultSession: SessionProps = {
   organization: '',
   active: false,
   email: '',
-  license_type: 'enterprise',
+  license_type: 'pro',
   expiry_date: new Date().toDateString(),
+  license_token: '',
+  updated_at: undefined,
 };
 
 export const defaultBitlyConfig: BitlyConfig = {
@@ -386,6 +355,24 @@ export const defaultUTMParams: UtmParams = {
 //   XParent: boolean;
 // };
 
+export type UserSettings = {
+  login: string;
+  stripe_id: string;
+  userfront_id: string;
+  first_name: string;
+  last_name: string;
+  created_at: string;
+  organization: string;
+  address: string;
+  city: string;
+  state: string;
+  zip: string;
+  active: boolean;
+  confirmed: boolean;
+  email: string;
+  updated_at?: Date | undefined;
+}
+
 export type MainSettings = {
   brandImage?: string;
   brandHeight: number;
@@ -513,6 +500,23 @@ export const defaultWiFiSettings: WiFiSettings = {
   },
 };
 
+export const defaultUserSettings: UserSettings = {
+  login: '',
+  stripe_id: '',
+  userfront_id: '',
+  first_name: '',
+  last_name: '',
+  created_at: '',
+  organization: '',
+  address: '',
+  city: '',
+  state: '',
+  zip: '',
+  active: false,
+  confirmed: false,
+  email: '',
+  updated_at: undefined,
+};
 export const DefaultQRStyle: QProps = {
   value: 'https://www.example.com/',
   ecLevel: 'H',

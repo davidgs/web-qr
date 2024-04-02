@@ -30,7 +30,6 @@ import { RootState } from "../stores/store";
 import ReactId from "../utils/ReactId";
 import "../css/QRForm.css";
 import { useAppSelector } from "../stores/hooks";
-import { RGBColor } from "react-color";
 
 export default function QCode() {
   const [copied, setCopied] = useState<boolean>(false);
@@ -82,43 +81,7 @@ export default function QCode() {
     a.click();
   };
 
-  const rgbFromString = (rgb: string): RGBColor => {
-    const sep = rgb.indexOf(",") > -1 ? "," : " ";
-    const rgbArray = rgb
-      .substr(4)
-      .split(")")[0]
-      .split(sep);
-    return {
-      r: parseInt(rgbArray[0], 10),
-      g: parseInt(rgbArray[1], 10),
-      b: parseInt(rgbArray[2], 10),
-      a: 1,
-    };
-  }
-  const rgbsToHex = (rgb: string): string => {
-    const sep = rgb.indexOf(",") > -1 ? "," : " ";
-    const rgbArray = rgb
-      .substr(4)
-      .split(")")[0]
-      .split(sep);
-    let r = parseInt(rgbArray[0], 10).toString(16);
-    let g = parseInt(rgbArray[1], 10).toString(16);
-    let b = parseInt(rgbArray[2], 10).toString(16);
 
-    if (r.length === 1) r = `0${r}`;
-    if (g.length === 1) g = `0${g}`;
-    if (b.length === 1) b = `0${b}`;
-
-    return `#${r}${g}${b}`;
-  }
-  const stringToColor = (str: string): string => {
-    let hash = 0;
-    for (let i = 0; i < str.length; i += 1) {
-      hash = str.charCodeAt(i) + ((hash << 5) - hash);
-    }
-    const c = (hash & 0x00ffffff).toString(16).toUpperCase();
-    return `#${"00000".substring(0, 6 - c.length)}${c}`;
-  }
   /**
    * Copy link to the clipboard and change the icon to a checkmark
    * */

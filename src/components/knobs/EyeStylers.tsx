@@ -22,18 +22,18 @@
  */
 import { OverlayTrigger, Tooltip } from "react-bootstrap";
 import { RootState } from "../../stores/store";
-import { useDispatch } from "react-redux";
 import { updateEyeRadius } from "../../reducers/qr/qrCodeSettingsSlice";
 import { CornerRadii } from "../../types";
 import AdjusterKnob from "./AdjusterKnob";
 import "../../css/EyeStylers.css";
 import "../../css/MainConfig.css";
-import { useAppSelector } from "../../stores/hooks";
+import { useAppDispatch, useAppSelector } from "../../stores/hooks";
 import { setSettingsUpdated } from "../../reducers/session/loginSlice";
 
 export default function EyeStylers() {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const qConfig = useAppSelector((state: RootState) => state.qrCode);
+  const session = useAppSelector((state: RootState) => state.license.settings);
   /* Update properties when eye-radius values change */
   const handleEyeRadiusChange = (e: number, index: number, corner: number) => {
     const value = e;
@@ -67,7 +67,6 @@ export default function EyeStylers() {
     }
   };
 
-
   return (
     <div className="eye-styler">
       {/* Top Left & right knobs */}
@@ -76,9 +75,15 @@ export default function EyeStylers() {
           placement="auto"
           delay={{ show: 250, hide: 300 }}
           overlay={
-            <Tooltip id="qr-tooltip">
-              Adjust the shape of each corner of the upper-left eye component
-            </Tooltip>
+            session.license_type !== "free" ? (
+              <Tooltip id="qr-tooltip">
+                Adjust the shape of each corner of the upper-left eye component
+              </Tooltip>
+            ) : (
+              <Tooltip id="qr-tooltip">
+                Eye Shape changes are only available with a paid subscription
+              </Tooltip>
+            )
           }
         >
           <div className="styler-column">
@@ -92,7 +97,7 @@ export default function EyeStylers() {
                   min={0}
                   max={50}
                   step={1}
-                  disabled={false}
+                  disabled={session.license_type === "free"}
                   callback={(value) => {
                     handleEyeRadiusChange(value, 0, 0);
                   }}
@@ -107,7 +112,7 @@ export default function EyeStylers() {
                   min={0}
                   max={50}
                   step={1}
-                  disabled={false}
+                  disabled={session.license_type === "free"}
                   callback={(value) => {
                     handleEyeRadiusChange(value, 0, 1);
                   }}
@@ -123,7 +128,7 @@ export default function EyeStylers() {
                   min={0}
                   max={50}
                   step={1}
-                  disabled={false}
+                  disabled={session.license_type === "free"}
                   callback={(value) => {
                     handleEyeRadiusChange(value, 0, 3);
                   }}
@@ -138,7 +143,7 @@ export default function EyeStylers() {
                   min={0}
                   max={50}
                   step={1}
-                  disabled={false}
+                  disabled={session.license_type === "free"}
                   callback={(value) => {
                     handleEyeRadiusChange(value, 0, 2);
                   }}
@@ -153,9 +158,15 @@ export default function EyeStylers() {
           placement="auto"
           delay={{ show: 250, hide: 300 }}
           overlay={
-            <Tooltip id="qr-tooltip">
-              Adjust the shape of each corner of the upper-right eye component
-            </Tooltip>
+            session.license_type !== "free" ? (
+              <Tooltip id="qr-tooltip">
+                Adjust the shape of each corner of the upper-right eye component
+              </Tooltip>
+            ) : (
+              <Tooltip id="qr-tooltip">
+                Eye Shape changes are only available with a paid subscription
+              </Tooltip>
+            )
           }
         >
           <div className="styler-column">
@@ -168,7 +179,7 @@ export default function EyeStylers() {
                   min={0}
                   max={50}
                   step={1}
-                  disabled={false}
+                  disabled={session.license_type === "free"}
                   callback={(value) => {
                     handleEyeRadiusChange(value, 1, 0);
                   }}
@@ -182,7 +193,7 @@ export default function EyeStylers() {
                   min={0}
                   max={50}
                   step={1}
-                  disabled={false}
+                  disabled={session.license_type === "free"}
                   callback={(value) => {
                     handleEyeRadiusChange(value, 1, 1);
                   }}
@@ -197,7 +208,7 @@ export default function EyeStylers() {
                   min={0}
                   max={50}
                   step={1}
-                  disabled={false}
+                  disabled={session.license_type === "free"}
                   callback={(value) => {
                     handleEyeRadiusChange(value, 1, 3);
                   }}
@@ -211,7 +222,7 @@ export default function EyeStylers() {
                   min={0}
                   max={50}
                   step={1}
-                  disabled={false}
+                  disabled={session.license_type === "free"}
                   callback={(value) => {
                     handleEyeRadiusChange(value, 1, 2);
                   }}
@@ -227,9 +238,15 @@ export default function EyeStylers() {
           placement="auto"
           delay={{ show: 250, hide: 300 }}
           overlay={
-            <Tooltip id="qr-tooltip">
-              Adjust the shape of each corner of the lower-left eye component
-            </Tooltip>
+            session.license_type !== "free" ? (
+              <Tooltip id="qr-tooltip">
+                Adjust the shape of each corner of the lower-left eye component
+              </Tooltip>
+            ) : (
+              <Tooltip id="qr-tooltip">
+                Eye Shape changes are only available with a paid subscription
+              </Tooltip>
+            )
           }
         >
           <div className="styler-column">
@@ -242,7 +259,7 @@ export default function EyeStylers() {
                   min={0}
                   max={50}
                   step={1}
-                  disabled={false}
+                  disabled={session.license_type === "free"}
                   callback={(value) => {
                     handleEyeRadiusChange(value, 2, 0);
                   }}
@@ -256,7 +273,7 @@ export default function EyeStylers() {
                   min={0}
                   max={50}
                   step={1}
-                  disabled={false}
+                  disabled={session.license_type === "free"}
                   callback={(value) => {
                     handleEyeRadiusChange(value, 2, 1);
                   }}
@@ -271,7 +288,7 @@ export default function EyeStylers() {
                   min={0}
                   max={50}
                   step={1}
-                  disabled={false}
+                  disabled={session.license_type === "free"}
                   callback={(value) => {
                     handleEyeRadiusChange(value, 2, 3);
                   }}
@@ -281,11 +298,11 @@ export default function EyeStylers() {
               <div className="eye-color-adjuster">
                 <AdjusterKnob
                   name="eyeRadius-2-2"
-                  value={qConfig?.settings?.eyeRadius[2][2] || 0 }
+                  value={qConfig?.settings?.eyeRadius[2][2] || 0}
                   min={0}
                   max={50}
                   step={1}
-                  disabled={false}
+                  disabled={session.license_type === "free"}
                   callback={(value) => {
                     handleEyeRadiusChange(value, 2, 2);
                   }}

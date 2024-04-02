@@ -1,0 +1,6 @@
+
+@media (width < 48em) {
+  .footer {
+    display: none;
+  }
+}

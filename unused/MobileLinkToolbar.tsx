@@ -23,7 +23,7 @@
  */
 import { JSX } from "react";
 import { OverlayTrigger, Tooltip, Button } from "react-bootstrap";
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 import { SaveFill, Save, XCircleFill, XCircle } from "react-bootstrap-icons";
 import store from "store2";
 import BitlyCheck from "../src/components/buttons/BitlyCheck";
@@ -41,12 +41,13 @@ import { updateQRValue } from "../src/reducers/qr/qrCodeSettingsSlice";
 import QRConfigButton from "./QRConfigButton";
 import DownloadButton from "../src/components/buttons/DownloadButton";
 import FormChooser from "../src/components/choosers/FormChooser";
+import { useAppDispatch, useAppSelector } from "../src/stores/hooks";
 
 export default function MobileLinkToolbar(): JSX.Element {
-  const dispatch = useDispatch();
-  const dark = useSelector((state: RootState) => state.main.dark);
+  const dispatch = useAppDispatch();
+  const dark = useSelector((state: RootState) => state.main.settings.dark);
   const darkClass = dark ? "header-stuff-dark" : "header-stuff";
-  const mainSet = useSelector((state: RootState) => state.main?.settings);
+  const mainSet = useAppSelector((state: RootState) => state.main?.settings);
   const useBitly = useSelector(
     (state: RootState) => state.bitly?.settings?.use_value
   );

@@ -91,24 +91,9 @@ export const fetchUserfront = createAsyncThunk('userfront/fetchUserfront', async
       }
     });
   return l;
-  // const session = fetch("https://api.userfront.com/v0/self", {
-  //   method: "GET",
-  //   headers: {
-  //     "Content-Type": "application/json",
-  //     Authorization: `Bearer ${Userfront.tokens.accessToken}`,
-  //   },
-  // })
-  //   .then((res) => res.json())
-  //   .then((data) => {
-  //     console.log("data", data);
-  //     return data;
-  //   })
-  //   .catch((err) => {
-  //     console.error("getting userfront user error", err);
-  //     return null;
-  //   });
-  // return session;
 });
+
+
 
 export const userFrontSlice = createSlice({
   name: 'userFront',

@@ -25,7 +25,6 @@ import Form from "react-bootstrap/Form";
 import { FloatingLabel, OverlayTrigger, Tooltip } from "react-bootstrap";
 import { RootState } from "../../stores/store";
 import { UtmObj, UtmKeyValue } from "../../types";
-import store from "store2";
 import { useAppSelector } from "../../stores/hooks";
 
 interface UTMChoiceProps {

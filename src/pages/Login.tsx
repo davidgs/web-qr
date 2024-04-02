@@ -1,16 +1,40 @@
+
+/* The MIT License (MIT)
+ *
+ * Copyright (c) 2022-present David G. Simmons
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ */
 import { InputGroup, Form, Button } from "react-bootstrap";
 import Logo from "../images/NewLinkerLogo.png";
-import { useDispatch } from "react-redux";
 import { RootState } from "../stores/store";
 import "../css/MainConfig.css";
 import "../css/AccountModal.css";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import Userfront from "@userfront/core";
 import { setLogin } from "../reducers/session/loginSlice";
-import { useAppSelector } from "../stores/hooks";
+import { useAppDispatch, useAppSelector } from "../stores/hooks";
+import ResetPassword from "../components/Modals/PasswordReset";
+import Footer from "../components/Footer";
 
 export default function Login() {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const dark = useAppSelector((state: RootState) => state.main.settings.dark);
 
   const darkClass: string = dark ? "header-stuff-dark" : "header-stuff";
@@ -20,8 +44,13 @@ export default function Login() {
   const [showPass, setShowPass] = useState<boolean>(false);
   const [showError, setShowError] = useState<boolean>(false);
   const [errorText, setErrorText] = useState<string>("");
+  const [showMe, setShowMe] = useState(false);
+
   Userfront.init("xbp876mb");
 
+  const toggleModal = (show: boolean) => {
+    setShowMe(show);
+  };
   const toggle = () => {
     setShowPass(!showPass);
   };
@@ -34,14 +63,8 @@ export default function Login() {
     }
   };
 
-  useEffect(() => {
-    console.log("logged in: ", loggedIn);
-  }, [loggedIn]);
-
   const tryLogin = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log(`userName`, userName);
-    console.log(`password`, password);
     Userfront.login({
       method: "password",
       username: userName,
@@ -59,7 +82,7 @@ export default function Login() {
   };
 
   return (
-    <div className="main-column">
+    <><div className="main-column">
       <div className="fullrow">
         <div style={{ margin: "auto", textAlign: "center" }}>
           <h1>
@@ -85,8 +108,7 @@ export default function Login() {
                       type="text"
                       id="username"
                       value={userName}
-                      onChange={valueChanged}
-                    />
+                      onChange={valueChanged} />
                   </div>
                 </div>
               </div>
@@ -108,8 +130,7 @@ export default function Login() {
                           borderBottomRightRadius: "0px",
                         }}
                         value={password}
-                        onChange={valueChanged}
-                      />
+                        onChange={valueChanged} />
                       <InputGroup.Text
                         onClick={toggle}
                         style={{
@@ -143,13 +164,25 @@ export default function Login() {
                 </div>
               )}
             </Form.Group>
-            <Button
-              variant="primary"
-              type="submit"
-              disabled={userName === "" || password === ""}
-            >
-              Login
-            </Button>
+            <div className="fullrow" style={{ justifyContent: "right" }}>
+              <div className="col70" />
+              <div className="col15">
+                <Button
+                  variant="primary"
+                  type="submit"
+                  disabled={userName === "" || password === ""}
+                >
+                  Login
+                </Button>
+              </div>
+              <div className="col10" />
+              <div className="col25">
+                <Button variant="secondary" onClick={(e) => {
+                  console.log(`showMe`, showMe);
+                  setShowMe(true);
+                } }>Forgot Password</Button>
+              </div>
+            </div>
           </Form>
           <div className="fullrow">
             <p></p>
@@ -173,6 +206,8 @@ export default function Login() {
           </div>
         </>
       )}
-    </div>
+      <Footer />
+      <ResetPassword show={showMe} callback={toggleModal} />
+    </div></>
   );
 }

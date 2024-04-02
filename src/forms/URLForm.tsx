@@ -24,17 +24,16 @@
 import { InputGroup } from "react-bootstrap";
 import { useEffect } from "react";
 import { makeLongLink } from "../utils/LongLink";
-import { useDispatch } from "react-redux";
 import { RootState } from "../stores/store";
 import { updateQRValue } from "../reducers/qr/qrCodeSettingsSlice";
 import { setActiveLink } from "../reducers/history/historySlice";
 import UTMTextField from "../components/UTMTextField";
 import UTMChoice from "../components/choosers/UTMChoice";
 import "../css/URLForm.css";
-import { useAppSelector } from "../stores/hooks";
+import { useAppDispatch, useAppSelector } from "../stores/hooks";
 
 export default function URLForm() {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const mainConfig = useAppSelector((state: RootState) => state.main.settings);
   const utmTarget = useAppSelector(
     (state: RootState) => state.utmConfigs.settings.utm_target

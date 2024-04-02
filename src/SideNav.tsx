@@ -23,18 +23,15 @@
  * SOFTWARE.
  */
 import "./css/hyde.css";
-import store from "store2";
-import { useDispatch } from "react-redux";
 import Logo from "./images/NewLinkerLogo.png";
 import { RootState } from "./stores/store";
 import { updateDark, updateMainSettings } from "./reducers/main/mainSlice";
-import { SessionResponse } from "@userfront/core";
 import Userfront from "@userfront/core";
 import axios from "axios";
-import { setLogin } from "./reducers/session/loginSlice";
+import { logoutUserFront, setLogin } from "./reducers/session/loginSlice";
 import { Link } from "react-router-dom";
 import { useEffect } from "react";
-import { useAppSelector } from "./stores/hooks";
+import { useAppDispatch, useAppSelector } from "./stores/hooks";
 import { settingsServer } from "./types";
 
 export default function SideNav() {
@@ -46,7 +43,7 @@ export default function SideNav() {
   const username = useAppSelector(
     (state: RootState) => state.userFront.settings.username
   );
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   // const [editConfig, setEditConfig] = useState(false);
   const mainSet = useAppSelector((state: RootState) => state.main);
   Userfront.init("xbp876mb");
@@ -58,15 +55,17 @@ export default function SideNav() {
     const d = !dark;
     const newSet = { ...mainSet, dark: d };
     const payload = { username: username, settings: newSet };
-    axios
-      .post(`${settingsServer}update-main-settings`, payload)
-      .then((res) => {
-        console.log(`res`, res);
-        dispatch(updateMainSettings(res.data.main_settings));
-      })
-      .catch((err) => {
-        console.log(`err`, err);
-      });
+    if (loggedIn) {
+      axios
+        .post(`${settingsServer}update-main-settings`, payload)
+        .then((res) => {
+          console.log(`res`, res);
+          dispatch(updateMainSettings(res.data.main_settings));
+        })
+        .catch((err) => {
+          console.log(`err`, err);
+        });
+    }
     dispatch(updateDark(d));
   };
 
@@ -77,21 +76,31 @@ export default function SideNav() {
    * Logout the user
    */
   const logout = () => {
-    Userfront.logout();
-    Userfront.getSession()
-      .then((session: SessionResponse) => {
-        if (session) {
-          console.log(`session`, session.isLoggedIn);
-          dispatch(setLogin(session.isLoggedIn));
-          return true;
-        } else {
-          return false;
-        }
-      })
-      .catch((err) => {
-        console.log(`err`, err);
-        return false;
-      });
+    dispatch(logoutUserFront());
+    dispatch(setLogin(false));
+    // await Userfront.logout()
+    //   .then(() => {
+    //     console.log(`Logged out`);
+    //     dispatch(setLogin(false));
+    //   })
+    //   .catch((err) => {
+    //     console.log(`err`, err);
+    //   });
+    // console.log(`Logged out ... `);
+    // Userfront.getSession()
+    //   .then((session: SessionResponse) => {
+    //     if (session) {
+    //       console.log(`session`, session.isLoggedIn);
+    //       dispatch(setLogin(session.isLoggedIn));
+    //       return true;
+    //     } else {
+    //       return false;
+    //     }
+    //   })
+    //   .catch((err) => {
+    //     console.log(`err`, err);
+    //     return false;
+    //   });
   };
 
   return (
@@ -133,15 +142,9 @@ export default function SideNav() {
             </span>
             {/* </a> */}
           </li>
-          {/* <li className="has-subnav">
-            <a href="/register">
-              <i className="bi bi-person-add bi-2x"></i>
-              <span className="nav-text">Create Account</span>
-            </a>
-          </li> */}
           <li>
             <Link to="/pricing">
-              <i className="bi bi-bag bi-2x"></i>
+              <i className="bi bi-credit-card-fill bi-2x"></i>
               <span className="nav-text">Purchase</span>
             </Link>
           </li>
@@ -149,6 +152,12 @@ export default function SideNav() {
             <Link to="/config">
               <i className="fa fa-cogs fa-2x"></i>
               <span className="nav-text">Configuration & Settings</span>
+            </Link>
+          </li>
+          <li>
+            <Link to="/guide">
+              <i className="bi bi-book-half bi-2x"></i>
+              <span className="nav-text">Docs</span>
             </Link>
           </li>
           <li>
@@ -183,6 +192,16 @@ export default function SideNav() {
           </li>
           <li>
             {loggedIn ? (
+              <Link to="/myAccount">
+                <i className="bi bi-person bi-2x"></i>
+                <span className="nav-text">My Account</span>
+              </Link>
+            ) : (
+              <> </>
+            )}
+          </li>
+          <li>
+            {loggedIn ? (
               <span className="logout" onClick={logout}>
                 <i className="bi bi-power bi-2x off"></i>
                 <span className="nav-text">Logout</span>
@@ -190,7 +209,7 @@ export default function SideNav() {
             ) : (
               <Link to="/login">
                 <span className="login">
-                  <i className="bi bi-person bi-2x on"></i>
+                  <i className="bi bi-power bi-2x on"></i>
                   <span className="nav-text">Login/Signup</span>
                 </span>
               </Link>

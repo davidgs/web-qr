@@ -37,14 +37,16 @@ function FileTypeSelector(props: FileTypeProps): JSX.Element {
   const { onSelectionChange, fileType } = props;
   const [selectedFileType, setSelectedFileType] = useState(fileType);
   const dark = useAppSelector((state: RootState) => state.main.settings.dark);
+  const license = useAppSelector((state: RootState) => state.license.settings);
   const darkClass = dark ? "header-stuff-dark" : "header-stuff";
-
   const handleSelectionChange = (event: React.MouseEvent<SVGSVGElement>) => {
     const selectedFileTypeValue = event.currentTarget.getAttribute(
       "data-value"
     ) as string;
-    setSelectedFileType(selectedFileTypeValue);
-    onSelectionChange(selectedFileTypeValue);
+    if (license.license_type !== "free") {
+      setSelectedFileType(selectedFileTypeValue);
+      onSelectionChange(selectedFileTypeValue);
+    }
   };
 
   return (
@@ -53,10 +55,15 @@ function FileTypeSelector(props: FileTypeProps): JSX.Element {
         placement="top"
         delay={{ show: 250, hide: 400 }}
         rootClose
-        overlay={
+        overlay={ license.license_type !== "free" ? (
           <Tooltip id="qrcode-tooltip">
             Generate QR Code as an svg. SVGs can have a transparent background
           </Tooltip>
+        ) : (
+          <Tooltip id="qrcode-tooltip">
+            file type changes are only available with a paid subscription
+          </Tooltip>
+        )
         }
       >
         <FiletypeSvg
@@ -69,7 +76,7 @@ function FileTypeSelector(props: FileTypeProps): JSX.Element {
               : `${darkClass} custom-radio`
           }
           style={{
-            cursor: "pointer",
+            cursor: license.license_type !== "free" ? "pointer" : "not-allowed",
           }}
         />
       </OverlayTrigger>
@@ -77,10 +84,15 @@ function FileTypeSelector(props: FileTypeProps): JSX.Element {
         placement="top"
         delay={{ show: 250, hide: 400 }}
         rootClose
-        overlay={
+        overlay={ license.license_type !== "free" ? (
           <Tooltip id="qrcode-tooltip">
             Generate QR Code as a jpg image.
           </Tooltip>
+        ) : (
+          <Tooltip id="qrcode-tooltip">
+            file type changes are only available with a paid subscription
+          </Tooltip>
+        )
         }
       >
         <FiletypeJpg
@@ -93,7 +105,7 @@ function FileTypeSelector(props: FileTypeProps): JSX.Element {
               : "custom-radio"
           }
           style={{
-            cursor: "pointer",
+            cursor: license.license_type !== "free" ? "pointer" : "not-allowed",
           }}
         />
       </OverlayTrigger>
@@ -101,10 +113,15 @@ function FileTypeSelector(props: FileTypeProps): JSX.Element {
         placement="top"
         delay={{ show: 250, hide: 400 }}
         rootClose
-        overlay={
+        overlay={ license.license_type !== "free" ? (
           <Tooltip id="qrcode-tooltip">
             Generate QR Code as a png image.
           </Tooltip>
+        ) : (
+          <Tooltip id="qrcode-tooltip">
+            file type changes are only available with a paid subscription
+          </Tooltip>
+        )
         }
       >
         <FiletypePng
@@ -117,7 +134,7 @@ function FileTypeSelector(props: FileTypeProps): JSX.Element {
               : "custom-radio"
           }
           style={{
-            cursor: "pointer",
+            cursor: license.license_type !== "free" ? "pointer" : "not-allowed",
           }}
         />
       </OverlayTrigger>

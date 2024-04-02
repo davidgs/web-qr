@@ -31,7 +31,6 @@ import {
 import { UtmObj } from "../types";
 import { RootState } from "../stores/store";
 import "../css/URLForm.css";
-import store from "store2";
 import { useAppSelector } from "../stores/hooks";
 
 interface UTMTextFieldProps {

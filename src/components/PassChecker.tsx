@@ -31,19 +31,15 @@ export default function PassChecker({
   upper,
   lower,
   special,
+  matches,
 }: {
   len: boolean;
   num: boolean;
   upper: boolean;
   lower: boolean;
   special: boolean;
+  matches: boolean;
 }): JSX.Element {
-  const [lenGood, setLenGood] = useState<boolean>(false);
-  const [numGood, setNumGood] = useState<boolean>(false);
-  const [upperGood, setUpperGood] = useState<boolean>(false);
-  const [lowerGood, setLowerGood] = useState<boolean>(false);
-  const [specialGood, setSpecialGood] = useState<boolean>(false);
-
   const goodCheck = (
     <Check className="text-success" size={20} style={{ color: "green" }} />
   );
@@ -56,30 +52,29 @@ export default function PassChecker({
     />
   );
 
-  useEffect(() => {
-    setLenGood(len);
-    setNumGood(num);
-    setUpperGood(upper);
-    setLowerGood(lower);
-    setSpecialGood(special);
-  }, [len, num, upper, lower, special]);
-
   return (
-    <>
-      {lenGood ? goodCheck : badCheck}{" "}
-      <span className="pass-text">Password must be </span>8-16 characters long.
+    <div style={{ textAlign: "left" }}>
+      {len ? goodCheck : badCheck}{" "}
+      <span className="pass-text  header-stuff-dark">
+        8-16 characters long.
+      </span>
       <br />
-      {numGood ? goodCheck : badCheck}{" "}
-      <span className="pass-text">Password must contain at least </span>one
-      number.
+      {num ? goodCheck : badCheck}{" "}
+      <span className="pass-text  header-stuff-dark">A number.</span>
       <br />
-      {upperGood ? goodCheck : badCheck} <span className="pass-text">Password must contain at least </span>one uppercase letter.
+      {upper ? goodCheck : badCheck}{" "}
+      <span className="pass-text header-stuff-dark">An uppercase letter.</span>
       <br />
-      {lowerGood ? goodCheck : badCheck} <span className="pass-text">Password must contain at least </span>one lowercase letter.
+      {lower ? goodCheck : badCheck}{" "}
+      <span className="pass-text header-stuff-dark">A lowercase letter.</span>
       <br />
-      {specialGood ? goodCheck : badCheck} <span className="pass-text">Password must contain at least </span>one special character.
+      {special ? goodCheck : badCheck}{" "}
+      <span className="pass-text header-stuff-dark">A special character.</span>
+      <br />
+      {matches ? goodCheck : badCheck}{" "}
+      <span className="pass-text header-stuff-dark">Passwords match.</span>
       <p />
-    </>
+    </div>
   );
 }
 

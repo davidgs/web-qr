@@ -26,7 +26,6 @@ import { useDebounce } from "@uidotdev/usehooks";
 import { knobConfig } from "../../types";
 import ReactId from "../../utils/ReactId";
 import { RootState } from "../../stores/store";
-import store from "store2";
 import { useAppSelector } from "../../stores/hooks";
 
 export default function AdjusterKnob({

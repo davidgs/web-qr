@@ -290,7 +290,14 @@ export const utmSlice = createSlice({
     });
     builder.addCase(fetchUtm.fulfilled, (state, action) => {
       state.loading = false;
-      state.settings = action.payload as UtmParams;
+      state.settings.utm_campaign = action.payload.utm_campaign as UtmObj;
+      state.settings.utm_content = action.payload.utm_content as UtmObj;
+      state.settings.utm_keyword = action.payload.utm_keyword as UtmObj;
+      state.settings.utm_medium = action.payload.utm_medium as UtmObj;
+      state.settings.utm_source = action.payload.utm_source as UtmObj;
+      state.settings.utm_target = action.payload.utm_target as UtmObj;
+      state.settings.utm_term = action.payload.utm_term as UtmObj;
+      state.error = undefined;
     });
     builder.addCase(fetchUtm.rejected, (state, action) => {
       state.loading = false;

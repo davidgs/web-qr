@@ -1,4 +1,4 @@
-import { CornerRadii, DefaultQRStyle, QProps } from "../types";
+import { CornerRadii, QProps } from "../types";
 
 interface Incoming {
   value: string;
@@ -55,7 +55,6 @@ export function toQRProps(incoming: string) {
 };
 
 export function fromQRProps(q: QProps) {
-  const iq = q as unknown as Incoming;
   const qrResp: Incoming = {
     value: q.value,
     ec_level: q.ecLevel,

@@ -21,19 +21,11 @@
  * SOFTWARE.
  */
 
-import { Button, Col, Row } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
-import {
-  Github,
-  Envelope,
-  Twitter,
-  Linkedin,
-  Mastodon,
-} from "react-bootstrap-icons";
 import Logo from "../images/NewLinkerLogo.png";
 import { RootState } from "../stores/store";
-import { PricingTable } from "../components/StripePricing";
 import { useAppSelector } from "../stores/hooks";
+import Footer from "../components/Footer";
 
 export default function FAQPage() {
   const navigate = useNavigate();
@@ -52,23 +44,26 @@ export default function FAQPage() {
     <div className={`main-column`}>
       <>
         <div className="fullrow">
-          <div >
+          <div>
             <h1 style={{ margin: "auto", textAlign: "center" }}>
               <img src={Logo} alt="QR Builder Logo" width={40} height={40} />{" "}
               &nbsp; &nbsp;
               <strong>
-                <span className="header-stuff">QR Builder</span>
+                <span className={darkClass}>QR Builder FAQ</span>
               </strong>
             </h1>
-            <h2 style={{ margin: "auto", textAlign: "center" }}>FAQ</h2>
+            <p></p>
+            <h4 style={{ margin: "auto", textAlign: "center" }}>
+              Frequently Asked Questions
+            </h4>
             <p></p>
             <h3>How do I use this?</h3>
             <p>
-              Simply click on the "Build" link in the top right corner of the
-              screen. You can then enter the URL you want to encode, and the
-              type of QR code you want to generate. Click "Generate" and your QR
-              code will be displayed. You can then download the QR code as an
-              image.
+              Simply click on the "Create" link in the menu (left sidebar on
+              desktop, in the menu at the top right on mobile). You can then
+              enter the URL you want to encode, and the type of QR code you want
+              to generate. You QR Code is generated in real-time as yuou enter
+              data. You can then download the QR code as a <code>.png</code> image.
             </p>
             <h3>How do I buy this?</h3>
             <p>
@@ -99,65 +94,7 @@ export default function FAQPage() {
             </p>
           </div>
         </div>
-        <div className="fullrow">
-          <p></p>
-          <hr style={{ width: "100%" }} />
-        </div>
-        <div className="fullrow">
-          <strong>QR Builder</strong>&nbsp; is open source and licensed under
-          the MIT license. The source code is available on &nbsp;
-          <a href="https://github.com/davidgs/link-maker">
-            <Github
-              className={darkClass}
-              style={{ height: "20px", width: "20px" }}
-            />
-          </a>
-        </div>
-        <div className="fullrow">
-          <strong>QR Builder</strong>&nbsp; is built by &nbsp;
-          <a className={darkClass} href="https://qr-builder.io/">
-            David G. Simmons.
-          </a>
-        </div>
-        <div className="fullrow">
-          <a href="mailto:davidgs@qr-builder.io">
-            <Envelope
-              className={darkClass}
-              style={{ height: "20px", width: "20px" }}
-            />
-          </a>
-          &nbsp; &nbsp;
-          <a href="https://github.com/davidgs/">
-            <Github
-              className={darkClass}
-              style={{ height: "20px", width: "20px" }}
-            />
-          </a>
-          &nbsp; &nbsp;
-          <a href="https://twitter.com/davidgsIoT">
-            <Twitter
-              className={darkClass}
-              style={{ height: "20px", width: "20px" }}
-            />
-          </a>
-          &nbsp; &nbsp;
-          <a href="https://linkedin.com/in/davidgsimmons">
-            <Linkedin
-              className={darkClass}
-              style={{ height: "20px", width: "20px" }}
-            />
-          </a>
-          &nbsp; &nbsp;
-          <a href="https://tty0.social/@davidgs">
-            <Mastodon
-              className={darkClass}
-              style={{ height: "20px", width: "20px" }}
-            />
-          </a>
-        </div>
-        <div className="fullrow" style={{ paddingBottom: "25px" }} />
-        <p />
-        <p />
+        <Footer />
       </>
     </div>
   );

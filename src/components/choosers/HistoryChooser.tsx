@@ -22,17 +22,16 @@
  */
 import { JSX, SyntheticEvent, useMemo, useState } from "react";
 import { Form, OverlayTrigger, Tooltip } from "react-bootstrap";
-import { useDispatch } from "react-redux";
 import store from "store2";
 import { RootState } from "../../stores/store";
 import { setActiveLink } from "../../reducers/history/historySlice";
 import DireWarning from "../../configuration/DireWarning";
 import { WiFiLink, utmLink } from "../../types";
 import ReactId from "../../utils/ReactId";
-import { useAppSelector } from "../../stores/hooks";
+import { useAppDispatch, useAppSelector } from "../../stores/hooks";
 
 export default function HistoryChooser(): JSX.Element {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const dark = useAppSelector((state: RootState) => state.main.settings.dark);
   const darkClass = dark ? "header-stuff-dark" : "header-stuff";
   const [displayValue, setDisplayValue] = useState<string>("History...");

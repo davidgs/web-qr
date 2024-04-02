@@ -22,17 +22,16 @@
  */
 import { JSX } from "react";
 import { RootState } from "../../stores/store";
-import { useDispatch } from "react-redux";
 import { check } from "../../reducers/bitly/bitlySlice";
 import axios from "axios";
 import { makeLongLink } from "../../utils/LongLink";
 import { setActiveLink } from "../../reducers/history/historySlice";
 import { updateQRValue } from "../../reducers/qr/qrCodeSettingsSlice";
 import Checker from "./Checker";
-import { useAppSelector } from "../../stores/hooks";
+import { useAppDispatch, useAppSelector } from "../../stores/hooks";
 
 export default function BitlyCheck(): JSX.Element {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const bitlyConfig = useAppSelector((state: RootState) => state.bitly.settings);
   const activeLink = useAppSelector(
     (state: RootState) => state.history.activeLink

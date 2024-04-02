@@ -22,8 +22,9 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-import { ColorResult, SketchPicker, RGBColor } from 'react-color';
-import { useState } from 'react';
+import { ColorResult, SketchPicker, RGBColor } from "react-color";
+import { useState } from "react";
+import { useAppSelector } from "../../stores/hooks";
 
 interface ColorPickerProps {
   pickColor: RGBColor;
@@ -33,54 +34,55 @@ interface ColorPickerProps {
 }
 export default function ColorPicker(props: ColorPickerProps) {
   const { pickColor, name, callback } = props;
+  const session = useAppSelector((state) => state.license.settings);
   const [showPicker, setShowPicker] = useState(false);
   const handleClick = () => {
-    setShowPicker(!showPicker);
+    session.license_type !== "free" && setShowPicker(!showPicker);
   };
   const handleClose = () => {
     setShowPicker(false);
   };
   const handleChange = (myColor: ColorResult) => {
-    callback(myColor, name);
+    session.license_type !== "free" && callback(myColor, name);
   };
 
   return (
     <div>
       <div
         style={{
-          width: '45px',
-          height: '40px',
-          padding: '3px',
-          background: '#fff',
-          borderRadius: '4px',
-          boxShadow: '0 0 0 1px rgba(66,11,95,.5)',
-          display: 'inline-block',
-          cursor: 'pointer',
+          width: "45px",
+          height: "40px",
+          padding: "3px",
+          background: "#fff",
+          borderRadius: "4px",
+          boxShadow: "0 0 0 1px rgba(66,11,95,.5)",
+          display: "inline-block",
+          cursor: "pointer",
         }}
         onClick={handleClick}
       >
         <div
           style={{
-            width: '80%',
-            height: '80%',
-            margin: 'auto',
-            borderRadius: '2px',
-            marginTop: '3px',
-            border: '1px solid #000',
+            width: "80%",
+            height: "80%",
+            margin: "auto",
+            borderRadius: "2px",
+            marginTop: "3px",
+            border: "1px solid #000",
             backgroundColor: `rgba(${pickColor.r}, ${pickColor.g}, ${pickColor.b}, ${pickColor.a})`,
-            alignContent: 'middle',
+            alignContent: "middle",
           }}
         />
       </div>
       {showPicker ? (
-        <div style={{ zIndex: 2, position: 'absolute' }}>
+        <div style={{ zIndex: 2, position: "absolute" }}>
           <div
             style={{
-              position: 'fixed',
-              top: '0px',
-              right: '0px',
-              bottom: '0px',
-              left: '0px',
+              position: "fixed",
+              top: "0px",
+              right: "0px",
+              bottom: "0px",
+              left: "0px",
             }}
             onClick={handleClose}
           />

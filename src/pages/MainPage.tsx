@@ -28,6 +28,7 @@ import { RootState } from "../stores/store";
 import { useAppSelector } from "../stores/hooks";
 
 import Logo from "../images/NewLinkerLogo.png";
+import Footer from "../components/Footer";
 
 export default function MainPage() {
   const mainSet = useAppSelector((state: RootState) => state.main.settings);
@@ -68,6 +69,7 @@ export default function MainPage() {
           {mainSet.formType === "wifi" ? <WifiForm /> : <URLForm />}
         </div>
       </div>
+      <Footer />
       {/* W: {width} x H: {size.height} */}
       {/* <Analytics /> */}
     </>

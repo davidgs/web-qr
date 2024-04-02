@@ -21,7 +21,6 @@
  * SOFTWARE.
  */
 import React, { SyntheticEvent, useState } from "react";
-import { useDispatch } from "react-redux";
 import {
   Accordion,
   Form,
@@ -41,15 +40,15 @@ import Checker from "../../components/buttons/Checker";
 import ImgElement from "../../components/ImgElement";
 import { RootState } from "../../stores/store";
 import "../../css/MainConfig.css";
-import store from "store2";
-import { useAppSelector } from "../../stores/hooks";
+import { useAppDispatch, useAppSelector } from "../../stores/hooks";
 export default function BrandingConfigurator({
   targetValidated,
 }: {
   targetValidated: boolean;
 }) {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const settings = useAppSelector((state: RootState) => state.main.settings);
+  const session = useAppSelector((state: RootState) => state.license.settings);
   const [showMainLogo, setShowMainLogo] = useState<boolean>(
     settings.brandImage !== undefined &&
       settings.brandImage !== null &&
@@ -189,7 +188,24 @@ export default function BrandingConfigurator({
         }
       >
         <Accordion.Header className={darkClass}>
-          <strong>Branding Configuration</strong>
+          <strong>Branding Configuration </strong>
+          <span style={{ marginTop: ".5rem" }}>
+            {session.license_type !== "enterprise" ? (
+              <OverlayTrigger
+                placement="auto"
+                delay={{ show: 250, hide: 300 }}
+                overlay={
+                  <Tooltip id="brand-tooltip">
+                    Branding settings for Enterprise Customers only.
+                  </Tooltip>
+                }
+              >
+                <i className="bi bi-ban" style={{ color: "red" }}></i>
+              </OverlayTrigger>
+            ) : (
+              ""
+            )}
+          </span>
         </Accordion.Header>
       </OverlayTrigger>
       <Accordion.Body id="images">
@@ -202,14 +218,21 @@ export default function BrandingConfigurator({
                 placement="auto"
                 delay={{ show: 250, hide: 300 }}
                 overlay={
-                  <Tooltip id="main-logo-tooltip">
-                    Click to select a logo for the App
-                  </Tooltip>
+                  session.license_type === "enterprise" ? (
+                    <Tooltip id="main-logo-tooltip">
+                      Click to select a logo for the App
+                    </Tooltip>
+                  ) : (
+                    <Tooltip id="main-logo-tooltip">
+                      Changes to the logo for the App are an Enterprise feature
+                    </Tooltip>
+                  )
                 }
               >
                 <Form.Control
                   className={darkClass}
                   type="file"
+                  disabled={session.license_type !== "enterprise"}
                   id="input-main-file"
                   onInput={(e) => {
                     setMainImg(e);
@@ -227,9 +250,13 @@ export default function BrandingConfigurator({
                   <div className="check-column">
                     <Checker
                       cState={showMainLogo}
-                      disabled={false}
+                      disabled={session.license_type !== "enterprise"}
                       label=""
-                      tooltip="Show the logo"
+                      tooltip={
+                        session.license_type === "enterprise"
+                          ? "Show the logo"
+                          : "This is an Enterprise feature"
+                      }
                       callback={(value) => setShowMainLogo(value)}
                     />
                   </div>
@@ -246,9 +273,13 @@ export default function BrandingConfigurator({
                     <div className="check-column">
                       <Checker
                         cState={false}
-                        disabled={false}
+                        disabled={session.license_type !== "enterprise"}
                         label=""
-                        tooltip="Show the logo"
+                        tooltip={
+                          session.license_type === "enterprise"
+                            ? "Remove the logo"
+                            : "This is an Enterprise feature"
+                        }
                         callback={() => deleteMainLogo()}
                       />
                     </div>
@@ -274,9 +305,15 @@ export default function BrandingConfigurator({
                     placement="top"
                     delay={{ show: 250, hide: 300 }}
                     overlay={
-                      <Tooltip id="qr-size-tooltip">
-                        Adjust the height of the logo
-                      </Tooltip>
+                      session.license_type === "enterprise" ? (
+                        <Tooltip id="qr-size-tooltip">
+                          Adjust the height of the logo
+                        </Tooltip>
+                      ) : (
+                        <Tooltip id="qr-size-tooltip">
+                          Changes to the logo height are an Enterprise feature
+                        </Tooltip>
+                      )
                     }
                   >
                     <div className="adjuster-control">
@@ -286,7 +323,9 @@ export default function BrandingConfigurator({
                         min={brandImageSettings.minHeight}
                         max={brandImageSettings.maxBrandHeight}
                         step={1}
-                        disabled={!showMainLogo}
+                        disabled={
+                          !showMainLogo && session.license_type !== "enterprise"
+                        }
                         callback={(value) => {
                           dispatch(updateHeight(value));
                           setImageSize(value, settings.brandWidth);
@@ -300,10 +339,16 @@ export default function BrandingConfigurator({
                     placement="top"
                     delay={{ show: 250, hide: 300 }}
                     overlay={
-                      <Tooltip id="qr-aspect-tooltip">
-                        {isMainAspectLocked ? "Unlock" : "Lock"} Image Aspect
-                        Ratio
-                      </Tooltip>
+                      session.license_type === "enterprise" ? (
+                        <Tooltip id="qr-aspect-tooltip">
+                          {isMainAspectLocked ? "Unlock" : "Lock"} Image Aspect
+                          Ratio
+                        </Tooltip>
+                      ) : (
+                        <Tooltip id="qr-aspect-tooltip">
+                          Changes to the aspect ratio are an Enterprise feature
+                        </Tooltip>
+                      )
                     }
                   >
                     <Button
@@ -311,7 +356,9 @@ export default function BrandingConfigurator({
                       variant="outline-secondary"
                       // style={{ width: "100%", fontSize: "0.6rem" }}
                       onClick={setLockMainAspectRatio}
-                      disabled={!showMainLogo}
+                      disabled={
+                        !showMainLogo && session.license_type !== "enterprise"
+                      }
                     >
                       {isMainAspectLocked ? (
                         <i className="bi bi-lock-fill" />
@@ -334,9 +381,15 @@ export default function BrandingConfigurator({
                     placement="top"
                     delay={{ show: 250, hide: 300 }}
                     overlay={
-                      <Tooltip id="qr-size-tooltip">
-                        Adjust the width of the logo
-                      </Tooltip>
+                      session.license_type === "enterprise" ? (
+                        <Tooltip id="qr-size-tooltip">
+                          Adjust the width of the logo
+                        </Tooltip>
+                      ) : (
+                        <Tooltip id="qr-size-tooltip">
+                          Changes to the logo width are an Enterprise feature
+                        </Tooltip>
+                      )
                     }
                   >
                     <div className="adjuster-control">
@@ -346,7 +399,10 @@ export default function BrandingConfigurator({
                         min={brandImageSettings.minWidth}
                         max={brandImageSettings.maxBrandWidth}
                         step={1}
-                        disabled={!showMainLogo || isMainAspectLocked}
+                        disabled={
+                          (!showMainLogo || isMainAspectLocked) &&
+                          session.license_type !== "enterprise"
+                        }
                         callback={(value) => {
                           dispatch(updateWidth(value));
                           setImageSize(settings.brandHeight, value);
@@ -366,9 +422,15 @@ export default function BrandingConfigurator({
                   placement="auto"
                   delay={{ show: 250, hide: 300 }}
                   overlay={
-                    <Tooltip id="brand-tooltip">
-                      Preview of your branding image.
-                    </Tooltip>
+                    session.license_type === "enterprise" ? (
+                      <Tooltip id="brand-tooltip">
+                        Preview of your branding image.
+                      </Tooltip>
+                    ) : (
+                      <Tooltip id="brand-tooltip">
+                        This is an Enterprise feature
+                      </Tooltip>
+                    )
                   }
                 >
                   <div>

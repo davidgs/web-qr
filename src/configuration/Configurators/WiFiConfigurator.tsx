@@ -28,7 +28,6 @@ import {
   OverlayTrigger,
   Tooltip,
 } from "react-bootstrap";
-import { useDispatch } from "react-redux";
 import ReactId from "../../utils/ReactId";
 import {
   updateSSIDAriaLabel,
@@ -36,11 +35,10 @@ import {
 } from "../../reducers/wifi/wifiSlice";
 import { updateTooltip } from "../../reducers/bitly/bitlySlice";
 import { RootState } from "../../stores/store";
-import store from "store2";
-import { useAppSelector } from "../../stores/hooks";
+import { useAppDispatch, useAppSelector } from "../../stores/hooks";
 
 export default function WiFiConfigurator(): React.JSX.Element {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const dark = useAppSelector((state: RootState) => state.main.settings.dark);
   const settings = useAppSelector((state: RootState) => state.wifi);
 

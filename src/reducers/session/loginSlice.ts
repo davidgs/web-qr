@@ -39,7 +39,7 @@ export const fetchLogin = createAsyncThunk('login/fetchLogin', async () => {
   Userfront.init("xbp876mb");
   const l = Userfront.getSession()
     .then((session) => {
-      console.log(`Logged In: ${session.isLoggedIn}`);
+      console.log(`login/fetchLogin Logged In: ${session.isLoggedIn}`);
       return session.isLoggedIn;
     })
     .catch((err) => {
@@ -48,6 +48,19 @@ export const fetchLogin = createAsyncThunk('login/fetchLogin', async () => {
   return l;
 }
 );
+
+export const logoutUserFront = createAsyncThunk('login/logoutUserFront', async () => {
+  Userfront.init("xbp876mb");
+  const l = Userfront.logout()
+    .then((result) => {
+      console.log('login/logoutUserFront Logged Out');
+      return false;
+    })
+    .catch((err) => {
+      return false;
+    });
+  return l;
+});
 
 export const loginSlice = createSlice({
   name: 'login',
@@ -60,19 +73,32 @@ export const loginSlice = createSlice({
       state.settingsUpdated = action.payload;
     }
   },
-    extraReducers: (builder) => {
-      builder.addCase(fetchLogin.pending, (state) => {
-        state.loading = true;
-      });
-      builder.addCase(fetchLogin.fulfilled, (state, action) => {
-        state.loading = false;
-        state.login = action.payload as boolean;
-      });
-      builder.addCase(fetchLogin.rejected, (state, action) => {
-        state.loading = false;
-        state.login = false;
-        state.error = action.error.message as string | undefined;
-      });
+  extraReducers: (builder) => {
+    builder.addCase(fetchLogin.pending, (state) => {
+      state.loading = true;
+    });
+    builder.addCase(fetchLogin.fulfilled, (state, action) => {
+      state.loading = false;
+      state.login = true;
+      state.error = undefined;
+    });
+    builder.addCase(fetchLogin.rejected, (state, action) => {
+      state.loading = false;
+      state.login = false;
+      state.error = action.error.message as string | undefined;
+    });
+    builder.addCase(logoutUserFront.pending, (state) => {
+      state.loading = true;
+    });
+    builder.addCase(logoutUserFront.fulfilled, (state, action) => {
+      state.loading = false;
+      state.login = action.payload as boolean;
+      state.error = undefined;
+    });
+    builder.addCase(logoutUserFront.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.error.message as string | undefined;
+    });
   },
 });
 

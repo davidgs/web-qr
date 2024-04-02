@@ -21,10 +21,10 @@
  * SOFTWARE.
  */
 import { Accordion, Form, OverlayTrigger, Tooltip } from "react-bootstrap";
-import { useDispatch } from "react-redux";
 import Checker from "../../components/buttons/Checker";
 import { RootState } from "../../stores/store";
 import "../../css/MainConfig.css";
+import "../../css/Config.css";
 import {
   updateAriaLabel,
   updateDomain,
@@ -34,18 +34,13 @@ import {
   updateURL,
   updateUseValue,
 } from "../../reducers/bitly/bitlySlice";
-import store from "store2";
-import { useAppSelector } from "../../stores/hooks";
+import { useAppDispatch, useAppSelector } from "../../stores/hooks";
 import { setSettingsUpdated } from "../../reducers/session/loginSlice";
 
-export default function BitlyConfigurator({
-  eKey,
-}: {
-  eKey: string;
-}) {
-  const dispatch = useDispatch();
+export default function BitlyConfigurator({ eKey }: { eKey: string }) {
+  const dispatch = useAppDispatch();
   const dark = useAppSelector((state: RootState) => state.main.settings.dark);
-  const session = useAppSelector((state: RootState) => state.session);
+  const session = useAppSelector((state: RootState) => state.license.settings);
   const bitly_settings = useAppSelector((state: RootState) => state.bitly);
   const darkClass = dark ? "header-stuff-dark" : "header-stuff";
   const type: string = "Link Shortener";
@@ -63,6 +58,25 @@ export default function BitlyConfigurator({
       >
         <Accordion.Header className={darkClass}>
           <strong>{type} Configuration</strong>
+          <span style={{ marginTop: ".5rem" }}>
+            {session.license_type !== "enterprise" ? (
+              <OverlayTrigger
+                placement="auto"
+                delay={{ show: 250, hide: 300 }}
+                overlay={
+                  <Tooltip id="brand-tooltip">
+                    {session.license_type !== "free"
+                      ? "Some of these Bitly settings for paid Customers only."
+                      : "Bitly settings for paid Customers only."}
+                  </Tooltip>
+                }
+              >
+                <i className={`bi bi-ban ${session.license_type}`}></i>
+              </OverlayTrigger>
+            ) : (
+              ""
+            )}
+          </span>
         </Accordion.Header>
       </OverlayTrigger>
       <Accordion.Body id={bitly_settings.settings.type}>
@@ -79,7 +93,7 @@ export default function BitlyConfigurator({
                 <div className="check-column">
                   <Checker
                     cState={bitly_settings.settings.use_value}
-                    disabled={false}
+                    disabled={session.license_type === "free"}
                     label=""
                     tooltip={
                       bitly_settings.settings.use_value
@@ -87,7 +101,11 @@ export default function BitlyConfigurator({
                         : `Check to use the '${bitly_settings.settings.type}'`
                     }
                     callback={(e) => {
-                      dispatch(setSettingsUpdated(bitly_settings.settings.use_value !== e));
+                      dispatch(
+                        setSettingsUpdated(
+                          bitly_settings.settings.use_value !== e
+                        )
+                      );
                       dispatch(updateUseValue(e));
                     }}
                   />
@@ -118,12 +136,17 @@ export default function BitlyConfigurator({
                         <Form.Control
                           className={darkClass}
                           type="text"
+                          disabled={session.license_type === "free"}
                           id={`${type}-url`}
                           placeholder={bitly_settings.settings.bitly_addr}
                           value={bitly_settings.settings.bitly_addr}
                           onChange={(e) => {
-                              dispatch(setSettingsUpdated(bitly_settings.settings.bitly_addr !==
-                              e.target.value));
+                            dispatch(
+                              setSettingsUpdated(
+                                bitly_settings.settings.bitly_addr !==
+                                  e.target.value
+                              )
+                            );
                             dispatch(updateURL(e.target.value));
                           }}
                         />
@@ -133,43 +156,49 @@ export default function BitlyConfigurator({
 
                   {/* item link shortener Domain */}
                   {/* Fence off for Enterprise License */}
-                  {(session.license_type === "pro" ||
-                    session.license_type === "enterprise") && (
-                    <div className="bitly-settings-row">
-                      <div className="text-label">
-                        <Form.Label className={darkClass}>
-                          <strong>Short Link Domain (if any)</strong>
-                        </Form.Label>
-                      </div>
-
-                      <div className="text-column">
-                        <OverlayTrigger
-                          placement="auto"
-                          delay={{ show: 250, hide: 300 }}
-                          overlay={
-                            <Tooltip
-                              id={`${bitly_settings.settings.type}-domain-tooltip`}
-                            >
-                              Enter the custom domain for your link shortener
-                            </Tooltip>
-                          }
-                        >
-                          <Form.Control
-                            className={darkClass}
-                            type="text"
-                            id={`${type}-domain`}
-                            placeholder={bitly_settings.settings.bitly_domain}
-                            value={bitly_settings.settings.bitly_domain}
-                            onChange={(e) => {
-                               dispatch(setSettingsUpdated(bitly_settings.settings.bitly_domain !==
-                                e.target.value));
-                              dispatch(updateDomain(e.target.value));
-                            }}
-                          />
-                        </OverlayTrigger>
-                      </div>
+                  <div className="bitly-settings-row">
+                    <div className="text-label">
+                      <Form.Label className={darkClass}>
+                        <strong>Short Link Domain (if any)</strong>
+                      </Form.Label>
                     </div>
-                  )}
+
+                    <div className="text-column">
+                      <OverlayTrigger
+                        placement="auto"
+                        delay={{ show: 250, hide: 300 }}
+                        overlay={
+                          <Tooltip
+                            id={`${bitly_settings.settings.type}-domain-tooltip`}
+                          >
+                            Enter the custom domain for your link shortener
+                          </Tooltip>
+                        }
+                      >
+                        <Form.Control
+                          className={darkClass}
+                          type="text"
+                          disabled={
+                            session.license_type === "free" ||
+                            session.license_type === "basic"
+                          }
+                          id={`${type}-domain`}
+                          placeholder={bitly_settings.settings.bitly_domain}
+                          value={bitly_settings.settings.bitly_domain}
+                          onChange={(e) => {
+                            dispatch(
+                              setSettingsUpdated(
+                                bitly_settings.settings.bitly_domain !==
+                                  e.target.value
+                              )
+                            );
+                            dispatch(updateDomain(e.target.value));
+                          }}
+                        />
+                      </OverlayTrigger>
+                    </div>
+                  </div>
+
                   {/* end fence */}
                   {/* Link Shortener token */}
                   <div className="bitly-settings-row">
@@ -197,8 +226,12 @@ export default function BitlyConfigurator({
                           placeholder={bitly_settings.settings.bitly_token}
                           value={bitly_settings.settings.bitly_token}
                           onChange={(e) => {
-                            dispatch(setSettingsUpdated(bitly_settings.settings.bitly_token !==
-                              e.target.value));
+                            dispatch(
+                              setSettingsUpdated(
+                                bitly_settings.settings.bitly_token !==
+                                  e.target.value
+                              )
+                            );
                             dispatch(updateToken(e.target.value));
                           }}
                         />
@@ -235,7 +268,12 @@ export default function BitlyConfigurator({
                               placeholder={`Enter ${bitly_settings.settings.type} ${type} field label`}
                               value={bitly_settings.settings.label}
                               onChange={(e) => {
-                                dispatch(setSettingsUpdated(bitly_settings.settings.label !== e.target.value));
+                                dispatch(
+                                  setSettingsUpdated(
+                                    bitly_settings.settings.label !==
+                                      e.target.value
+                                  )
+                                );
                                 dispatch(updateLabel(e.target.value));
                               }}
                             />
@@ -266,7 +304,12 @@ export default function BitlyConfigurator({
                               placeholder={`Enter ${bitly_settings.settings.type} field tooltip`}
                               value={bitly_settings.settings.tooltip}
                               onChange={(e) => {
-                                dispatch(setSettingsUpdated(bitly_settings.settings.tooltip !== e.target.value));
+                                dispatch(
+                                  setSettingsUpdated(
+                                    bitly_settings.settings.tooltip !==
+                                      e.target.value
+                                  )
+                                );
                                 dispatch(updateTooltip(e.target.value));
                               }}
                             />
@@ -298,7 +341,12 @@ export default function BitlyConfigurator({
                               required
                               value={bitly_settings.settings.aria_label}
                               onChange={(e) => {
-                                dispatch(setSettingsUpdated(bitly_settings.settings.aria_label !== e.target.value));
+                                dispatch(
+                                  setSettingsUpdated(
+                                    bitly_settings.settings.aria_label !==
+                                      e.target.value
+                                  )
+                                );
                                 dispatch(updateAriaLabel(e.target.value));
                               }}
                             />
@@ -332,7 +380,12 @@ export default function BitlyConfigurator({
                               required
                               value={bitly_settings.settings.error}
                               onChange={(e) => {
-                                dispatch(setSettingsUpdated(bitly_settings.settings.error !== e.target.value));
+                                dispatch(
+                                  setSettingsUpdated(
+                                    bitly_settings.settings.error !==
+                                      e.target.value
+                                  )
+                                );
                                 dispatch(updateAriaLabel(e.target.value));
                               }}
                             />

@@ -21,9 +21,11 @@
  * SOFTWARE.
  */
 
+import Footer from "../components/Footer";
+
 export default function Privacy() {
   return (
-    <div className={`main-column`}>
+    <><div className={`main-column`}>
       <h1>
         QR Builder<span className="tr">&trade;</span> Privacy Policy
       </h1>
@@ -62,9 +64,9 @@ export default function Privacy() {
       </p>
       <p>This policy is effective as of 1 January 2024.</p>
       <div className="fullrow" style={{ paddingBottom: "25px" }} />
-        <p />
-        <p />
-    </div>
-
+      <p />
+      <p />
+      <Footer />
+    </div></>
   );
 }

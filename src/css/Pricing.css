@@ -1,0 +1,13 @@
+@media (width <= 48em) {
+  .col45 {
+    flex-direction: row;
+    width: 100%;
+  }
+  .text-column {
+    width: 100%;
+  }
+
+  .account {
+    flex-direction: column;
+  }
+}

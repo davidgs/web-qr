@@ -34,6 +34,8 @@ const initialState: SessionProps = {
   email: defaultSession.email,
   license_type: defaultSession.license_type,
   expiry_date: defaultSession.expiry_date,
+  license_token: defaultSession.license_token,
+
 };
 
 export const sessionSlice = createSlice({
@@ -79,6 +81,9 @@ export const sessionSlice = createSlice({
     ) => {
       state.expiry_date = action.payload;
     },
+    updateSessionLicenseToken: (state, action: PayloadAction<string>) => {
+      state.license_token = action.payload;
+    }
   },
 });
 
@@ -94,7 +99,8 @@ export const {
   updateSessionActive,
   updateSessionEmail,
   updateSessionLicenseType,
-  updateSessionExpiryDate
+  updateSessionExpiryDate,
+  updateSessionLicenseToken,
 } = sessionSlice.actions;
 
 export default sessionSlice.reducer;

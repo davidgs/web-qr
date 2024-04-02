@@ -29,18 +29,17 @@ import {
   OverlayTrigger,
   Tooltip,
 } from "react-bootstrap";
-import { useDispatch } from "react-redux";
 import { RootState } from "../stores/store";
 import { updateQRValue } from "../reducers/qr/qrCodeSettingsSlice";
 import { Eye, EyeSlashFill } from "react-bootstrap-icons";
 import { setActiveLink } from "../reducers/history/historySlice";
 import Checker from "../components/buttons/Checker";
 import "../css/MainConfig.css";
-import { useAppSelector } from "../stores/hooks";
+import { useAppDispatch, useAppSelector } from "../stores/hooks";
 
 export default function WifiForm() {
   // WIFI:S:<SSID>;T:<WEP|WPA|nopass>;P:<PASSWORD>;H:<true|false|blank>;;
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const dark = useAppSelector((state: RootState) => state.main.settings.dark);
   const darkClass = dark ? "header-stuff-dark" : "header-stuff";
   const settings = useAppSelector((state: RootState) => state.wifi);

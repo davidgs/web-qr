@@ -22,11 +22,8 @@
  * SOFTWARE.
  */
 import { JSX } from "react";
-import { OverlayTrigger, Tooltip, Button, Form, Col } from "react-bootstrap";
-import { useDispatch } from "react-redux";
+import { OverlayTrigger, Tooltip, Button, Form } from "react-bootstrap";
 import {
-  SaveFill,
-  Save,
   XCircleFill,
   XCircle,
   Hourglass,
@@ -49,17 +46,17 @@ import { updateQRValue } from "../reducers/qr/qrCodeSettingsSlice";
 // import QRConfigButton from "./buttons/QRConfigButton";
 import DownloadButton from "./buttons/DownloadButton";
 import "../css/Toolbar.css";
-import { useAppSelector } from "../stores/hooks";
+import { useAppDispatch, useAppSelector } from "../stores/hooks";
 
 export default function LinkToolbar(): JSX.Element {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const dark = useAppSelector((state: RootState) => state.main.settings.dark);
   const darkClass = dark ? "header-stuff-dark" : "header-stuff";
   const mainSet = useAppSelector((state: RootState) => state.main.settings);
   const bitlySettings = useAppSelector(
     (state: RootState) => state.bitly.settings
   );
-  const session = useAppSelector((state: RootState) => state.session);
+  const license = useAppSelector((state: RootState) => state.license.settings);
   // fence for basic license
   const linkHistory = useAppSelector(
     (state: RootState) => state.history.linkHistory
@@ -185,8 +182,8 @@ export default function LinkToolbar(): JSX.Element {
         <div className="fullrow">
           {/* fence for basic & free licenses */}
           {/* bitly enable */}
-          {session.license_type !== "basic" &&
-          session.license_type !== "free" &&
+          {license.license_type !== "basic" &&
+          license.license_type !== "free" &&
           bitlySettings.use_value &&
           mainSet?.formType !== "wifi" ? (
             <div className="col15">
@@ -228,7 +225,7 @@ export default function LinkToolbar(): JSX.Element {
           {/* fence for Basic License */}
           {/* history button */}
           <div className="col30">
-            {session.license_type !== "free" && <HistoryChooser />}
+            {license.license_type !== "free" && <HistoryChooser />}
           </div>
           {/* end fence */}
           <div className="col30">
@@ -243,7 +240,7 @@ export default function LinkToolbar(): JSX.Element {
               </div> */}
               {/* fence for basic license */}
               {/* save button */}
-              {session.license_type !== "free" && (
+              {license.license_type !== "free" && (
                 <div className="button-column">
                   <OverlayTrigger
                     placement="top"

@@ -21,7 +21,7 @@
  * SOFTWARE.
  */
 
-import { Button, Col, Row } from "react-bootstrap";
+import { Button, Col, OverlayTrigger, Row, Tooltip } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import {
   Github,
@@ -31,9 +31,18 @@ import {
   Mastodon,
 } from "react-bootstrap-icons";
 import Logo from "../images/NewLinkerLogo.png";
+import qCode1 from "../images/qcode1.png";
+import qCode2 from "../images/qcode2.png";
+import qCode3 from "../images/qcode3.png";
 import { RootState } from "../stores/store";
 import { PricingTable } from "../components/StripePricing";
 import { useAppSelector } from "../stores/hooks";
+import FreeCard from "../components/Cards/FreeCard";
+import BasicCard from "../components/Cards/BasicCard";
+import "../css/Pricing.css";
+import ProCard from "../components/Cards/ProCard";
+import EnterpriseCard from "../components/Cards/EnterpriseCard";
+import Footer from "../components/Footer";
 
 export default function PricingPage() {
   const navigate = useNavigate();
@@ -75,37 +84,32 @@ export default function PricingPage() {
         <div className="fullrow">
           <hr style={{ width: "100%" }}></hr>
         </div>
-        <div className="fullrow">
-          <h4>Free features:</h4>
+{/* Free & Basic Cards */}
+        <div className="fullrow" style={{ justifyContent: "center" }}>
+
+          <div className="col45">
+            <FreeCard />
+          </div>
+          <div className="col5" />
+          <div className="col45">
+            <BasicCard />
+          </div>
         </div>
         <div className="fullrow">
-          <ul>
-            <li>WiFi codes to allow for automatic signon to your networks</li>
-            <li>Simple URL Codes</li>
-            <li>
-              Download your QR Codes in <code>jpg</code>, <code>png</code>, or
-              &nbsp;
-              <code>svg</code> format
-            </li>
-            <li> Encode your links for tracking</li>
-            <ul>
-              <li>
-                <code>
-                  https://qr-builder.io/?utm_campaign=intro-page&utm_source=qr-builder&utm_medium=web
-                  &nbsp;
-                </code>
-              </li>
-            </ul>
-            <li>
-              Create QR Codes for URLs <em>and</em> WiFi networks to allow for
-              automatic signons to your networks
-            </li>
-          </ul>
+
+          </div>
+        {/* </div> */}
+        <div className="fullrow">
+          <hr style={{ width: "100%" }} />
         </div>
         <div className="fullrow">
-          <Button variant="success" size={"sm"} onClick={go}>
-            Start Using
-          </Button>
+          <div className="col45">
+            <ProCard />
+          </div>
+          <div className="col5"/>
+          <div className="col45">
+            <EnterpriseCard />
+          </div>
         </div>
         <div className="fullrow">
           <hr style={{ width: "100%" }} />
@@ -446,7 +450,7 @@ export default function PricingPage() {
         </div>
         <Row>
           <Col size="sm4">
-            <a href="https://dub.co" target="_blank">
+            <a href="https://dub.co" target="_blank" rel="noreferrer">
               dub.co
             </a>{" "}
             Link Shortener
@@ -494,65 +498,7 @@ export default function PricingPage() {
         {/* // pricing-table-id="prctbl_1OgV8HGuKQxVPasTQ9Cm8EPf"
           // publishable-key="pk_test_51OYEejGuKQxVPasTmIP0YpYi6bMc5YxPdbTODK6FO0quQ9clYbr9TC9Kihv3o2zV8ErBY2xRD4OwnLNoxgE265B600yqy7eDkN"
         // ></StripePricing> */}
-        <div className="fullrow">
-          <p></p>
-          <hr style={{ width: "100%" }} />
-        </div>
-        <div className="fullrow">
-          <strong>QR Builder</strong>&nbsp; is open source and licensed under
-          the MIT license. The source code is available on &nbsp;
-          <a href="https://github.com/davidgs/link-maker">
-            <Github
-              className={darkClass}
-              style={{ height: "20px", width: "20px" }}
-            />
-          </a>
-        </div>
-        <div className="fullrow">
-          <strong>QR Builder</strong>&nbsp; is built by &nbsp;
-          <a className={darkClass} href="https://qr-builder.io/">
-            David G. Simmons.
-          </a>
-        </div>
-        <div className="fullrow">
-          <a href="mailto:davidgs@qr-builder.io">
-            <Envelope
-              className={darkClass}
-              style={{ height: "20px", width: "20px" }}
-            />
-          </a>
-          &nbsp; &nbsp;
-          <a href="https://github.com/davidgs/">
-            <Github
-              className={darkClass}
-              style={{ height: "20px", width: "20px" }}
-            />
-          </a>
-          &nbsp; &nbsp;
-          <a href="https://twitter.com/davidgsIoT">
-            <Twitter
-              className={darkClass}
-              style={{ height: "20px", width: "20px" }}
-            />
-          </a>
-          &nbsp; &nbsp;
-          <a href="https://linkedin.com/in/davidgsimmons">
-            <Linkedin
-              className={darkClass}
-              style={{ height: "20px", width: "20px" }}
-            />
-          </a>
-          &nbsp; &nbsp;
-          <a href="https://tty0.social/@davidgs">
-            <Mastodon
-              className={darkClass}
-              style={{ height: "20px", width: "20px" }}
-            />
-          </a>
-        </div>
-        <div className="fullrow" style={{ paddingBottom: "25px" }} />
-        <p />
-        <p />
+        <Footer />
       </>
     </div>
   );
