@@ -1,3 +1,5 @@
+import { IProps } from "react-qrcode-logo";
+
 /* The MIT License (MIT)
  *
  * Copyright (c) 2022-present David G. Simmons
@@ -30,7 +32,7 @@ declare type EyeColor = string; // | InnerOuterEyeColor;
 //   inner: string;
 //   outer: string;
 // };
-export interface IProps {
+export interface QProps extends IProps {
   value: string;
   ecLevel: 'L' | 'M' | 'Q' | 'H';
   enableCORS: boolean;
@@ -45,12 +47,14 @@ export interface IProps {
   logoOnLoad?: () => void;
   removeQrCodeBehindLogo: boolean;
   logoPadding: number;
-  logoPaddingStyle: 'square' | 'circle' | 'none' | undefined;
+  logoPaddingStyle: 'square' | 'circle' | undefined;
   eyeRadius: [CornerRadii, CornerRadii, CornerRadii];
   eyeColor: EyeColor;
   qrStyle: 'squares' | 'dots';
   style: object;
   id: string;
+  QRType: "png" | "svg" | "jpg";
+  XParent: boolean;
 }
 
 export type ICountry = {
@@ -68,26 +72,26 @@ export type UtmKeyValue = {
 };
 
 export type UtmObj = {
-  useValue: boolean;
-  isChooser: boolean;
-  showName: boolean;
+  use_value: boolean;
+  is_chooser: boolean;
+  show_name: boolean;
   label: string;
-  ariaLabel: string;
+  aria_label: string;
   tooltip: string;
   error: string;
   value: UtmKeyValue[];
 };
 
 export type BitlyConfig = {
-  useValue: boolean;
+  use_value: boolean;
   label: string;
-  ariaLabel: string;
+  aria_label: string;
   tooltip: string;
   error: string;
-  bitlyToken: string;
-  bitlyDomain: string;
-  bitlyAddr: string;
-  bitlyEnabled: boolean;
+  bitly_token: string;
+  bitly_domain: string;
+  bitly_addr: string;
+  bitly_enabled: boolean;
   type: string;
 };
 
@@ -111,7 +115,83 @@ export type SessionProps = {
   active: boolean;
   email: string;
   license_type: string;
-  expiry_date?: Date;
+  expiry_date?: Date | undefined;
+  license_token?: string;
+  updated_at?: Date | undefined;
+};
+
+
+export type UserfrontProps = {
+  mode: string,
+  userId: number,
+  userUuid: string,
+  username: string,
+  email: string,
+  name: string,
+  image: string,
+  phoneNumber: string,
+  data: {},
+  locked: boolean,
+  isMfaRequired: boolean,
+  preferredFirstFactor: {
+    channel: string,
+    strategy: string,
+  },
+  preferredSecondFactor: {
+    channel: string,
+    strategy: string
+  },
+  isEmailConfirmed: boolean,
+  isPhoneNumberConfirmed: boolean,
+  lastActiveAt: string,
+  createdAt: string,
+  updatedAt: string,
+  tenant: {
+    tenantId: string,
+    name: string,
+    image: string,
+    loginRedirectPath: string,
+    logoutRedirectPath: string
+  },
+  authorization: {},
+  tenantId: string,
+  isConfirmed: boolean,
+  uuid: string,
+  authentication: {
+    firstFactors: [
+      {
+        channel: string,
+        strategy: string
+      },
+      {
+        channel: string,
+        strategy: string
+      }
+    ],
+    secondFactors: [{}]
+  },
+  chatHmac: string,
+  requestParams: {}
+}
+
+export type LicenseProps = {
+  cust_id: string;
+  license_type: string;
+  license_key: string;
+  active: boolean;
+  confirmed: boolean;
+  expire_date: Date;
+  license_status: string;
+}
+
+export const defaultLicense: LicenseProps = {
+  cust_id: '',
+  license_type: 'free',
+  license_key: '',
+  active: false,
+  confirmed: false,
+  expire_date: new Date(),
+  license_status: 'no license',
 };
 
 export const defaultSession: SessionProps = {
@@ -123,64 +203,66 @@ export const defaultSession: SessionProps = {
   organization: '',
   active: false,
   email: '',
-  license_type: 'free',
-  expiry_date: new Date()
+  license_type: 'pro',
+  expiry_date: undefined,
+  license_token: '',
+  updated_at: undefined,
 };
 
 export const defaultBitlyConfig: BitlyConfig = {
-  useValue: false,
-  label: 'Shorten Link',
-  ariaLabel: 'Shorten Link with Bitly',
+  use_value: false,
+  label: 'Shorten',
+  aria_label: 'Shorten Link with Bitly',
   tooltip: 'Shorten Link with Bitly',
   error: 'No Bitly Token Found',
-  bitlyToken: '',
-  bitlyDomain: '',
-  bitlyAddr: 'https://api-ssl.bitly.com/v4/shorten',
-  bitlyEnabled: false,
+  bitly_token: '',
+  bitly_domain: '',
+  bitly_addr: 'https://api-ssl.bitly.com/v4/shorten',
+  bitly_enabled: false,
   type: 'bitly',
 };
 
 export const defaultUTMTarget: UtmObj = {
-  useValue: true,
-  isChooser: false,
-  showName: true,
+  use_value: true,
+  is_chooser: false,
+  show_name: true,
   label: 'URL to encode',
   tooltip: 'Complete URL to encode',
   error: 'Please enter a valid URL',
-  ariaLabel: 'This must be a valid URL',
+  aria_label: 'This must be a valid URL',
   value: [{ key: '', value: '' }],
 };
 
 export const defaultUTMKeyword: UtmObj = {
-  useValue: true,
-  isChooser: false,
-  showName: true,
+  use_value: true,
+  is_chooser: false,
+  show_name: true,
   label: 'Keywords',
   tooltip: 'Additional keywords to append to the link',
   error: 'Please enter a valid Keyword',
-  ariaLabel: 'Add any additional keywords',
+  aria_label: 'Add any additional keywords',
   value: [{ key: '', value: '' }],
 };
 
 export const defaultUTMContent: UtmObj = {
-  useValue: true,
-  isChooser: false,
-  showName: true,
+  use_value: true,
+  is_chooser: false,
+  show_name: true,
   label: 'Content',
   tooltip: 'Additional content to append to the link',
   error: 'Please enter a valid content value',
-  ariaLabel: 'Add any additional content',
+  aria_label: 'Add any additional content',
   value: [{ key: '', value: '' }],
 };
 
 export const defaultUTMTerm: UtmObj = {
-  useValue: true,
-  isChooser: false,
-  showName: true,
+  use_value: true,
+  is_chooser: false,
+  show_name: true,
   label: 'Term',
   tooltip: `What's the Campaign Term?`,
   error: 'Please choose a valid Term',
-  ariaLabel: `What's the Campaign Term?`,
+  aria_label: `What's the Campaign Term?`,
   value: [
     { key: 'adwords', value: 'Adwords' },
     { key: 'angel', value: 'Angel' },
@@ -210,14 +292,14 @@ export const defaultUTMTerm: UtmObj = {
 };
 
 export const defaultUTMMedium: UtmObj = {
-  useValue: true,
-  isChooser: false,
-  showName: true,
+  use_value: true,
+  is_chooser: false,
+  show_name: true,
   label: 'Referral Medium',
   tooltip:
     "What kind of referral link is this? This is usually how you're distributing the link.",
   error: 'Please choose a valid referral medium',
-  ariaLabel: 'Referral medium',
+  aria_label: 'Referral medium',
   value: [
     { key: 'cpc', value: 'Cost Per Click' },
     { key: 'direct', value: 'Direct' },
@@ -237,24 +319,24 @@ export const defaultUTMMedium: UtmObj = {
 };
 
 export const defaultUTMSource: UtmObj = {
-  useValue: true,
-  isChooser: false,
-  showName: true,
+  use_value: true,
+  is_chooser: false,
+  show_name: true,
   label: 'Referral Source',
   tooltip: 'Where will you be posting this link?',
   error: 'Please enter a valid referral source',
-  ariaLabel: 'Referral Source',
+  aria_label: 'Referral Source',
   value: [{ key: '', value: '' }],
 };
 
 export const defaultUTMCampaign: UtmObj = {
-  useValue: true,
-  isChooser: false,
-  showName: true,
+  use_value: true,
+  is_chooser: false,
+  show_name: true,
   label: 'Campaign',
   tooltip: 'Enter a campaign name',
   error: 'Please enter a valid campaign name',
-  ariaLabel: 'Campaign Name',
+  aria_label: 'Campaign Name',
   value: [{ key: '', value: '' }],
 };
 
@@ -268,10 +350,28 @@ export const defaultUTMParams: UtmParams = {
   utm_keyword: defaultUTMKeyword,
 };
 
-export type QRSettings = {
-  QRType: string;
-  XParent: boolean;
-};
+// export type QRSettings = {
+//   QRType: string;
+//   XParent: boolean;
+// };
+
+export type UserSettings = {
+  login: string;
+  stripe_id: string;
+  userfront_id: string;
+  first_name: string;
+  last_name: string;
+  created_at: string;
+  organization: string;
+  address: string;
+  city: string;
+  state: string;
+  zip: string;
+  active: boolean;
+  confirmed: boolean;
+  email: string;
+  updated_at?: Date | undefined;
+}
 
 export type MainSettings = {
   brandImage?: string;
@@ -279,8 +379,7 @@ export type MainSettings = {
   brandWidth: number;
   brandOpacity: number;
   formType: 'simple' | 'encoded' | 'wifi';
-  sidebar: 'open' | 'closed' | 'top';
-  firstRun: boolean;
+  dark: boolean;
 };
 
 export type WiFiSettings = {
@@ -401,7 +500,24 @@ export const defaultWiFiSettings: WiFiSettings = {
   },
 };
 
-export const DefaultQRStyle: IProps = {
+export const defaultUserSettings: UserSettings = {
+  login: '',
+  stripe_id: '',
+  userfront_id: '',
+  first_name: '',
+  last_name: '',
+  created_at: '',
+  organization: '',
+  address: '',
+  city: '',
+  state: '',
+  zip: '',
+  active: false,
+  confirmed: false,
+  email: '',
+  updated_at: undefined,
+};
+export const DefaultQRStyle: QProps = {
   value: 'https://www.example.com/',
   ecLevel: 'H',
   size: 220,
@@ -422,15 +538,17 @@ export const DefaultQRStyle: IProps = {
     [0, 0, 0, 0],
   ],
   logoPadding: 0,
-  logoPaddingStyle: 'none',
+  logoPaddingStyle: undefined,
   style: { height: '100%', width: '100%' },
   id: '',
-};
-
-export const defaultQRSettings: QRSettings = {
   QRType: 'png',
   XParent: false,
 };
+
+// export const defaultQRSettings: QRSettings = {
+//   QRType: 'png',
+//   XParent: false,
+// };
 
 export const defaultMainSettings: MainSettings = {
   brandImage: '',
@@ -438,8 +556,60 @@ export const defaultMainSettings: MainSettings = {
   brandWidth: 200,
   brandOpacity: 1.0,
   formType: 'simple',
-  sidebar: 'open',
-  firstRun: true,
+  dark: false,
+};
+
+export const defaultUserFront: UserfrontProps = {
+  mode: 'test',
+  userId: 0,
+  userUuid: '',
+  username: '',
+  email: '',
+  name: '',
+  image: '',
+  phoneNumber: '',
+  data: {},
+  locked: false,
+  isMfaRequired: false,
+  preferredFirstFactor: {
+    channel: '',
+    strategy: ''
+  },
+  preferredSecondFactor: {
+    channel: '',
+    strategy: ''
+  },
+  isEmailConfirmed: false,
+  isPhoneNumberConfirmed: false,
+  lastActiveAt: '',
+  createdAt: '',
+  updatedAt: '',
+  tenant: {
+    tenantId: '',
+    name: '',
+    image: '',
+    loginRedirectPath: '',
+    logoutRedirectPath: ''
+  },
+  authorization: {},
+  tenantId: '',
+  isConfirmed: false,
+  uuid: '',
+  authentication: {
+    firstFactors: [
+      {
+        channel: '',
+        strategy: ''
+      },
+      {
+        channel: '',
+        strategy: ''
+      }
+    ],
+    secondFactors: [{}]
+  },
+  chatHmac: '',
+  requestParams: {}
 };
 
 export const knobConfig = {
@@ -462,3 +632,5 @@ export const qrImageSettings = {
   minHeight: 50,
   minWidth: 50,
 };
+
+export const settingsServer = "https://qr-builder.io/api/";

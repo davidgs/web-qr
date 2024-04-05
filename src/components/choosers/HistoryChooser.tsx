@@ -20,26 +20,26 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-import { JSX, SyntheticEvent, useMemo, useState } from 'react';
-import { Form, OverlayTrigger, Tooltip } from 'react-bootstrap';
-import { useDispatch, useSelector } from 'react-redux';
-import store from 'store2';
-import { RootState } from '../../stores/store';
-import { setActiveLink } from '../../reducers/history/historySlice';
-import DireWarning from '../../configuration/DireWarning';
-import { WiFiLink, utmLink } from '../../types';
-import ReactId from '../../utils/ReactId';
+import { JSX, SyntheticEvent, useMemo, useState } from "react";
+import { Form, OverlayTrigger, Tooltip } from "react-bootstrap";
+import store from "store2";
+import { RootState } from "../../stores/store";
+import { setActiveLink } from "../../reducers/history/historySlice";
+import DireWarning from "../../configuration/DireWarning";
+import { WiFiLink, utmLink } from "../../types";
+import ReactId from "../../utils/ReactId";
+import { useAppDispatch, useAppSelector } from "../../stores/hooks";
 
 export default function HistoryChooser(): JSX.Element {
-  const dispatch = useDispatch();
-  const dark = useSelector((state: RootState) => state.dark?.dark);
-  const darkClass = dark ? 'header-stuff-dark' : 'header-stuff';
-  const [displayValue, setDisplayValue] = useState<string>('History...');
+  const dispatch = useAppDispatch();
+  const dark = useAppSelector((state: RootState) => state.main.settings.dark);
+  const darkClass = dark ? "header-stuff-dark" : "header-stuff";
+  const [displayValue, setDisplayValue] = useState<string>("History...");
   const [showDireWarning, setShowDireWarning] = useState(false);
-  const links = useSelector((state: RootState) => state.history.linkHistory);
-  const main = useSelector((state: RootState) => state.main?.settings);
-  const activeLink = useSelector(
-    (state: RootState) => state.history.activeLink,
+  const links = useAppSelector((state: RootState) => state.history.linkHistory);
+  const main = useAppSelector((state: RootState) => state.main.settings);
+  const activeLink = useAppSelector(
+    (state: RootState) => state.history.activeLink
   );
 
   /**
@@ -55,13 +55,13 @@ export default function HistoryChooser(): JSX.Element {
     utH?.map((item: utmLink) => {
       items.push(
         <option
-          color={dark ? '#adb5bd' : '#0B3665'}
+          color={dark ? "#adb5bd" : "#0B3665"}
           id={`${item.uuid}`}
           key={`${item.uuid}`}
           value={item.uuid}
         >
           {item.short_link ? item.short_link : item.long_link}
-        </option>,
+        </option>
       );
     });
     return items;
@@ -69,7 +69,7 @@ export default function HistoryChooser(): JSX.Element {
   }, [links]);
 
   const clearHistory = (): void => {
-    store.set('history', { utm_link: [], wifi_link: [] });
+    store.set("history", { utm_link: [], wifi_link: [] });
   };
 
   /* Show a dire warning */
@@ -90,13 +90,13 @@ export default function HistoryChooser(): JSX.Element {
     utH?.map((item: WiFiLink) => {
       items.push(
         <option
-          color={dark ? '#adb5bd' : '#0B3665'}
+          color={dark ? "#adb5bd" : "#0B3665"}
           id={`${item.uuid}`}
           key={`${item.uuid}`}
           value={item.uuid}
         >
           {item.ssid}
-        </option>,
+        </option>
       );
     });
     return items;
@@ -105,13 +105,13 @@ export default function HistoryChooser(): JSX.Element {
 
   const valueChanged = (eventKey: SyntheticEvent) => {
     const target = eventKey.target as HTMLInputElement;
-    if (target.value === 'clear-history') {
+    if (target.value === "clear-history") {
       setShowDireWarning(true);
       return;
     }
     setDisplayValue(target.value);
     const v = target.value;
-    if (main?.formType === 'wifi') {
+    if (main?.formType === "wifi") {
       const wLinks: WiFiLink[] = { ...(links?.wifi_link as WiFiLink[]) };
       let i = 0;
       while (wLinks[i] !== undefined) {
@@ -123,7 +123,7 @@ export default function HistoryChooser(): JSX.Element {
               password: wLinks[i].password,
               hidden: wLinks[i].hidden,
               encryption: wLinks[i].encryption,
-            }),
+            })
           );
           break;
         }
@@ -146,7 +146,7 @@ export default function HistoryChooser(): JSX.Element {
               utm_keyword: uLinks[i].utm_keyword,
               short_link: uLinks[i].short_link,
               long_link: uLinks[i].long_link,
-            }),
+            })
           );
           break;
         }
@@ -156,7 +156,7 @@ export default function HistoryChooser(): JSX.Element {
   };
 
   return (
-    <div>
+    <div style={{ width: "100%" }}>
       <OverlayTrigger
         placement="auto"
         delay={{ show: 250, hide: 300 }}
@@ -170,11 +170,11 @@ export default function HistoryChooser(): JSX.Element {
       >
         <Form.Select
           // variant={dark ? 'icon-only-dark' : 'icon-only'}
-          size="sm"
+          // size="lg"
           disabled={
             links?.utm_link?.length === 0 && links?.wifi_link?.length === 0
           }
-          color={dark ? '#adb5bd' : '#0B3665'}
+          color={dark ? "#adb5bd" : "#0B3665"}
           className={darkClass}
           id="dropdown-basic-button"
           title={displayValue}
@@ -184,22 +184,22 @@ export default function HistoryChooser(): JSX.Element {
           value={displayValue}
         >
           <option
-            style={{ color: 'red' }}
+            style={{ color: "red" }}
             id={`clear-list-${ReactId()}`}
             key={`clear-list-${ReactId()}`}
             value="clear-history"
           >
-            {main?.formType === 'wifi' ? 'WiFi Network' : 'Link'} History
+            {main?.formType === "wifi" ? "WiFi Network" : "Link"} History
           </option>
           <option
-            style={{ color: 'red' }}
+            style={{ color: "red" }}
             id={`clear-list-${ReactId()}`}
             key={`clear-list-${ReactId()}`}
             value="clear-history"
           >
             Clear History
           </option>
-          {main?.formType === 'wifi' ? wifiItems : historyItems}
+          {main?.formType === "wifi" ? wifiItems : historyItems}
         </Form.Select>
       </OverlayTrigger>
       <DireWarning

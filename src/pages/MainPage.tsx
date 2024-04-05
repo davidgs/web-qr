@@ -20,31 +20,57 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-import { useSelector } from "react-redux";
 import LinkToolbar from "../components/LinkToolbar";
-import MobileLinkToolbar from "../components/MobileLinkToolbar";
-import MobileQCode from "../forms/MobileQRCodeForm";
-import MobileURLForm from "../forms/MobileURLForm";
 import QCode from "../forms/QRCodeForm";
 import URLForm from "../forms/URLForm";
 import WifiForm from "../forms/WiFiForm";
 import { RootState } from "../stores/store";
+import { useAppSelector } from "../stores/hooks";
+
+import Logo from "../images/NewLinkerLogo.png";
+import Footer from "../components/Footer";
 
 export default function MainPage() {
-  const mainSet = useSelector((state: RootState) => state.main.settings);
+  const mainSet = useAppSelector((state: RootState) => state.main.settings);
+  const name = useAppSelector((state: RootState) => state.userFront.settings.name);
 
   return (
     <>
       <div className={`main-column`}>
-        <div className="link-form">
-          {mainSet.sidebar !== "top" ? <QCode /> : <MobileQCode />}
-          <hr />
-          {mainSet.sidebar !== "top" ? <LinkToolbar /> : <MobileLinkToolbar />}
-          <hr />
-          {mainSet.formType === "wifi" && <WifiForm />}
-          {mainSet.sidebar !== "top" ? <URLForm /> : <MobileURLForm />}
+        <div className="fullrow">
+          <div style={{ margin: "auto", textAlign: "center" }}>
+            <h2>
+              <img
+                src={Logo}
+                alt="QR Builder Logo"
+                width={40}
+                height={40}
+              ></img>{" "}
+              &nbsp; &nbsp;
+              <strong>
+                QR Builder
+                <span className="tr">&trade;</span>
+              </strong>
+            </h2>
+          </div>
         </div>
+        {name && (
+          <div style={{ margin: "auto", textAlign: "center" }}>
+            Welcome back {name}
+          </div>
+        )}
+
+        <div className="link-form">
+          <QCode />
+          {/* {mainSet.sidebar !== "top" ? <QCode /> : <MobileQCode />} */}
+          <hr />
+          <LinkToolbar />
+          <hr />
+          {mainSet.formType === "wifi" ? <WifiForm /> : <URLForm />}
+        </div>
+        <Footer />
       </div>
+
       {/* W: {width} x H: {size.height} */}
       {/* <Analytics /> */}
     </>

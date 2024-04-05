@@ -21,10 +21,14 @@
  * SOFTWARE.
  */
 
+import Footer from "../components/Footer";
+
 export default function Privacy() {
   return (
-    <div className={`main-column`}>
-      <h1>Privacy</h1>
+    <><div className={`main-column`}>
+      <h1>
+        QR Builder<span className="tr">&trade;</span> Privacy Policy
+      </h1>
       <p>
         Your privacy is important to us. It is QR Builder's policy to respect
         your privacy regarding any information we may collect from you across
@@ -59,6 +63,10 @@ export default function Privacy() {
         free to contact us.
       </p>
       <p>This policy is effective as of 1 January 2024.</p>
-    </div>
+      <div className="fullrow" style={{ paddingBottom: "25px" }} />
+      <p />
+      <p />
+      <Footer />
+    </div></>
   );
 }

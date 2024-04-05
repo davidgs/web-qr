@@ -56,7 +56,7 @@ export function makeLongLink(linkParts: ActiveLink): string {
       ? (utmString += `?keyword=${linkParts?.utm_keyword}`)
       : (utmString += `&keyword=${linkParts?.utm_keyword}`);
   }
-  utmString !== '' ? (tempLink += `/${utmString}`) : (tempLink = tempLink);
+  if (utmString !== '') (tempLink += `/${utmString}`);
   return tempLink;
 }
 

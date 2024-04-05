@@ -1,15 +1,15 @@
-import React from 'react';
-import { Form } from 'react-bootstrap';
-import { useSelector, useDispatch } from 'react-redux';
-import store from 'store2';
-import { RootState } from '../../stores/store';
-import { updateFormType } from '../../reducers/main/mainSlice';
+import React from "react";
+import { Form } from "react-bootstrap";
+import store from "store2";
+import { RootState } from "../../stores/store";
+import { updateFormType } from "../../reducers/main/mainSlice";
+import { useAppDispatch, useAppSelector } from "../../stores/hooks";
 
 export default function FormChooser(): React.JSX.Element {
-  const dispatch = useDispatch();
-  const dark = useSelector((state: RootState) => state.dark?.dark);
+  const dispatch = useAppDispatch();
+  const dark = useAppSelector((state: RootState) => state.main.settings.dark);
   const darkClass = dark ? "header-stuff-dark" : "header-stuff";
-  const mainSet = useSelector((state: RootState) => state.main?.settings);
+  const mainSet = useAppSelector((state: RootState) => state.main.settings);
 
   /**
    *
@@ -18,16 +18,16 @@ export default function FormChooser(): React.JSX.Element {
   const saveFormType = (value: string) => {
     const ms = { ...mainSet };
     ms.formType = value as "simple" | "encoded" | "wifi";
-    dispatch(updateFormType(value));
+    dispatch(updateFormType(value as "simple" | "encoded" | "wifi"));
     store.set("main-config", ms);
   };
 
   return (
-    <div className='fullrow'>
-      <div className={mainSet.sidebar === 'top' ? "col45" : "col15"}>
+    <div className="fullrow">
+      <div className="chooser-label">
         <Form.Label className={darkClass}>Link Type</Form.Label>
       </div>
-      <div className={mainSet.sidebar === 'top' ? "col45" : "col25"}>
+      <div className="chooser-column">
         <Form.Select
           className={darkClass}
           size="sm"
@@ -42,7 +42,7 @@ export default function FormChooser(): React.JSX.Element {
             }
             saveFormType(e.target.value);
           }}
-          style={{ paddingTop: '-5px'}}
+          style={{ paddingTop: "-5px" }}
           value={mainSet?.formType}
         >
           <option key="none" value="Choose one ...">

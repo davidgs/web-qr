@@ -1,0 +1,165 @@
+/* The MIT License (MIT)
+ *
+ * Copyright (c) 2022-present David G. Simmons
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ */
+
+.button-row {
+  display: flex;
+  flex-direction: row;
+  /* right: 10px;
+  left: 30%; */
+  position: relative;
+}
+
+.button-column {
+  display: flex;
+  flex-direction: column;
+  padding-right: 8px;
+}
+
+.btn-icon-only {
+  border-color: #0B3665;
+  border: 1px solid #0B3665;
+  border-radius: 10%;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+  border-top-color: initial;
+  border-top-style: solid;
+  border-top-width: 0.5px;
+  border-right-color: initial;
+  border-right-style: solid;
+  border-right-width: 0.5px;
+  border-bottom-color: initial;
+  border-bottom-style: solid;
+  border-bottom-width: 0.5px;
+  border-left-color: initial;
+  border-left-style: solid;
+  border-left-width: 0.5px;
+  border-image-source: initial;
+  border-image-slice: initial;
+  border-image-width: initial;
+  border-image-outset: initial;
+  border-image-repeat: initial;
+  outline: solid;
+  color: #0B3665 !important;
+}
+
+.btn-icon-only:hover {
+  background-color: #0B3665 !important;
+  color: #adb5bd !important;
+  transform: scale(1.25);
+}
+
+.col30 {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 30%;
+  padding-top: 7px;
+  padding-left: 0;
+  padding-right: 10px;
+}
+
+.btn-icon-only-dark {
+  border-color: #adb5bd;
+  border: 1px solid #adb5bd;
+  border-radius: 10%;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+  border-top-color: initial;
+  border-top-style: solid;
+  border-top-width: 0.5px;
+  border-right-color: initial;
+  border-right-style: solid;
+  border-right-width: 0.5px;
+  border-bottom-color: initial;
+  border-bottom-style: solid;
+  border-bottom-width: 0.5px;
+  border-left-color: initial;
+  border-left-style: solid;
+  border-left-width: 0.5px;
+  border-image-source: initial;
+  border-image-slice: initial;
+  border-image-width: initial;
+  border-image-outset: initial;
+  border-image-repeat: initial;
+  outline: solid;
+  color: #adb5bd !important;
+}
+
+.btn-icon-only-dark:hover {
+  background-color: #adb5bd !important;
+  color: black !important;
+  border-color: black !important;
+  transform: scale(1.25);
+  transition: width 0.3s ease-in-out;
+}
+
+.config-btn-icon-only-dark {
+  border-radius: 10%;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+  border-top-color: initial;
+  border-top-style: solid;
+  border-top-width: 0.5px;
+  border-right-color: initial;
+  border-right-style: solid;
+  border-right-width: 0.5px;
+  border-bottom-color: initial;
+  border-bottom-style: solid;
+  border-bottom-width: 0.5px;
+  border-left-color: initial;
+  border-left-style: solid;
+  border-left-width: 0.5px;
+  border-image-source: initial;
+  border-image-slice: initial;
+  border-image-width: initial;
+  border-image-outset: initial;
+  border-image-repeat: initial;
+  outline: solid;
+  color: #adb5bd;
+}
+
+@media (width <= 48em) {
+  .button-row {
+    padding-top: 10px;
+    margin-top: 0px !important;
+  }
+  .fullrow {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: 10px;
+    width: 100%;
+  }
+  .col30 {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 75%;
+    padding-top: 7px;
+    padding-left: 0;
+    padding-right: 0;
+  }
+}

@@ -20,7 +20,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-import { SyntheticEvent, useState } from 'react';
+import { SyntheticEvent, useState } from "react";
 import {
   FloatingLabel,
   Form,
@@ -28,33 +28,34 @@ import {
   InputGroup,
   OverlayTrigger,
   Tooltip,
-} from 'react-bootstrap';
-import { useSelector, useDispatch } from 'react-redux';
-import { RootState } from '../stores/store';
-import { updateQRValue } from '../reducers/qr/qrCodeSettingsSlice';
-import { Eye, EyeSlashFill } from 'react-bootstrap-icons';
-import { setActiveLink } from '../reducers/history/historySlice';
-import Checker from '../components/buttons/Checker';
+} from "react-bootstrap";
+import { RootState } from "../stores/store";
+import { updateQRValue } from "../reducers/qr/qrCodeSettingsSlice";
+import { Eye, EyeSlashFill } from "react-bootstrap-icons";
+import { setActiveLink } from "../reducers/history/historySlice";
+import Checker from "../components/buttons/Checker";
+import "../css/MainConfig.css";
+import { useAppDispatch, useAppSelector } from "../stores/hooks";
 
 export default function WifiForm() {
   // WIFI:S:<SSID>;T:<WEP|WPA|nopass>;P:<PASSWORD>;H:<true|false|blank>;;
-  const dispatch = useDispatch();
-  const dark = useSelector((state: RootState) => state.dark.dark);
-  const darkClass = dark ? 'header-stuff-dark' : 'header-stuff';
-  const settings = useSelector((state: RootState) => state.wifi.settings);
+  const dispatch = useAppDispatch();
+  const dark = useAppSelector((state: RootState) => state.main.settings.dark);
+  const darkClass = dark ? "header-stuff-dark" : "header-stuff";
+  const settings = useAppSelector((state: RootState) => state.wifi);
   const [passwordShown, setPasswordShown] = useState<boolean>(false);
-  const pwField = document.getElementById('wifi-passwd');
-  const activeLink = useSelector(
-    (state: RootState) => state.history.activeLink,
+  const pwField = document.getElementById("wifi-passwd");
+  const activeLink = useAppSelector(
+    (state: RootState) => state.history.activeLink
   );
   const wifiString = `WIFI:S:${activeLink.ssid};T:${activeLink.encryption};P:${activeLink.password};H:${activeLink.hidden};;`;
 
   dispatch(updateQRValue(wifiString));
   const toggle = () => {
     if (!passwordShown) {
-      pwField?.setAttribute('type', 'text');
+      pwField?.setAttribute("type", "text");
     } else {
-      pwField?.setAttribute('type', 'password');
+      pwField?.setAttribute("type", "password");
     }
     setPasswordShown(!passwordShown);
   };
@@ -62,28 +63,28 @@ export default function WifiForm() {
   const valueChanged = (value: SyntheticEvent) => {
     const tar = value.target as HTMLInputElement;
     switch (tar.id) {
-      case 'wifi-encryption-choice':
+      case "wifi-encryption-choice":
         dispatch(
           setActiveLink({
             ...activeLink,
-            encryption: tar.value as 'nopass' | 'WEP' | 'WPA/WPA2',
-          }),
+            encryption: tar.value as "nopass" | "WEP" | "WPA/WPA2",
+          })
         );
         break;
-      case 'wifi-ssid':
+      case "wifi-ssid":
         dispatch(
           setActiveLink({
             ...activeLink,
             ssid: tar.value,
-          }),
+          })
         );
         break;
-      case 'wifi-passwd':
+      case "wifi-passwd":
         dispatch(
           setActiveLink({
             ...activeLink,
             password: tar.value,
-          }),
+          })
         );
         break;
       default:
@@ -96,80 +97,88 @@ export default function WifiForm() {
       setActiveLink({
         ...activeLink,
         hidden: value,
-      }),
+      })
     );
   };
 
   return (
     <>
       <Form>
-        <div className="fullrow">
-          <div className="col20">
-            <Form.Label className={darkClass}>
-              <strong>{settings.encryption.label}</strong>
-            </Form.Label>
-          </div>
-          <div className="col30">
-            <OverlayTrigger
-              placement="auto"
-              delay={{ show: 250, hide: 300 }}
-              overlay={
-                <Tooltip id="wifi-values-tooltip">
-                  {settings.encryption.tooltip}
-                </Tooltip>
-              }
-            >
-              <Form.Select
-                className={darkClass}
-                size="sm"
-                required
-                aria-label={settings?.encryption.ariaLabel}
-                id="wifi-encryption-choice"
-                onChange={(eventKey) => {
-                  if (eventKey.target.value === "Choose one ...") {
-                    return;
-                  }
-                  // dispatch(updateEncryptionValue(eventKey.target.value));
-                  valueChanged(eventKey);
-                }}
-                value={
-                  activeLink.encryption === undefined
-                    ? "Choose one ..."
-                    : activeLink.encryption
+        <div className="main-settings-row">
+          <div className="controls-row" style={{ paddingBottom: "10px" }}>
+            <div className="label-column">
+              <Form.Label className={darkClass}>
+                <strong>{settings.encryption.label}</strong>
+              </Form.Label>
+            </div>
+            <div className="controls-column">
+              <OverlayTrigger
+                placement="auto"
+                delay={{ show: 250, hide: 300 }}
+                overlay={
+                  <Tooltip id="wifi-values-tooltip">
+                    {settings.encryption.tooltip}
+                  </Tooltip>
                 }
               >
-                <option key="none" value="Choose one ...">
-                  Choose One ...
-                </option>
-                <option key="nopass" id="nopass" value="nopass">
-                  No Password
-                </option>
-                <option key="wep" id="WEP" value="WEP">
-                  WEP
-                </option>
-                <option key="wpa" id="WPA/WPA2" value="WPA/WPA2">
-                  WPA/WPA2
-                </option>
-              </Form.Select>
-            </OverlayTrigger>
+                <Form.Select
+                  className={darkClass}
+                  size="sm"
+                  required
+                  aria-label={settings?.encryption.ariaLabel}
+                  id="wifi-encryption-choice"
+                  onChange={(eventKey) => {
+                    if (eventKey.target.value === "Choose one ...") {
+                      return;
+                    }
+                    // dispatch(updateEncryptionValue(eventKey.target.value));
+                    valueChanged(eventKey);
+                  }}
+                  value={
+                    activeLink.encryption === undefined
+                      ? "Choose one ..."
+                      : activeLink.encryption
+                  }
+                >
+                  <option key="none" value="Choose one ...">
+                    Choose One ...
+                  </option>
+                  <option key="nopass" id="nopass" value="nopass">
+                    No Password
+                  </option>
+                  <option key="wep" id="WEP" value="WEP">
+                    WEP
+                  </option>
+                  <option key="wpa" id="WPA/WPA2" value="WPA/WPA2">
+                    WPA/WPA2
+                  </option>
+                </Form.Select>
+              </OverlayTrigger>
+            </div>
           </div>
-          <div className="col20" />
-          <div className="col25">
-            <Checker
-              cState={
-                activeLink.hidden === undefined ? false : activeLink.hidden
-              }
-              label={settings.hidden.label}
-              tooltip={settings.hidden.tooltip}
-              disabled={false}
-              callback={(value) => {
-                checkChanged(value);
-                dispatch(updateQRValue(wifiString));
-              }}
-            />
+          <div className="controls-row">
+            <div className="label-column">
+              <Form.Label className={darkClass}>
+                <strong>{settings.hidden.label}</strong>
+              </Form.Label>
+            </div>
+            <div className="checker-column">
+              <Checker
+                cState={
+                  activeLink.hidden === undefined ? false : activeLink.hidden
+                }
+                label=""
+                tooltip={settings.hidden.tooltip}
+                disabled={false}
+                callback={(value) => {
+                  checkChanged(value);
+                  dispatch(updateQRValue(wifiString));
+                }}
+              />
+            </div>
           </div>
         </div>
-        <div className="fullrow">
+        <div className="controls-row" style={{ paddingBottom: "10px" }}>
           <InputGroup size="lg">
             <OverlayTrigger
               placement="auto"
@@ -198,7 +207,7 @@ export default function WifiForm() {
             </OverlayTrigger>
           </InputGroup>
         </div>
-        <div className="fullrow input-group mb-3">
+        <div className="controls-row" style={{ paddingBottom: "10px" }}>
           <InputGroup size="lg">
             <OverlayTrigger
               placement="auto"
@@ -227,7 +236,7 @@ export default function WifiForm() {
                         ? ""
                         : activeLink.password
                     }
-                    autoComplete='password'
+                    autoComplete="password"
                     onChange={(e) => {
                       valueChanged(e);
                     }}
@@ -241,6 +250,9 @@ export default function WifiForm() {
           </InputGroup>
         </div>
       </Form>
+      <div className="fullrow" style={{ paddingBottom: "25px" }} />
+      <p />
+      <p />
     </>
   );
 }

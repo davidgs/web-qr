@@ -20,16 +20,110 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-import { createRoot } from "react-dom/client";
 import { Provider } from "react-redux";
 import App from "./App";
 import { mainStore } from "./stores/store";
 import ReactDOM from "react-dom/client";
+import { RouterProvider, createBrowserRouter } from "react-router-dom";
+import React from "react";
+import Account from "./pages/Account";
+import BuyPage from "./pages/BuyPage";
+import ConfigPage from "./pages/ConfigPage";
+import Login from "./pages/Login";
+import MainPage from "./pages/MainPage";
+import PricingPage from "./pages/PricingPage";
+import Privacy from "./pages/Privacy";
+import TermsOfService from "./pages/TermsOfService";
+import WelcomePage from "./pages/WelcomePage";
+import ErrorPage from "./ErrorPage";
+import { loader as rootLoader } from "./App";
+import FAQPage from "./pages/FAQ";
+import MyAccount from "./pages/MyAccount";
+import PayFailPage from "./pages/PaymentPages/PayFailPage";
+import PaySuccessPage from "./pages/PaymentPages/PaySuccessPage";
+import UserGuide from "./pages/UserGuide";
 
+const router = createBrowserRouter([
+  {
+    path: "/",
+    element: <App />,
+    errorElement: <ErrorPage />,
+    loader: rootLoader,
+    children: [
+      {
+        path: "account",
+        element: <Account />,
+      },
+      {
+        path: "/",
+        element: <WelcomePage />,
+      },
+      {
+        path: "build",
+        element: <MainPage />,
+      },
+      {
+        path: "buy",
+        element: <BuyPage />,
+      },
+      {
+        path: "config",
+        element: <ConfigPage />,
+      },
+      {
+        path: "faq",
+        element: <FAQPage />,
+      },
+      {
+        path: "guide",
+        element: <UserGuide />,
+      },
+      {
+        path: "login",
+        element: <Login />,
+      },
+      {
+        path: "myAccount",
+        element: <MyAccount />,
+      },
+      {
+        path: "payment-failed",
+        element: <PayFailPage />,
+      },
+      {
+        path: "payment-success",
+        element: <PaySuccessPage />,
+      },
+      {
+        path: "pricing",
+        element: <PricingPage />,
+      },
+      {
+        path: "privacy",
+        element: <Privacy />,
+      },
+      {
+        path: "tos",
+        element: <TermsOfService />,
+      },
+      {
+        path: "welcome",
+        element: <WelcomePage />,
+      },
+    ],
+    //   {
+    //     path: "contacts/:contactId",
+    //     element: <Contact />,
+    //   },
+    // ],
+  },
+]);
 const root = document.getElementById("root");
 if (!root) throw new Error("No root element found");
 ReactDOM.createRoot(root).render(
-  <Provider store={mainStore}>
-    <App />
-  </Provider>
+  <React.StrictMode>
+    <Provider store={mainStore}>
+      <RouterProvider router={router} />
+    </Provider>
+  </React.StrictMode>
 );

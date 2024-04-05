@@ -20,11 +20,11 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-import { JSX, useState, SyntheticEvent, useEffect } from 'react';
-import { Accordion, Form } from 'react-bootstrap';
-import { UtmKeyValue, UtmObj } from '../types';
-import Checker from '../components/buttons/Checker';
-import PillArea from './pills/PillArea';
+import { JSX, useState, SyntheticEvent, useEffect } from "react";
+import { Accordion, Form } from "react-bootstrap";
+import { UtmKeyValue, UtmObj } from "../types";
+import Checker from "../components/buttons/Checker";
+import PillArea from "./pills/PillArea";
 
 interface UtmAccordianProps {
   type: string;
@@ -35,14 +35,14 @@ interface UtmAccordianProps {
 }
 
 export default function UTMAccordianItem(
-  props: UtmAccordianProps,
+  props: UtmAccordianProps
 ): JSX.Element {
   const { type, value, itemNo, callback } = props;
   const [accValue, setAccValue] = useState<UtmObj>(value as UtmObj);
-  const [kvValue, setKvValue] = useState<string>('');
+  const [kvValue, setKvValue] = useState<string>("");
   const [valValid, setValValid] = useState<boolean>(true);
   const valKind: string =
-    type.split('_')[1].charAt(0).toUpperCase() + type.split('_')[1].slice(1);
+    type.split("_")[1].charAt(0).toUpperCase() + type.split("_")[1].slice(1);
 
   useEffect(() => {
     callback(type, accValue);
@@ -76,18 +76,18 @@ export default function UTMAccordianItem(
   const addPill = (event: SyntheticEvent) => {
     const target = event.target as HTMLInputElement;
     setKvValue(target?.value);
-    if (!target?.value.includes(',')) {
+    if (!target?.value.includes(",")) {
       return;
     }
-    if (target?.value.indexOf('=') === -1) {
+    if (target?.value.indexOf("=") === -1) {
       setValValid(false);
       return;
     }
-    setKvValue('');
+    setKvValue("");
     const newTrm = accValue?.value as UtmKeyValue[];
     const newTrmPill = {
-      key: target?.value?.replace(/,/g, '').split('=')[1].trim(),
-      value: target?.value?.replace(/,/g, '').split('=')[0].trim(),
+      key: target?.value?.replace(/,/g, "").split("=")[1].trim(),
+      value: target?.value?.replace(/,/g, "").split("=")[0].trim(),
     };
     newTrm.push(newTrmPill);
     setAccValue((prevConfig) => {
@@ -110,14 +110,14 @@ export default function UTMAccordianItem(
             </div>
             <div className="col10">
               <Checker
-                cState={accValue?.useValue}
+                cState={accValue?.use_value}
                 disabled={false}
                 label=""
                 tooltip={`Check to enable the use of the '${type}' value`}
                 callback={(v) => {
                   setAccValue((prevConfig) => {
                     const newConfig = { ...(prevConfig as UtmObj) };
-                    newConfig.useValue = v;
+                    newConfig.use_value = v;
                     callback(type, newConfig);
                     return newConfig;
                   });
@@ -126,7 +126,7 @@ export default function UTMAccordianItem(
             </div>
             <div className="col60" />
           </div>
-          {accValue?.useValue && (
+          {accValue?.use_value && (
             <>
               {/* item Label */}
               <div className="fullrow">
@@ -142,7 +142,7 @@ export default function UTMAccordianItem(
                   id={`${type}-label`}
                   placeholder={`Enter ${type} field label`}
                   value={
-                    accValue?.showName
+                    accValue?.show_name
                       ? `${accValue?.label} (${type})`
                       : `${accValue?.label}`
                   }
@@ -163,14 +163,14 @@ export default function UTMAccordianItem(
                 </div>
                 <div className="col10">
                   <Checker
-                    cState={accValue?.showName ? accValue.showName : false}
+                    cState={accValue?.show_name ? accValue.show_name : false}
                     disabled={false}
                     label=""
                     tooltip="check to show the field name in the field label"
                     callback={(v) => {
                       setAccValue((prevConfig) => {
                         const newConfig = { ...(prevConfig as UtmObj) };
-                        newConfig.showName = v;
+                        newConfig.show_name = v;
                         callback(type, newConfig);
                         return newConfig;
                       });
@@ -191,7 +191,7 @@ export default function UTMAccordianItem(
                   type="text"
                   id={`${type}-tooltip`}
                   placeholder={`Enter ${type} field tooltip`}
-                  value={accValue?.tooltip ? accValue.tooltip : ''}
+                  value={accValue?.tooltip ? accValue.tooltip : ""}
                   onChange={(e) => {
                     setAccValue((prevConfig) => {
                       const newConfig = { ...(prevConfig as UtmObj) };
@@ -215,11 +215,11 @@ export default function UTMAccordianItem(
                   id={`${type}-aria`}
                   placeholder={`Enter ${type} field ARIA (Accessibility) label`}
                   required
-                  value={accValue?.ariaLabel ? accValue.ariaLabel : ''}
+                  value={accValue?.aria_label ? accValue.aria_label : ""}
                   onChange={(e) => {
                     setAccValue((prevConfig) => {
                       const newConfig = { ...(prevConfig as UtmObj) };
-                      newConfig.ariaLabel = e.target.value;
+                      newConfig.aria_label = e.target.value;
                       callback(type, newConfig);
                       return newConfig;
                     });
@@ -238,7 +238,7 @@ export default function UTMAccordianItem(
                   type="text"
                   id={`${type}-error`}
                   placeholder={`Enter ${type} field error text`}
-                  value={accValue?.error ? accValue.error : ''}
+                  value={accValue?.error ? accValue.error : ""}
                   onChange={(e) => {
                     setAccValue((prevConfig) => {
                       const newConfig = { ...(prevConfig as UtmObj) };
@@ -251,21 +251,21 @@ export default function UTMAccordianItem(
               </div>
               {/* use chooser or txt */}
               <div className="fullrow">
-                {accValue?.useValue ? (
+                {accValue?.use_value ? (
                   <div className="fullrow">
                     <div className="col15">
                       <Form.Label>Use Chooser</Form.Label>
                     </div>
                     <div className="col10">
                       <Checker
-                        cState={accValue?.isChooser}
+                        cState={accValue?.is_chooser}
                         disabled={false}
                         label=""
                         tooltip={`Use a chooser to select from a list of ${type} values`}
                         callback={(v) => {
                           setAccValue((prevConfig) => {
                             const newConfig = { ...(prevConfig as UtmObj) };
-                            newConfig.isChooser = v;
+                            newConfig.is_chooser = v;
                             callback(type, newConfig);
                             return newConfig;
                           });
@@ -278,14 +278,14 @@ export default function UTMAccordianItem(
                     </div>
                     <div className="col10">
                       <Checker
-                        cState={!accValue?.isChooser}
+                        cState={!accValue?.is_chooser}
                         disabled={false}
                         label=""
                         tooltip={`Use a Text Field to enter ${type} values`}
                         callback={(v) => {
                           setAccValue((prevConfig) => {
                             const newConfig = { ...(prevConfig as UtmObj) };
-                            newConfig.isChooser = !v;
+                            newConfig.is_chooser = !v;
                             callback(type, newConfig);
                             return newConfig;
                           });
@@ -305,7 +305,7 @@ export default function UTMAccordianItem(
                 )} */}
               </div>
               {/* item Values */}
-              {accValue?.isChooser && ( // || utmObj?.restrict_bases ? (
+              {accValue?.is_chooser && ( // || utmObj?.restrict_bases ? (
                 <>
                   <div className="fullrow">
                     <Form.Label>
@@ -316,7 +316,7 @@ export default function UTMAccordianItem(
                     <Form.Control
                       type="text"
                       placeholder="Enter comma-separated list of key=value pairs to use"
-                      value={kvValue || ''}
+                      value={kvValue || ""}
                       required
                       id={`${type}-values`}
                       isInvalid={!valValid}

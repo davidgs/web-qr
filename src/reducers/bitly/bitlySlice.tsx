@@ -20,53 +20,154 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-import { createSlice } from '@reduxjs/toolkit';
-import { defaultBitlyConfig } from '../../types';
+import { createAsyncThunk, PayloadAction, createSlice } from "@reduxjs/toolkit";
+import { BitlyConfig, defaultBitlyConfig, settingsServer } from "../../types";
 
-const initialState = {
-  settings: defaultBitlyConfig,
+export interface BitlyState {
+  loading: boolean;
+  settings: BitlyConfig;
+  error: string | undefined;
+}
+
+const initialState: BitlyState = {
+  settings: {
+    bitly_enabled: defaultBitlyConfig.bitly_enabled,
+    bitly_addr: defaultBitlyConfig.bitly_addr,
+    bitly_token: defaultBitlyConfig.bitly_token,
+    bitly_domain: defaultBitlyConfig.bitly_domain,
+    label: defaultBitlyConfig.label,
+    tooltip: defaultBitlyConfig.tooltip,
+    aria_label: defaultBitlyConfig.aria_label,
+    error: defaultBitlyConfig.error,
+    use_value: defaultBitlyConfig.use_value,
+    type: defaultBitlyConfig.type,
+  },
+  loading: false,
+  error: undefined,
 };
 
+export const fetchBitly = createAsyncThunk(
+  "bitly/fetchBitly",
+  async ({ username }: { username: string }) => {
+    const data = { username: username, data_fetch: "bitly_settings" };
+    if (username === "") {
+      return defaultBitlyConfig;
+    }
+    const session = fetch(`${settingsServer}user-data`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        console.log("bitly data", data);
+        return data;
+      })
+      .catch((err) => {
+        console.error("getting bitly user error", err);
+        return err;
+      });
+    return session;
+  }
+);
+
+export const saveBitly = createAsyncThunk(
+  "bitly/saveBitly",
+  async ({
+    username,
+    settings,
+  }: {
+    username: string;
+    settings: BitlyConfig;
+  }) => {
+    const data = { username: username, settings: settings };
+    const session = fetch(`${settingsServer}update-bitly-settings`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        return data.bitly_settings;
+      })
+      .catch((err) => {
+        console.error("saving bitly user error", err);
+        return err;
+      });
+    return session;
+  }
+);
+
 export const bitlySlice = createSlice({
-  name: 'bitly',
+  name: "bitly",
   initialState,
   reducers: {
     check: (state) => {
-      state.settings.bitlyEnabled = !state.settings.bitlyEnabled as boolean;
+      state.settings.bitly_enabled = !state.settings.bitly_enabled;
     },
-    updateURL: (state, action) => {
-      state.settings.bitlyAddr = action.payload as string;
+    updateURL: (state, action: PayloadAction<string>) => {
+      state.settings.bitly_addr = action.payload;
     },
-    updateToken: (state, action) => {
-      state.settings.bitlyToken = action.payload as string;
+    updateToken: (state, action: PayloadAction<string>) => {
+      state.settings.bitly_token = action.payload;
     },
-    updateLabel: (state, action) => {
-      state.settings.label = action.payload as string;
+    updateLabel: (state, action: PayloadAction<string>) => {
+      state.settings.label = action.payload;
     },
-    updateTooltip: (state, action) => {
-      state.settings.tooltip = action.payload as string;
+    updateTooltip: (state, action: PayloadAction<string>) => {
+      state.settings.tooltip = action.payload;
     },
-    updateAriaLabel: (state, action) => {
-      state.settings.ariaLabel = action.payload as string;
+    updateAriaLabel: (state, action: PayloadAction<string>) => {
+      state.settings.aria_label = action.payload;
     },
-    updateError: (state, action) => {
-      state.settings.error = action.payload as string;
+    updateError: (state, action: PayloadAction<string>) => {
+      state.settings.error = action.payload;
     },
-    updateDomain: (state, action) => {
-      state.settings.bitlyDomain = action.payload as string;
+    updateDomain: (state, action: PayloadAction<string>) => {
+      state.settings.bitly_domain = action.payload;
     },
-    updateUseValue: (state, action) => {
-      state.settings.useValue = action.payload as boolean;
+    updateUseValue: (state, action: PayloadAction<boolean>) => {
+      state.settings.use_value = action.payload;
     },
-    updateType: (state, action) => {
-      state.settings.type = action.payload as string;
+    updateType: (state, action: PayloadAction<string>) => {
+      state.settings.type = action.payload;
     },
-    updateEnableBitly: (state, action) => {
-      state.settings.bitlyEnabled = action.payload as boolean;
+    updateEnableBitly: (state, action: PayloadAction<boolean>) => {
+      state.settings.bitly_enabled = action.payload;
     },
-    updateBitlySettings: (state, action) => {
-      state.settings = action.payload as any;
+    updateBitlySettings: (state, action: PayloadAction<BitlyConfig>) => {
+      state.settings = action.payload;
     },
+  },
+  extraReducers: (builder) => {
+    builder.addCase(fetchBitly.pending, (state) => {
+      state.loading = true;
+    });
+    builder.addCase(fetchBitly.fulfilled, (state, action) => {
+      state.loading = false;
+      state.settings = action.payload as BitlyConfig;
+    });
+    builder.addCase(fetchBitly.rejected, (state, action) => {
+      state.loading = false;
+      state.settings = defaultBitlyConfig;
+      state.error = action.error.message as string | undefined;
+    });
+    builder.addCase(saveBitly.pending, (state) => {
+      state.loading = true;
+    });
+    builder.addCase(saveBitly.fulfilled, (state, action) => {
+      state.loading = false;
+      state.settings = action.payload as BitlyConfig;
+    });
+    builder.addCase(saveBitly.rejected, (state, action) => {
+      state.loading = false;
+      state.settings = defaultBitlyConfig;
+      state.error = action.error.message as string | undefined;
+    });
   },
 });
 

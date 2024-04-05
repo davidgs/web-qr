@@ -20,29 +20,29 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-import React from 'react';
+import React from "react";
 import {
   Accordion,
   Form,
   FormControl,
   OverlayTrigger,
   Tooltip,
-} from 'react-bootstrap';
-import { useSelector, useDispatch } from 'react-redux';
-import ReactId from '../../utils/ReactId';
+} from "react-bootstrap";
+import ReactId from "../../utils/ReactId";
 import {
   updateSSIDAriaLabel,
   updateSSIDLabel,
-} from '../../reducers/wifi/wifiSlice';
-import { updateTooltip } from '../../reducers/bitly/bitlySlice';
-import { RootState } from '../../stores/store';
+} from "../../reducers/wifi/wifiSlice";
+import { updateTooltip } from "../../reducers/bitly/bitlySlice";
+import { RootState } from "../../stores/store";
+import { useAppDispatch, useAppSelector } from "../../stores/hooks";
 
 export default function WiFiConfigurator(): React.JSX.Element {
-  const dispatch = useDispatch();
-  const dark = useSelector((state: RootState) => state.dark.dark);
-  const settings = useSelector((state: RootState) => state.wifi.settings);
+  const dispatch = useAppDispatch();
+  const dark = useAppSelector((state: RootState) => state.main.settings.dark);
+  const settings = useAppSelector((state: RootState) => state.wifi);
 
-  const darkClass = dark ? 'header-stuff-dark' : 'header-stuff';
+  const darkClass = dark ? "header-stuff-dark" : "header-stuff";
 
   return (
     <Accordion.Body id="wifi-settings">

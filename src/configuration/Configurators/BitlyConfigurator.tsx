@@ -20,29 +20,30 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-import { Accordion, Form, OverlayTrigger, Tooltip } from 'react-bootstrap';
-import { useSelector, useDispatch } from 'react-redux';
-import Checker from '../../components/buttons/Checker';
+import { Accordion, Form, OverlayTrigger, Tooltip } from "react-bootstrap";
+import Checker from "../../components/buttons/Checker";
+import { RootState } from "../../stores/store";
+import "../../css/MainConfig.css";
+import "../../css/Config.css";
 import {
-  updateTooltip,
-  updateLabel,
   updateAriaLabel,
   updateDomain,
+  updateLabel,
   updateToken,
-  updateType,
+  updateTooltip,
   updateURL,
   updateUseValue,
-  updateError,
-} from '../../reducers/bitly/bitlySlice';
-import { RootState } from '../../stores/store';
+} from "../../reducers/bitly/bitlySlice";
+import { useAppDispatch, useAppSelector } from "../../stores/hooks";
+import { setSettingsUpdated } from "../../reducers/session/loginSlice";
 
 export default function BitlyConfigurator({ eKey }: { eKey: string }) {
-  const dark = useSelector((state: RootState) => state.dark.dark);
-  const dispatch = useDispatch();
-  const settings = useSelector((state: RootState) => state.bitly.settings);
-  const session = useSelector((state: RootState) => state.session.settings);
-  const darkClass = dark ? 'header-stuff-dark' : 'header-stuff';
-  const type: string = 'Link Shortener';
+  const dispatch = useAppDispatch();
+  const dark = useAppSelector((state: RootState) => state.main.settings.dark);
+  const session = useAppSelector((state: RootState) => state.license.settings);
+  const bitly_settings = useAppSelector((state: RootState) => state.bitly);
+  const darkClass = dark ? "header-stuff-dark" : "header-stuff";
+  const type: string = "Link Shortener";
 
   return (
     <Accordion.Item eventKey={eKey}>
@@ -51,289 +52,352 @@ export default function BitlyConfigurator({ eKey }: { eKey: string }) {
         delay={{ show: 250, hide: 300 }}
         overlay={
           <Tooltip id={`${type}-accordion`}>
-            Edit configuration for {settings.type}
+            Edit configuration for {bitly_settings.settings.type}
           </Tooltip>
         }
       >
         <Accordion.Header className={darkClass}>
           <strong>{type} Configuration</strong>
+          <span style={{ marginTop: ".5rem" }}>
+            {session.license_type !== "enterprise" ? (
+              <OverlayTrigger
+                placement="auto"
+                delay={{ show: 250, hide: 300 }}
+                overlay={
+                  <Tooltip id="brand-tooltip">
+                    {session.license_type !== "free"
+                      ? "Some of these Bitly settings for paid Customers only."
+                      : "Bitly settings for paid Customers only."}
+                  </Tooltip>
+                }
+              >
+                <i className={`bi bi-ban ${session.license_type}`}></i>
+              </OverlayTrigger>
+            ) : (
+              ""
+            )}
+          </span>
         </Accordion.Header>
       </OverlayTrigger>
-      <Accordion.Body id={settings.type}>
+      <Accordion.Body id={bitly_settings.settings.type}>
         <Form noValidate>
-          {/* item Use Value */}
-          <div className="fullrow">
-            <div className={`${darkClass} col30`}>
-              <Form.Label
-                className={darkClass}
-              >{`Use '${settings.type}'?`}</Form.Label>
-            </div>
-            <div className="col10">
-              <Checker
-                cState={settings.useValue}
-                disabled={false}
-                label=""
-                tooltip={
-                  settings.useValue
-                    ? `Uncheck to not the use the '${settings.type}'`
-                    : `Check to use the '${settings.type}'`
-                }
-                callback={(e) => dispatch(updateUseValue(e))}
-              />
-            </div>
-            <div className="col60" />
-          </div>
-          {settings.useValue && (
-            <>
-              {/* Link Shortener Type */}
-              {/* <div className="fullrow">
-                <div className="col30">
+          <div className="main-settings-row">
+            <div className="bitly-settings">
+              {/* item Use Value */}
+              <div className="bitly-settings-row">
+                <div className={`${darkClass} text-label`}>
                   <Form.Label
                     className={darkClass}
-                  >{`Choose '${type}'?`}</Form.Label>
+                  >{`Use '${bitly_settings.settings.type}'?`}</Form.Label>
                 </div>
-                <div className="col15">
-                  <Form.Select
-                    className={darkClass}
-                    size="sm"
-                    required
-                    aria-label={settings.ariaLabel}
-                    id={type}
-                    disabled={false}
-                    onChange={(eventKey) => {
-                      if (eventKey.target.value === "Choose one ...") {
-                        // returnVal('');
-                        return;
-                      }
-                      dispatch(updateType(eventKey.target.value));
-                    }}
-                    value={settings.type}
-                  >
-                    <option key="none" value="Choose one ...">
-                      Choose One ...
-                    </option>
-                    <option key="bitly" value="bitly">
-                      Bitly
-                    </option>
-                    <option key="tinyurl" value="yourls">
-                      YOURLS
-                    </option>
-                  </Form.Select>
-                </div>
-                <div className="col50" />
-                <div className="col5" />
-              </div> */}
-              {/* item link shortener URL */}
-              <div className="fullrow">
-                <Form.Label className={darkClass}>
-                  <strong>Link Shortener URL</strong>
-                </Form.Label>
-              </div>
-              <div className="fullrow">
-                <OverlayTrigger
-                  placement="auto"
-                  delay={{ show: 250, hide: 300 }}
-                  overlay={
-                    <Tooltip id={`${settings.type}-error-tooltip`}>
-                      Enter the URL for your link shortener
-                    </Tooltip>
-                  }
-                >
-                  <Form.Control
-                    className={darkClass}
-                    type="text"
-                    id={`${type}-error`}
-                    placeholder={settings.bitlyAddr}
-                    value={settings.bitlyAddr}
-                    onChange={(e) => {
-                      dispatch(updateURL(e.target.value));
+                <div className="check-column">
+                  <Checker
+                    cState={bitly_settings.settings.use_value}
+                    disabled={session.license_type === "free"}
+                    label=""
+                    tooltip={
+                      bitly_settings.settings.use_value
+                        ? `Uncheck to not the use the '${bitly_settings.settings.type}'`
+                        : `Check to use the '${bitly_settings.settings.type}'`
+                    }
+                    callback={(e) => {
+                      dispatch(
+                        setSettingsUpdated(
+                          bitly_settings.settings.use_value !== e
+                        )
+                      );
+                      dispatch(updateUseValue(e));
                     }}
                   />
-                </OverlayTrigger>
+                </div>
               </div>
-              {/* item link shortener Domain */}
-              {/* Fence off for Enterprise License */}
-              {session.license_type === "pro" && (
+              {bitly_settings.settings.use_value && (
                 <>
-                  <div className="fullrow">
-                    <Form.Label className={darkClass}>
-                      <strong>Short Link Domain (if any)</strong>
-                    </Form.Label>
+                  {/* Link Shortener Type */}
+                  {/* item link shortener URL */}
+                  <div className="bitly-settings-row">
+                    <div className="text-label">
+                      <Form.Label className={darkClass}>
+                        <strong>Link Shortener URL</strong>
+                      </Form.Label>
+                    </div>
+                    <div className="text-column">
+                      <OverlayTrigger
+                        placement="auto"
+                        delay={{ show: 250, hide: 300 }}
+                        overlay={
+                          <Tooltip
+                            id={`${bitly_settings.settings.type}-error-tooltip`}
+                          >
+                            Enter the URL for your link shortener
+                          </Tooltip>
+                        }
+                      >
+                        <Form.Control
+                          className={darkClass}
+                          type="text"
+                          disabled={session.license_type === "free"}
+                          id={`${type}-url`}
+                          placeholder={bitly_settings.settings.bitly_addr}
+                          value={bitly_settings.settings.bitly_addr}
+                          onChange={(e) => {
+                            dispatch(
+                              setSettingsUpdated(
+                                bitly_settings.settings.bitly_addr !==
+                                  e.target.value
+                              )
+                            );
+                            dispatch(updateURL(e.target.value));
+                          }}
+                        />
+                      </OverlayTrigger>
+                    </div>
                   </div>
-                  <div className="fullrow">
-                    <OverlayTrigger
-                      placement="auto"
-                      delay={{ show: 250, hide: 300 }}
-                      overlay={
-                        <Tooltip id={`${settings.type}-error-tooltip`}>
-                          Enter the custom domain for your link shortener
-                        </Tooltip>
-                      }
-                    >
-                      <Form.Control
-                        className={darkClass}
-                        type="text"
-                        id={`${type}-error`}
-                        placeholder={settings.bitlyDomain}
-                        value={settings.bitlyDomain}
-                        onChange={(e) => {
-                          dispatch(updateDomain(e.target.value));
-                        }}
-                      />
-                    </OverlayTrigger>
+
+                  {/* item link shortener Domain */}
+                  {/* Fence off for Enterprise License */}
+                  <div className="bitly-settings-row">
+                    <div className="text-label">
+                      <Form.Label className={darkClass}>
+                        <strong>Short Link Domain (if any)</strong>
+                      </Form.Label>
+                    </div>
+
+                    <div className="text-column">
+                      <OverlayTrigger
+                        placement="auto"
+                        delay={{ show: 250, hide: 300 }}
+                        overlay={
+                          <Tooltip
+                            id={`${bitly_settings.settings.type}-domain-tooltip`}
+                          >
+                            Enter the custom domain for your link shortener
+                          </Tooltip>
+                        }
+                      >
+                        <Form.Control
+                          className={darkClass}
+                          type="text"
+                          disabled={
+                            session.license_type === "free" ||
+                            session.license_type === "basic"
+                          }
+                          id={`${type}-domain`}
+                          placeholder={bitly_settings.settings.bitly_domain}
+                          value={bitly_settings.settings.bitly_domain}
+                          onChange={(e) => {
+                            dispatch(
+                              setSettingsUpdated(
+                                bitly_settings.settings.bitly_domain !==
+                                  e.target.value
+                              )
+                            );
+                            dispatch(updateDomain(e.target.value));
+                          }}
+                        />
+                      </OverlayTrigger>
+                    </div>
                   </div>
+
+                  {/* end fence */}
+                  {/* Link Shortener token */}
+                  <div className="bitly-settings-row">
+                    <div className="text-label">
+                      <Form.Label className={darkClass}>
+                        <strong>Link Shortener API Token</strong>
+                      </Form.Label>
+                    </div>
+                    <div className="text-column">
+                      <OverlayTrigger
+                        placement="auto"
+                        delay={{ show: 250, hide: 300 }}
+                        overlay={
+                          <Tooltip
+                            id={`${bitly_settings.settings.type}-token-tooltip`}
+                          >
+                            Enter the API Token for your link shortener
+                          </Tooltip>
+                        }
+                      >
+                        <Form.Control
+                          className={darkClass}
+                          type="password"
+                          id={`${type}-token`}
+                          placeholder={bitly_settings.settings.bitly_token}
+                          value={bitly_settings.settings.bitly_token}
+                          onChange={(e) => {
+                            dispatch(
+                              setSettingsUpdated(
+                                bitly_settings.settings.bitly_token !==
+                                  e.target.value
+                              )
+                            );
+                            dispatch(updateToken(e.target.value));
+                          }}
+                        />
+                      </OverlayTrigger>
+                    </div>
+                  </div>
+                  {/* item Label */}
+                  {session.license_type === "enterprise" && (
+                    <>
+                      <div className="bitly-settings-row">
+                        <div className="text-label">
+                          <Form.Label className={darkClass}>
+                            <strong>Label</strong>
+                          </Form.Label>
+                        </div>
+                        <div className="text-column">
+                          <OverlayTrigger
+                            placement="auto"
+                            delay={{ show: 250, hide: 300 }}
+                            overlay={
+                              <Tooltip
+                                id={`${bitly_settings.settings.type}-label-tooltip`}
+                              >
+                                Enter the label for the{" "}
+                                {bitly_settings.settings.type} {type} field
+                              </Tooltip>
+                            }
+                          >
+                            <Form.Control
+                              className={darkClass}
+                              type="text"
+                              width="100%"
+                              id={`${type}-label`}
+                              placeholder={`Enter ${bitly_settings.settings.type} ${type} field label`}
+                              value={bitly_settings.settings.label}
+                              onChange={(e) => {
+                                dispatch(
+                                  setSettingsUpdated(
+                                    bitly_settings.settings.label !==
+                                      e.target.value
+                                  )
+                                );
+                                dispatch(updateLabel(e.target.value));
+                              }}
+                            />
+                          </OverlayTrigger>
+                        </div>
+                      </div>
+                      <div className="bitly-settings-row">
+                        <div className="text-label">
+                          <Form.Label className={darkClass}>
+                            <strong>ToolTip Text</strong>
+                          </Form.Label>
+                        </div>
+                        <div className="text-column">
+                          <OverlayTrigger
+                            placement="auto"
+                            delay={{ show: 250, hide: 300 }}
+                            overlay={
+                              <Tooltip id={`${type}-tooltip-tooltip`}>
+                                Enter the tooltip text for the{" "}
+                                {bitly_settings.settings.type} field
+                              </Tooltip>
+                            }
+                          >
+                            <Form.Control
+                              className={darkClass}
+                              type="text"
+                              id={`${type}-tooltip`}
+                              placeholder={`Enter ${bitly_settings.settings.type} field tooltip`}
+                              value={bitly_settings.settings.tooltip}
+                              onChange={(e) => {
+                                dispatch(
+                                  setSettingsUpdated(
+                                    bitly_settings.settings.tooltip !==
+                                      e.target.value
+                                  )
+                                );
+                                dispatch(updateTooltip(e.target.value));
+                              }}
+                            />
+                          </OverlayTrigger>
+                        </div>
+                      </div>
+                      <div className="bitly-settings-row">
+                        <div className="text-label">
+                          <Form.Label className={darkClass}>
+                            <strong>ARIA (Accessibility) Text</strong>
+                          </Form.Label>
+                        </div>
+                        <div className="text-column">
+                          <OverlayTrigger
+                            placement="auto"
+                            delay={{ show: 250, hide: 300 }}
+                            overlay={
+                              <Tooltip id={`${type}-aria-tooltip`}>
+                                Enter the ARIA (Accessibility) text for the{" "}
+                                {bitly_settings.settings.type}: {type} field
+                              </Tooltip>
+                            }
+                          >
+                            <Form.Control
+                              className={darkClass}
+                              type="text"
+                              id={`${type}-aria`}
+                              placeholder={`Enter ${bitly_settings.settings.type} ${type} field ARIA (Accessibility) label`}
+                              required
+                              value={bitly_settings.settings.aria_label}
+                              onChange={(e) => {
+                                dispatch(
+                                  setSettingsUpdated(
+                                    bitly_settings.settings.aria_label !==
+                                      e.target.value
+                                  )
+                                );
+                                dispatch(updateAriaLabel(e.target.value));
+                              }}
+                            />
+                          </OverlayTrigger>
+                        </div>
+                      </div>
+                      {/* item Error */}
+                      {/* item Aria */}
+                      <div className="bitly-settings-row">
+                        <div className="text-label">
+                          <Form.Label className={darkClass}>
+                            <strong>Error Feedback Text</strong>
+                          </Form.Label>
+                        </div>
+                        <div className="text-column">
+                          <OverlayTrigger
+                            placement="auto"
+                            delay={{ show: 250, hide: 300 }}
+                            overlay={
+                              <Tooltip id={`${type}-aria-tooltip`}>
+                                Enter the Error text for the{" "}
+                                {bitly_settings.settings.type}: {type} field
+                              </Tooltip>
+                            }
+                          >
+                            <Form.Control
+                              className={darkClass}
+                              type="text"
+                              id={`${type}-error`}
+                              placeholder={`Enter ${bitly_settings.settings.type} ${type} field error text`}
+                              required
+                              value={bitly_settings.settings.error}
+                              onChange={(e) => {
+                                dispatch(
+                                  setSettingsUpdated(
+                                    bitly_settings.settings.error !==
+                                      e.target.value
+                                  )
+                                );
+                                dispatch(updateAriaLabel(e.target.value));
+                              }}
+                            />
+                          </OverlayTrigger>
+                        </div>
+                      </div>
+                    </>
+                  )}
                 </>
               )}
-              {/* end fence */}
-              {/* Link Shortener token */}
-              <div className="fullrow">
-                <Form.Label className={darkClass}>
-                  <strong>Link Shortener API Token</strong>
-                </Form.Label>
-              </div>
-              <div className="fullrow">
-                <OverlayTrigger
-                  placement="auto"
-                  delay={{ show: 250, hide: 300 }}
-                  overlay={
-                    <Tooltip id={`${settings.type}-error-tooltip`}>
-                      Enter the API Token for your link shortener
-                    </Tooltip>
-                  }
-                >
-                  <Form.Control
-                    className={darkClass}
-                    type="password"
-                    id={`${type}-error`}
-                    placeholder={settings.bitlyToken}
-                    value={settings.bitlyToken}
-                    onChange={(e) => {
-                      dispatch(updateToken(e.target.value));
-                    }}
-                  />
-                </OverlayTrigger>
-              </div>
-              {/* item Label */}
-              {session.license_type === "enterprise" && (
-                <>
-                <div className="fullrow">
-                  <Form.Label className={darkClass}>
-                    <strong>Label</strong>
-                  </Form.Label>
-                </div>
-              <div className="fullrow">
-                <OverlayTrigger
-                  placement="auto"
-                  delay={{ show: 250, hide: 300 }}
-                  overlay={
-                    <Tooltip id={`${settings.type}-label-tooltip`}>
-                      Enter the label for the {settings.type} {type} field
-                    </Tooltip>
-                  }
-                >
-                  <Form.Control
-                    className={darkClass}
-                    type="text"
-                    width="100%"
-                    id={`${type}-label`}
-                    placeholder={`Enter ${settings.type} ${type} field label`}
-                    value={settings.label}
-                    onChange={(e) => {
-                      dispatch(updateLabel(e.target.value));
-                    }}
-                  />
-                </OverlayTrigger>
-              </div>
-              <div className="fullrow">
-                <Form.Label className={darkClass}>
-                  <strong>ToolTip Text</strong>
-                </Form.Label>
-              </div>
-              <div className="fullrow">
-                <OverlayTrigger
-                  placement="auto"
-                  delay={{ show: 250, hide: 300 }}
-                  overlay={
-                    <Tooltip id={`${type}-tooltip-tooltip`}>
-                      Enter the tooltip text for the {settings.type} field
-                    </Tooltip>
-                  }
-                >
-                  <Form.Control
-                    className={darkClass}
-                    type="text"
-                    id={`${type}-tooltip`}
-                    placeholder={`Enter ${settings.type} field tooltip`}
-                    value={settings.tooltip}
-                    onChange={(e) => {
-                      dispatch(updateTooltip(e.target.value));
-                    }}
-                  />
-                </OverlayTrigger>
-              </div>
-              <div className="fullrow">
-                <Form.Label className={darkClass}>
-                  <strong>ARIA (Accessibility) Text</strong>
-                </Form.Label>
-              </div>
-              <div className="fullrow">
-                <OverlayTrigger
-                  placement="auto"
-                  delay={{ show: 250, hide: 300 }}
-                  overlay={
-                    <Tooltip id={`${type}-aria-tooltip`}>
-                      Enter the ARIA (Accessibility) text for the{" "}
-                      {settings.type}: {type} field
-                    </Tooltip>
-                  }
-                >
-                  <Form.Control
-                    className={darkClass}
-                    type="text"
-                    id={`${type}-aria`}
-                    placeholder={`Enter ${settings.type} ${type} field ARIA (Accessibility) label`}
-                    required
-                    value={settings.ariaLabel}
-                    onChange={(e) => {
-                      dispatch(updateAriaLabel(e.target.value));
-                    }}
-                  />
-                </OverlayTrigger>
-              </div>
-              {/* item Error */}
-              {/* item Aria */}
-              <div className="fullrow">
-                <Form.Label className={darkClass}>
-                  <strong>Error Feedback Text</strong>
-                </Form.Label>
-              </div>
-              <div className="fullrow">
-                <OverlayTrigger
-                  placement="auto"
-                  delay={{ show: 250, hide: 300 }}
-                  overlay={
-                    <Tooltip id={`${type}-aria-tooltip`}>
-                      Enter the Error text for the {settings.type}: {type} field
-                    </Tooltip>
-                  }
-                >
-                  <Form.Control
-                    className={darkClass}
-                    type="text"
-                    id={`${type}-error`}
-                    placeholder={`Enter ${settings.type} ${type} field error text`}
-                    required
-                    value={settings.error}
-                    onChange={(e) => {
-                      dispatch(updateError(e.target.value));
-                    }}
-                  />
-                </OverlayTrigger>
-                  </div>
-                </>
-              )}
-            </>
-          )}
+            </div>
+          </div>
         </Form>
       </Accordion.Body>
     </Accordion.Item>

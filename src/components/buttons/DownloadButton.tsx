@@ -20,32 +20,33 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-import { OverlayTrigger, Tooltip, Button } from 'react-bootstrap';
-import { Download } from 'react-bootstrap-icons';
-import potrace from 'potrace';
-import { RootState } from '../../stores/store';
-import { useSelector } from 'react-redux';
-import ReactId from '../../utils/ReactId';
+import { OverlayTrigger, Tooltip, Button } from "react-bootstrap";
+import { Download } from "react-bootstrap-icons";
+import potrace from "potrace";
+import { RootState } from "../../stores/store";
+import ReactId from "../../utils/ReactId";
+import { useAppSelector } from "../../stores/hooks";
 
 export default function DownloadButton() {
-  const qrConf = useSelector((state: RootState) => state.qr.settings);
-  const qrCodeConf = useSelector((state: RootState) => state.qrCode.settings);
-  const dark = useSelector((state: RootState) => state.dark.dark);
-  const darkClass = dark ? 'header-stuff-dark' : 'header-stuff';
+  const qrCodeConf = useAppSelector(
+    (state: RootState) => state.qrCode.settings
+  );
+  const dark = useAppSelector((state: RootState) => state.main.settings.dark);
+  const darkClass = !dark ? "header-stuff-dark" : "header-stuff";
 
   const saveSVG = () => {
     const canvas = document.getElementById(
-      'react-qrcode-logo',
+      "react-qrcode-logo"
     ) as HTMLCanvasElement;
     const params = {
-      background: qrConf.XParent ? 'none' : qrCodeConf.bgColor,
+      background: qrCodeConf.XParent ? "none" : qrCodeConf.bgColor,
       color: qrCodeConf.fgColor,
     };
-    const dataURL = canvas?.toDataURL(`image/${qrConf.QRType}`);
+    const dataURL = canvas?.toDataURL(`image/${qrCodeConf.QRType}`);
     // eslint-disable-next-line func-names
     potrace.trace(dataURL, params, function (err: any, svg: any) {
       if (err) throw err;
-      const a = document.createElement('a');
+      const a = document.createElement("a");
       a.href = `data:image/svg+xml;base64,${btoa(svg)}`;
       a.download = `qrcode-${ReactId()}.svg`;
       a.click();
@@ -53,17 +54,17 @@ export default function DownloadButton() {
   };
 
   const onDownloadClick = () => {
-    if (qrConf.QRType === 'svg') {
+    if (qrCodeConf.QRType === "svg") {
       saveSVG();
       return;
     }
     const canvas = document.getElementById(
-      'react-qrcode-logo',
+      "react-qrcode-logo"
     ) as HTMLCanvasElement;
-    const dataURL = canvas?.toDataURL(`image/${qrConf.QRType}`);
-    const a = document.createElement('a');
+    const dataURL = canvas?.toDataURL(`image/${qrCodeConf.QRType}`);
+    const a = document.createElement("a");
     a.href = dataURL;
-    a.download = `qrcode-${ReactId()}.${qrConf.QRType}`;
+    a.download = `qrcode-${ReactId()}.${qrCodeConf.QRType}`;
     a.click();
   };
 
@@ -77,12 +78,11 @@ export default function DownloadButton() {
     >
       <Button
         variant={dark ? "icon-only-dark" : "icon-only"}
-        size="sm"
         onClick={onDownloadClick}
         className={darkClass}
-        style={{ float: "right", alignItems: "center" }}
+        style={{ float: "right" }}
       >
-        <Download className={darkClass} color={dark ? "#adb5bd" : "#0B263E"} />
+        <Download style={{ marginTop: "-3px" }} />
       </Button>
     </OverlayTrigger>
   );

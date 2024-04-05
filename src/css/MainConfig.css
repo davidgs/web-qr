@@ -1,0 +1,195 @@
+/* The MIT License (MIT)
+ *
+ * Copyright (c) 2022-present David G. Simmons
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ */
+.main-settings-settings {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 60%;
+}
+
+.main-settings-row {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  /* justify-content: center; */
+  width: 100%;
+}
+
+.section-header {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  flex-wrap: wrap;
+  font-weight: bold;
+  font-size: 1.2rem;
+  width: 100%;
+  padding-bottom: 10px;
+}
+
+.controls-row {
+  display: flex;
+  flex-direction: row;
+  /* align-items: center; */
+  justify-content: flex-start;
+  margin-top: 10px;
+  width: 100%;
+}
+.controls-row-invisible {
+  display: flex;
+  flex-direction: row;
+  /* align-items: center; */
+  justify-content: flex-start;
+  margin-top: 10px;
+  width: 100%;
+}
+
+.label-column {
+  display: flex;
+  flex-direction: column;
+  /* align-items: center; */
+  justify-content: center;
+  width: 40%;
+}
+
+.adjuster-label {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  width: 40%;
+}
+
+.aspect-button {
+  width: 50px;
+  height: 50px;
+  font-size: 0.6rem !important;
+  /* display: flex;
+  flex-direction: column; */
+  align-items: center;
+  justify-content: center;
+  /* width: 40%; */
+}
+.adjuster-control {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 60%;
+}
+
+.bitly-settings {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+}
+.bitly-settings-row {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  /* justify-content: center; */
+  width: 100%;
+  padding-bottom: 10px;
+}
+
+.text-label {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  width: 20%;
+}
+.text-column {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: space-between;
+  width: 80%;
+}
+
+.check-column {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 20%;
+}
+
+.image-preview {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 40%;
+}
+
+@media (width <= 48em) {
+  .main-settings-settings {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .controls-row {
+    flex-direction: row;
+    width: 100%;
+    margin-top: 0px;
+    justify-content: flex-start;
+  }
+  .controls-row-invisible {
+    display: none;
+  }
+
+  .controls-row .label-column {
+    flex-direction: column;
+    width: 60%;
+    margin-top: 0px;
+  }
+
+  .controls-row .check-column {
+    flex-direction: column;
+    width: 40%;
+    margin-top: 0px;
+    justify-content: flex-start;
+  }
+
+  .main-settings-row {
+    flex-direction: column;
+    width: 100%;
+        margin-top: 10px;
+
+  }
+
+  .image-preview {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .section-header {
+    font-size: 1rem;
+  }
+
+  .text-label {
+    width: 40%;
+  }
+}
