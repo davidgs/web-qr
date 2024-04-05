@@ -68,7 +68,30 @@ export default function App() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [userfront]);
 
+  /*
+  "data": {
+          "type": "machines",
+          "attributes": {
+            "fingerprint": "4d:Eq:UV:D3:XZ:tL:WN:Bz:mA:Eg:E6:Mk:YX:dK:NC",
+            "platform": "macOS",
+            "name": "Office MacBook Pro"
+          },
+          "relationships": {
+            "license": {
+              "data": {
+                "type": "licenses",
+                "id": "4097d726-6cc5-4156-8575-3a96387e19b4"
+              }
+            }
+          }
+        }
+        */
   async function validateLicense() {
+    const dud = new DeviceUUID().parse();
+    const uuid = new DeviceUUID().get();
+    console.log("uuid: ", uuid);
+    const fingerprint = uuid.replace(/-/gi, "").replace(/(.{2})/g, "$1:").slice(0, -1);
+    console.log("fingerprint: ", fingerprint)
     const response = await fetch(
       `https://api.keygen.sh/v1/accounts/${license.settings.cust_id}/licenses/actions/validate-key`,
       {
@@ -81,7 +104,7 @@ export default function App() {
           meta: {
             key: license.settings.license_key,
             scope: {
-              fingerprint: new DeviceUUID().parse().deviceUUID,
+              fingerprint: fingerprint,
             },
           },
         }),
@@ -95,9 +118,9 @@ export default function App() {
       .catch((error) => console.error("license error: ", error));
     console.log("Response: ", response);
 
-    if (response.meta.valid === false && response.meta.code === "NO_MACHINES") {
+    if (response.meta) {
+      if (response.meta.valid === false && (response.meta.code === "NO_MACHINES" || response.meta.code === "FINGERPRINT_SCOPE_MISMATCH")) {
       // Check out a license
-      const dud = new DeviceUUID().parse()
       console.log("No machines assigned");
       const licResp = await fetch(`${settingsServer}fetchMachine`, {
         method: "POST",
@@ -108,20 +131,21 @@ export default function App() {
           username: userfront.username,
           license: license.settings.license_key,
           id: response.data.id,
-          fingerprint: dud.deviceUUID,
+          fingerprint: fingerprint,
           platform: dud.os,
           name: dud.platform,
         }),
       })
         .then((response) => response.json())
         .then((data) => {
-          console.log("maachine response: ", data);
+          console.log("machine response: ", data);
           return data;
         })
         .catch((error) => console.error("license error: ", error));
       // const { meta, data, errors } = await response.json();
     } else if (response.meta.valid) {
-      console.log("License is valid");
+      console.log("License is valid, machine assigned");
+      }
     }
   }
 
@@ -153,10 +177,6 @@ export default function App() {
    * if the user is logged in, get the user data
    */
   useEffect(() => {
-    const deviceUUID = new DeviceUUID().get();
-    const did = new DeviceUUID().parse();
-    console.log(`did`, did);
-    console.log("deviceUUID", deviceUUID);
     console.log("App.tsx: isLoggedIn", isLogged as boolean);
     dispatch(setLogin(isLogged as boolean));
     if (isLogged) {

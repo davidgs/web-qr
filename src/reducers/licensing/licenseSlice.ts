@@ -55,10 +55,33 @@ export const fetchLicense = createAsyncThunk('license/fetchLicense',
         'Content-Type': 'application/json',
       },
       body: JSON.stringify(data),
+    })
+      .then(response => response.json())
+      .then(data => {
+        console.log(`fetchLicense: ${JSON.stringify(data)}`)
+        return data;
+      })
+      .catch((error) => {
+        console.error('Error:', error);
+        return defaultLicense as LicenseProps;
+      });
+    console.log(`fetchLicense: ${JSON.stringify(session)}`)
+    return session;
+  });
+
+export const updateLicenseSettings = createAsyncThunk('license/updateLicenseSettings',
+  async (props: LicenseProps) => {
+    const data = { username: props.cust_id, data_update: "license_settings", data: props };
+    const session = fetch(`${settingsServer}delete-license`, {
+      method: "POST",
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(data),
     });
     const response = await session;
     const json = await response.json();
-    console.log(`fetchLicense: ${JSON.stringify(json)}`)
+    console.log(`updateLicenseSettings: ${JSON.stringify(json)}`)
     return json;
   });
 

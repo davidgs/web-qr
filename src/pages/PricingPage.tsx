@@ -21,19 +21,9 @@
  * SOFTWARE.
  */
 
-import { Button, Col, OverlayTrigger, Row, Tooltip } from "react-bootstrap";
+import { Col, Row } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
-import {
-  Github,
-  Envelope,
-  Twitter,
-  Linkedin,
-  Mastodon,
-} from "react-bootstrap-icons";
 import Logo from "../images/NewLinkerLogo.png";
-import qCode1 from "../images/qcode1.png";
-import qCode2 from "../images/qcode2.png";
-import qCode3 from "../images/qcode3.png";
 import { RootState } from "../stores/store";
 import { PricingTable } from "../components/StripePricing";
 import { useAppSelector } from "../stores/hooks";
@@ -84,8 +74,10 @@ export default function PricingPage() {
         <div className="fullrow">
           <hr style={{ width: "100%" }}></hr>
         </div>
-{/* Free & Basic Cards */}
-        <div className="fullrow" style={{ justifyContent: "center" }}>
+        <div className="fullrow">&nbsp;</div>
+        <PricingTable />
+        {/* Free & Basic Cards */}
+        {/* <div className="fullrow" style={{ justifyContent: "center" }}>
 
           <div className="col45">
             <FreeCard />
@@ -94,15 +86,15 @@ export default function PricingPage() {
           <div className="col45">
             <BasicCard />
           </div>
-        </div>
-        <div className="fullrow">
+        </div> */}
+        {/* <div className="fullrow">
 
-          </div>
+          </div> */}
         {/* </div> */}
-        <div className="fullrow">
+        {/* <div className="fullrow">
           <hr style={{ width: "100%" }} />
-        </div>
-        <div className="fullrow">
+        </div> */}
+        {/* <div className="fullrow">
           <div className="col45">
             <ProCard />
           </div>
@@ -110,7 +102,7 @@ export default function PricingPage() {
           <div className="col45">
             <EnterpriseCard />
           </div>
-        </div>
+        </div> */}
         <div className="fullrow">
           <hr style={{ width: "100%" }} />
         </div>
@@ -493,8 +485,8 @@ export default function PricingPage() {
             $499/yr
           </Col>
         </Row>
-        <div className="fullrow">&nbsp;</div>
-        <PricingTable />
+        {/* <div className="fullrow">&nbsp;</div>
+        <PricingTable /> */}
         {/* // pricing-table-id="prctbl_1OgV8HGuKQxVPasTQ9Cm8EPf"
           // publishable-key="pk_test_51OYEejGuKQxVPasTmIP0YpYi6bMc5YxPdbTODK6FO0quQ9clYbr9TC9Kihv3o2zV8ErBY2xRD4OwnLNoxgE265B600yqy7eDkN"
         // ></StripePricing> */}

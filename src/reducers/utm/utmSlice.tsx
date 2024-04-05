@@ -43,7 +43,7 @@ const initialState: UtmState = {
 };
 
 export const fetchUtm = createAsyncThunk(
-  "bitly/fetchUtm",
+  "utm/fetchUtm",
   async ({ username }: { username: string }) => {
     const data = { username: username, data_fetch: "utm_settings" };
     if (username === "") {
@@ -309,6 +309,7 @@ export const utmSlice = createSlice({
     });
     builder.addCase(saveUtm.fulfilled, (state, action) => {
       state.loading = false;
+      state.settings = action.payload as UtmParams;
       state.error = undefined;
     });
     builder.addCase(saveUtm.rejected, (state, action) => {

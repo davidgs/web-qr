@@ -68,8 +68,9 @@ export default function MainPage() {
           <hr />
           {mainSet.formType === "wifi" ? <WifiForm /> : <URLForm />}
         </div>
+        <Footer />
       </div>
-      <Footer />
+
       {/* W: {width} x H: {size.height} */}
       {/* <Analytics /> */}
     </>

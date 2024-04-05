@@ -77,7 +77,7 @@ export const sessionSlice = createSlice({
     },
     updateSessionExpiryDate: (
       state,
-      action: PayloadAction<string | Date | undefined>
+      action: PayloadAction<Date | undefined>
     ) => {
       state.expiry_date = action.payload;
     },

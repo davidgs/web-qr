@@ -192,7 +192,7 @@ export default function Account() {
    *
    * @param e Event for form submission
    */
-  const registerMe = (e: any) => {
+  async function registerMe (e: any) {
     e.preventDefault();
     e.stopPropagation();
     console.log("Registering user");
@@ -205,7 +205,7 @@ export default function Account() {
       email: email,
       password: passwd,
     };
-    const session = fetch(`${settingsServer}create-user`, {
+    const session = await fetch(`${settingsServer}create-user`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -219,6 +219,12 @@ export default function Account() {
       .catch((err) => {
         return err;
       });
+    console.log(`session`, session);
+    if (session.error) {
+      setErrorMessage(session.error);
+      setShowError(true);
+      return session;
+    }
     return session;
   };
   // Userfront.signup({

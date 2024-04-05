@@ -115,7 +115,7 @@ export type SessionProps = {
   active: boolean;
   email: string;
   license_type: string;
-  expiry_date?: string | Date;
+  expiry_date?: Date | undefined;
   license_token?: string;
   updated_at?: Date | undefined;
 };
@@ -204,7 +204,7 @@ export const defaultSession: SessionProps = {
   active: false,
   email: '',
   license_type: 'pro',
-  expiry_date: new Date().toDateString(),
+  expiry_date: undefined,
   license_token: '',
   updated_at: undefined,
 };
@@ -633,4 +633,4 @@ export const qrImageSettings = {
   minWidth: 50,
 };
 
-export const settingsServer = "http://localhost:4242/";
+export const settingsServer = "https://qr-builder.io/api/";

@@ -1,7 +1,6 @@
 import {
   Button,
   FloatingLabel,
-  Form,
   FormControl,
   InputGroup,
   OverlayTrigger,
@@ -24,6 +23,8 @@ import {
   saveUserSettings,
 } from "../reducers/user/userSlice";
 import Footer from "../components/Footer";
+import { updateLicense, updateLicenseSettings } from "../reducers/licensing/licenseSlice";
+import { dtf } from "../utils/dateformat";
 
 function MyAccount() {
   const dark = useAppSelector((state) => state.main.settings.dark);
@@ -35,6 +36,18 @@ function MyAccount() {
   const [LicType, setLicType] = useState<string>("Free");
   const [LicStat, setLicStat] = useState<string>("None");
 
+  const cancelSub = () => {
+    console.log("Cancelling subscription...");
+    const ld = { ...license };
+    ld.license_key = "";
+    ld.license_status = "canceled";
+    ld.active = false;
+    ld.expire_date = new Date();
+    ld.license_type = "free";
+    dispatch(updateLicense(ld));
+    dispatch(updateLicenseSettings(ld));
+
+  }
   const saveEdit = () => {
     if (editMe) {
       // save the data
@@ -84,10 +97,8 @@ function MyAccount() {
     console.log(license.license_type);
     const spl = license?.license_type?.split("-");
     const lst = spl[0].charAt(0).toUpperCase() + spl[0].slice(1);
-    console.log(`lst`, lst);
     if (spl[1]) {
       const l = lst + " " + spl[1].charAt(0).toUpperCase() + spl[1].slice(1);
-      console.log(`l`, l);
       setLicType(l);
     } else {
       setLicType(lst);
@@ -96,7 +107,6 @@ function MyAccount() {
     const ls = tspl[0].charAt(0).toUpperCase() + tspl[0].slice(1);
     if (tspl[1]) {
       const l = ls + " " + tspl[1].charAt(0).toUpperCase() + tspl[1].slice(1);
-      console.log(`l`, l);
       setLicStat(l);
     } else {
       setLicStat(ls);
@@ -415,7 +425,7 @@ function MyAccount() {
           <div className="fullrow">
             <div className="col50" style={{ float: "right" }}>
               <p className="updated">
-                Last Updated: {user.settings?.updated_at.toLocaleString()}
+                Last Updated: {dtf.format(new Date(user.settings?.updated_at))}
               </p>
             </div>
           </div>
@@ -497,7 +507,7 @@ function MyAccount() {
             <OverlayTrigger
               placement="auto"
               delay={{ show: 250, hide: 300 }}
-              overlay={<Tooltip id="ssid-label-tooltip">License Key</Tooltip>}
+              overlay={<Tooltip id="ssid-label-tooltip">License Token</Tooltip>}
             >
               <FloatingLabel label="License Token" className={darkClass}>
                 <FormControl
@@ -534,12 +544,29 @@ function MyAccount() {
                   id="expiration-date"
                   aria-label="License Expiration Date"
                   aria-describedby="license expiration"
-                  value={`${license.expire_date}`}
+                  value={dtf.format(new Date(license.expire_date))}
                   disabled={true}
                 />
               </FloatingLabel>
             </OverlayTrigger>
           </InputGroup>
+        </div>
+        {/* cancel subscription */}
+        <div className="col50" style={{ margin: "auto" }}>
+          { license.license_key !== "" &&
+          <InputGroup size="lg">
+            <OverlayTrigger
+              placement="auto"
+              delay={{ show: 250, hide: 300 }}
+              overlay={
+                <Tooltip id="ssid-label-tooltip">Cancel your subscription</Tooltip>
+              }
+            >
+              <Button variant="warning" onClick={cancelSub}>Cancel Subscription</Button>
+
+            </OverlayTrigger>
+            </InputGroup>
+          }
         </div>
         <Footer />
       </div>
