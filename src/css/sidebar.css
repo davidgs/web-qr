@@ -44,19 +44,19 @@
 }
 
 .main-column {
-    transition: width 0.4s ease-in-out;
-    position: absolute;
-    top: 15px;
-    left: 45px;
-    margin-left: 10px;
-    margin-right: 10px;
-    /* min-width: 500px; */
-    margin-top: 10px;
-    width: calc(100% - 90px);
-    position: absolute;
-    left: 60px;
-    overflow-y: auto;
-  }
+  transition: width 0.4s ease-in-out;
+  position: absolute;
+  top: 15px;
+  left: 45px;
+  margin-left: 10px;
+  margin-right: 10px;
+  /* min-width: 500px; */
+  margin-top: 10px;
+  width: calc(100% - 90px);
+  position: absolute;
+  left: 60px;
+  overflow-y: auto;
+}
 
 .main-menu:hover,
 nav.main-menu.expanded {
@@ -68,6 +68,7 @@ nav.main-menu.expanded {
   pointer-events: all;
   cursor: pointer;
 }
+
 .main-menu {
   background: rgb(10, 28, 46);
   position: fixed;
@@ -107,7 +108,7 @@ nav.main-menu.expanded {
   width: 250px;
   justify-content: left;
   align-items: center;
-    color: #999;
+  color: #999;
 
 }
 
@@ -256,7 +257,7 @@ nav.main-menu li.active>a,
   width: 150px;
   height: 60px;
   padding-top: 20px;
-  top: 50%;
+  top: 85%;
   color: rgba(255, 255, 255, .5);
   z-index: 1000;
   height: 60px;
@@ -274,6 +275,7 @@ nav.main-menu li.active>a,
   .bi-8x {
     font-size: 4em !important;
   }
+
   .main-column {
     transition: width 0.4s ease-in-out;
     position: fixed;
@@ -482,8 +484,8 @@ nav.main-menu li.active>a,
   }
 }
 
-@media (height <= 36em){
-   .bi-2x {
+@media (height <=36em) {
+  .bi-2x {
     font-size: 1em !important;
   }
 
@@ -494,6 +496,7 @@ nav.main-menu li.active>a,
   .bi-8x {
     font-size: 4em !important;
   }
+
   .main-column {
     transition: width 0.4s ease-in-out;
     position: fixed;
@@ -701,6 +704,7 @@ nav.main-menu li.active>a,
     background-color: #000000;
   }
 }
+
 @media (width <=20em) {
   .copyright-sticky-closed {
     display: none;
@@ -727,6 +731,7 @@ nav.main-menu li.active>a,
 .bs-text-custom {
   color: rgb(117, 115, 115) !important;
 }
+
 @import 'bootstrap/dist/css/bootstrap.min.css';
 
 @import 'bootstrap-icons/font/bootstrap-icons.css';
