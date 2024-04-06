@@ -26,12 +26,13 @@ import Logo from "../images/NewLinkerLogo.png";
 import { RootState } from "../stores/store";
 import "../css/MainConfig.css";
 import "../css/AccountModal.css";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Userfront from "@userfront/core";
 import { setLogin } from "../reducers/session/loginSlice";
 import { useAppDispatch, useAppSelector } from "../stores/hooks";
 import ResetPassword from "../components/Modals/PasswordReset";
 import Footer from "../components/Footer";
+import { useSearchParams } from "react-router-dom";
 
 export default function Login() {
   const dispatch = useAppDispatch();
@@ -47,7 +48,45 @@ export default function Login() {
   const [errorText, setErrorText] = useState<string>("");
   const [showMe, setShowMe] = useState(false);
 
-  Userfront.init("xbp876mb");
+const [params] = useSearchParams();
+const uuid = params.get("uuid");
+const token = params.get("token");
+const type = params.get("type");
+console.log(`uuid`, uuid);
+console.log(`token`, token);
+
+
+  async function resetPassword() {
+    const payload = {
+    token: token,
+    uuid: uuid,
+};
+    const response = await fetch(
+      "https://api.userfront.com/v0/tenants/xbp876mb/auth/link",
+      {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(payload),
+      }
+    )
+      .then((response) => response.json())
+      .then((data) => {
+        console.log(`data`, data);
+        return data;
+      })
+      .catch((error) => {
+        console.error(`error`, error);
+      });
+    console.log(`response`, response);
+  }
+  useEffect(() => {
+    if (uuid && token) {
+      resetPassword();
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [uuid, token]);
 
   const toggleModal = (show: boolean) => {
     setShowMe(show);
