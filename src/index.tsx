@@ -42,6 +42,7 @@ import MyAccount from "./pages/MyAccount";
 import PayFailPage from "./pages/PaymentPages/PayFailPage";
 import PaySuccessPage from "./pages/PaymentPages/PaySuccessPage";
 import UserGuide from "./pages/UserGuide";
+import ResetPage from "./pages/ResetPage";
 
 const router = createBrowserRouter([
   {
@@ -101,6 +102,10 @@ const router = createBrowserRouter([
       {
         path: "privacy",
         element: <Privacy />,
+      },
+      {
+        path: "reset",
+        element: <ResetPage />,
       },
       {
         path: "tos",

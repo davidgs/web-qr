@@ -40,6 +40,7 @@ export default function Login() {
   const darkClass: string = dark ? "header-stuff-dark" : "header-stuff";
   const loggedIn = useAppSelector((state: RootState) => state.login.login);
   const [userName, setUserName] = useState<string>("");
+  const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [showPass, setShowPass] = useState<boolean>(false);
   const [showError, setShowError] = useState<boolean>(false);
@@ -57,6 +58,9 @@ export default function Login() {
   const valueChanged = (e: React.ChangeEvent<HTMLInputElement>) => {
     const tar: HTMLInputElement = e.target as HTMLInputElement;
     if (tar.id === "username") {
+      if (tar.value.includes("@")) {
+        setEmail(tar.value);
+      }
       setUserName(tar.value);
     } else {
       setPassword(tar.value);
@@ -67,7 +71,7 @@ export default function Login() {
     e.preventDefault();
     Userfront.login({
       method: "password",
-      username: userName,
+      username: (email === "" ? userName : userName),
       password: password,
     })
       .then((session) => {

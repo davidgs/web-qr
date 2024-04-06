@@ -216,6 +216,9 @@ export default function SideNav() {
             )}
           </li>
         </ul>
+        <div style={{ display: "none" }} className="settings">
+          <Link to="/reset/:uuid" />
+        </div>
         <div className={`copyright-sticky-closed`}>
           <p
             style={{
