@@ -81,7 +81,7 @@ export default function PasswordReset({
           </Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          This will send you a login-link to your acount.
+          This will send you a link to reset the password to your acount.
           <br />
           Please enter the email address you used to register.
           <Form>
