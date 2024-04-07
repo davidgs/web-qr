@@ -21,6 +21,15 @@
  * SOFTWARE.
  */
 
+ .prodHunter {
+  position: absolute !important;
+  top: 10px !important;
+  left: calc(100vw - 550px) !important;
+  width: 100%;
+  /* padding: 10px; */
+  z-index: 1000;
+}
+
 .bi-2x {
   font-size: 2em !important;
 }

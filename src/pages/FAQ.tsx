@@ -26,6 +26,7 @@ import Logo from "../images/NewLinkerLogo.png";
 import { RootState } from "../stores/store";
 import { useAppSelector } from "../stores/hooks";
 import Footer from "../components/Footer";
+import PHunt from "../components/PHunt";
 
 export default function FAQPage() {
   const navigate = useNavigate();
@@ -52,6 +53,9 @@ export default function FAQPage() {
                 <span className={darkClass}>QR Builder FAQ</span>
               </strong>
             </h1>
+            <div className="fullrow">
+              <PHunt />
+            </div>
             <p></p>
             <h4 style={{ margin: "auto", textAlign: "center" }}>
               Frequently Asked Questions
@@ -63,7 +67,8 @@ export default function FAQPage() {
               desktop, in the menu at the top right on mobile). You can then
               enter the URL you want to encode, and the type of QR code you want
               to generate. You QR Code is generated in real-time as yuou enter
-              data. You can then download the QR code as a <code>.png</code> image.
+              data. You can then download the QR code as a <code>.png</code>{" "}
+              image.
             </p>
             <h3>How do I buy this?</h3>
             <p>

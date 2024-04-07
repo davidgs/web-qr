@@ -36,6 +36,7 @@ import qCode3 from "../images/qcode3.png";
 import { RootState } from "../stores/store";
 import { useAppSelector } from "../stores/hooks";
 import Footer from "../components/Footer";
+import PHunt from "../components/PHunt";
 
 export default function WelcomePage() {
   const navigate = useNavigate();
@@ -63,6 +64,9 @@ export default function WelcomePage() {
               </strong>
             </h1>
           </div>
+        </div>
+        <div className="fullrow">
+          <PHunt />
         </div>
         <div>
           <b style={{ textWrap: "nowrap" }}>QR Builder </b> is a cross-platform

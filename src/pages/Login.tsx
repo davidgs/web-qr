@@ -116,6 +116,7 @@ console.log(`token`, token);
       .then((session) => {
         console.log(`session`, session);
         dispatch(setLogin(true));
+        Userfront.redirectIfLoggedIn();
       })
       .catch((err) => {
         setErrorText(`${err}`);

@@ -41,6 +41,8 @@ import { settingsServer } from "../types";
 import { setLogin } from "../reducers/session/loginSlice";
 import { useAppDispatch, useAppSelector } from "../stores/hooks";
 import Footer from "../components/Footer";
+import Logo from "../images/NewLinkerLogo.png";
+import PHunt from "../components/PHunt";
 Userfront.init("xbp876mb");
 
 type goodBad = {
@@ -291,6 +293,22 @@ export default function Account() {
   return (
     <>
       <div className="main-column">
+        <div className="fullrow">
+          <div style={{ margin: "auto", textAlign: "center" }}>
+            <h1>
+              <img
+                src={Logo}
+                alt="QR Builder Logo"
+                width={40}
+                height={40}
+              ></img>{" "}
+              Create an Account
+            </h1>
+          </div>
+        </div>
+        <div className="fullrow">
+          <PHunt />
+        </div>
         {!isLoggedIn ? (
           <Form onSubmit={registerMe} noValidate>
             <InputGroup hasValidation>

@@ -33,6 +33,7 @@ import "../css/Pricing.css";
 import ProCard from "../components/Cards/ProCard";
 import EnterpriseCard from "../components/Cards/EnterpriseCard";
 import Footer from "../components/Footer";
+import PHunt from "../components/PHunt";
 
 export default function PricingPage() {
   const navigate = useNavigate();
@@ -65,6 +66,9 @@ export default function PricingPage() {
               </strong>
             </h1>
           </div>
+        </div>
+        <div className="fullrow">
+          <PHunt />
         </div>
         <div>
           <strong>QR Builder</strong>&nbsp;is a cross-platform application for
