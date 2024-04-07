@@ -7,6 +7,7 @@ import { RootState } from "../stores/store";
 import { SyntheticEvent, useState } from "react";
 import { EyeSlashFill, Eye } from "react-bootstrap-icons";
 import PassChecker from "../components/PassChecker";
+import PHunt from "../components/PHunt";
 
 type goodBad = {
   lengthGood: boolean;
@@ -135,6 +136,9 @@ export default function ResetPage() {
               Reset your password
             </h1>
           </div>
+        </div>
+        <div className="fullrow">
+          <PHunt />
         </div>
         <Form onSubmit={resetPassword}>
           <InputGroup hasValidation>

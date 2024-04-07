@@ -29,6 +29,7 @@ import { useAppSelector } from "../stores/hooks";
 
 import Logo from "../images/NewLinkerLogo.png";
 import Footer from "../components/Footer";
+import PHunt from "../components/PHunt";
 
 export default function MainPage() {
   const mainSet = useAppSelector((state: RootState) => state.main.settings);
@@ -59,7 +60,9 @@ export default function MainPage() {
             Welcome back {name}
           </div>
         )}
-
+        <div className="fullrow">
+          <PHunt />
+        </div>
         <div className="link-form">
           <QCode />
           {/* {mainSet.sidebar !== "top" ? <QCode /> : <MobileQCode />} */}

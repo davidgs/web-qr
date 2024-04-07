@@ -106,7 +106,7 @@ const Footer = () => {
             </a>
           </div>
           <div className="col60">
-            <a href="https://www.producthunt.com/posts/qr-builder?utm_source=badge-featured&utm_medium=badge&utm_souce=badge-qr&#0045;builder" target="_blank"><img src="https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=449193&theme=light" alt="Qr&#0032;Builder - The&#0032;modern&#0044;&#0032;easy&#0032;to&#0032;use&#0032;QR&#0032;Code&#0032;builder&#0032;tool | Product Hunt" style={{width: "250px", height: "54px"}} /></a>
+            {/* <a href="https://www.producthunt.com/posts/qr-builder?utm_source=badge-featured&utm_medium=badge&utm_souce=badge-qr&#0045;builder" target="_blank"><img src="https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=449193&theme=light" alt="Qr&#0032;Builder - The&#0032;modern&#0044;&#0032;easy&#0032;to&#0032;use&#0032;QR&#0032;Code&#0032;builder&#0032;tool | Product Hunt" style={{width: "250px", height: "54px"}} /></a> */}
             </div>
         </div>
         <div className="fullrow" style={{ paddingBottom: "25px" }} />

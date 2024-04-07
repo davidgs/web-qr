@@ -25,6 +25,7 @@ import {
 import Footer from "../components/Footer";
 import { updateLicense, updateLicenseSettings } from "../reducers/licensing/licenseSlice";
 import { dtf } from "../utils/dateformat";
+import PHunt from "../components/PHunt";
 
 function MyAccount() {
   const dark = useAppSelector((state) => state.main.settings.dark);
@@ -125,6 +126,9 @@ function MyAccount() {
           </h1>
           <p></p>
         </Row>
+        <div className="fullrow">
+          <PHunt />
+        </div>
         <div
           className="fullrow"
           style={{ textAlign: "center", justifyContent: "center" }}
@@ -553,20 +557,23 @@ function MyAccount() {
         </div>
         {/* cancel subscription */}
         <div className="col50" style={{ margin: "auto" }}>
-          { license.license_key !== "" &&
-          <InputGroup size="lg">
-            <OverlayTrigger
-              placement="auto"
-              delay={{ show: 250, hide: 300 }}
-              overlay={
-                <Tooltip id="ssid-label-tooltip">Cancel your subscription</Tooltip>
-              }
-            >
-              <Button variant="warning" onClick={cancelSub}>Cancel Subscription</Button>
-
-            </OverlayTrigger>
+          {license.license_key !== "" && (
+            <InputGroup size="lg">
+              <OverlayTrigger
+                placement="auto"
+                delay={{ show: 250, hide: 300 }}
+                overlay={
+                  <Tooltip id="ssid-label-tooltip">
+                    Cancel your subscription
+                  </Tooltip>
+                }
+              >
+                <Button variant="warning" onClick={cancelSub}>
+                  Cancel Subscription
+                </Button>
+              </OverlayTrigger>
             </InputGroup>
-          }
+          )}
         </div>
         <Footer />
       </div>

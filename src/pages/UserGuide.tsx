@@ -28,6 +28,7 @@ import { useAppSelector } from "../stores/hooks";
 import Footer from "../components/Footer";
 import "../css/userguide.css";
 import "../css/hyde.css";
+import PHunt from "../components/PHunt";
 
 export default function UserGuide() {
   const navigate = useNavigate();
@@ -46,25 +47,29 @@ export default function UserGuide() {
     <>
       <div className={`main-column`}>
         <div className="fullrow">
-            <h1 style={{ margin: "auto", textAlign: "center" }}>
-              <img src={Logo} alt="QR Builder Logo" width={40} height={40} />{" "}
-              &nbsp; &nbsp;
-              <strong>
-                <span className={darkClass}>QR Builder User Guides</span>
-              </strong>
-            </h1>
-          <p/>
+          <h1 style={{ margin: "auto", textAlign: "center" }}>
+            <img src={Logo} alt="QR Builder Logo" width={40} height={40} />{" "}
+            &nbsp; &nbsp;
+            <strong>
+              <span className={darkClass}>QR Builder User Guides</span>
+            </strong>
+          </h1>
+          <p />
         </div>
         <div className="fullrow">
-            <i className="one bi bi-qr-code bi-1x "></i>Basic Usage:
-          </div>
-          <div className="fullrow">
+          <PHunt />
+        </div>
+        <div className="fullrow">
+          <i className="one bi bi-qr-code bi-1x "></i>Basic Usage:
+        </div>
+        <div className="fullrow">
           <i className="one bi bi-qr-code bi-1x "></i>Advanced Usage:
-            </div>
-          <div className="fullrow"><i className="fa fa-cogs"></i>Configuration
-</div>
+        </div>
+        <div className="fullrow">
+          <i className="fa fa-cogs"></i>Configuration
+        </div>
         <Footer />
-      </div >
-      </>
+      </div>
+    </>
   );
 }

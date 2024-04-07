@@ -48,6 +48,7 @@ import { setSettingsUpdated } from "../reducers/session/loginSlice";
 import Logo from "../images/NewLinkerLogo.png";
 import WiFiConfigurator from "../configuration/Configurators/WiFiConfigurator";
 import Footer from "../components/Footer";
+import PHunt from "../components/PHunt";
 
 function ConfigPage(): JSX.Element {
   const [targetValidated] = useState(false);
@@ -129,6 +130,9 @@ function ConfigPage(): JSX.Element {
           </h1>
           <p></p>
         </Row>
+        <div className="fullrow">
+          <PHunt />
+        </div>
         {(license.license_type === "free" || !loggedIn) && (
           <Row>
             <h2 className={darkClass} style={{ margin: "auto" }}>
