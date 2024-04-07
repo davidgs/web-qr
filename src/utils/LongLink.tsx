@@ -20,43 +20,44 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-import { ActiveLink } from '../types';
+import { ActiveLink } from "../types";
 
 export function makeLongLink(linkParts: ActiveLink): string {
-  let tempLink: string = 'https://www.example.com/';
+  let tempLink: string = "https://www.example.com/";
   tempLink = linkParts?.utm_target as string;
-  let utmString = '';
-  if (linkParts?.utm_campaign !== '' && linkParts?.utm_campaign !== undefined) {
-    utmString !== ''
-      ? (utmString += `?utm_campaign=${linkParts?.utm_campaign}`)
-      : (utmString += `&utm_source${linkParts?.utm_campaign}`);
-  }
-  if (linkParts?.utm_source !== '' && linkParts?.utm_source !== undefined) {
+  let utmString = "";
+  if (linkParts?.utm_source !== "" && linkParts?.utm_source !== undefined) {
     utmString === ""
       ? (utmString += `?utm_source=${linkParts?.utm_source}`)
       : (utmString += `&utm_source=${linkParts?.utm_source}`);
   }
-  if (linkParts?.utm_medium !== '' && linkParts?.utm_medium !== undefined) {
+  if (linkParts?.utm_medium !== "" && linkParts?.utm_medium !== undefined) {
     utmString === ""
       ? (utmString += `?utm_medium=${linkParts?.utm_medium}`)
       : (utmString += `&utm_medium=${linkParts?.utm_medium}`);
   }
-  if (linkParts?.utm_term !== '' && linkParts?.utm_term !== undefined) {
+  if (linkParts?.utm_campaign !== "" && linkParts?.utm_campaign !== undefined) {
+    utmString === ""
+      ? (utmString += `?utm_campaign=${linkParts?.utm_campaign}`)
+      : (utmString += `&utm_campaign=${linkParts?.utm_campaign}`);
+  }
+
+  if (linkParts?.utm_term !== "" && linkParts?.utm_term !== undefined) {
     utmString === ""
       ? (utmString += `?utm_term=${linkParts?.utm_term}`)
       : (utmString += `&utm_term=${linkParts?.utm_term}`);
   }
-  if (linkParts?.utm_content !== '' && linkParts?.utm_content !== undefined) {
+  if (linkParts?.utm_content !== "" && linkParts?.utm_content !== undefined) {
     utmString === ""
       ? (utmString += `?utm_content=${linkParts?.utm_content}`)
       : (utmString += `&utm_content=${linkParts?.utm_content}`);
   }
-  if (linkParts?.utm_keyword !== '' && linkParts?.utm_keyword !== undefined) {
+  if (linkParts?.utm_keyword !== "" && linkParts?.utm_keyword !== undefined) {
     utmString === ""
       ? (utmString += `?keyword=${linkParts?.utm_keyword}`)
       : (utmString += `&keyword=${linkParts?.utm_keyword}`);
   }
-  if (utmString !== '') (tempLink += `/${utmString}`);
+  if (utmString !== "") tempLink += `/${utmString}`;
   return tempLink;
 }
 
