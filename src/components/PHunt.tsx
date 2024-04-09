@@ -15,23 +15,23 @@ export default function PHunt() {
   return (
     <Draggable>
       <div
-        className="fullrow prodHunter"
+        className=" prod-hunt fullrow"
         style={{
           display: vis,
           float: "right",
           position: "absolute",
           top: "12px",
-          // left: "30px",
         }}
       >
         <div
           className="handle"
-          style={{
-            display: "flex",
-            flexDirection: "column",
-            width: "36px",
-            paddingTop: "5px",
-          }}
+          // style={{
+          //   display: "flex",
+          //   flexDirection: "column",
+          //   width: "36px",
+          //   paddingTop: "5px",
+          //   color: "white",
+          // }}
         >
           <i className="bi bi-grip-vertical bi-2x"></i>
         </div>
@@ -50,15 +50,9 @@ export default function PHunt() {
             height="54"
           />
         </a>
-        <div
+        <div className="prod-close"
           onClick={hideMe}
-          style={{
-            width: "30px",
-            marginTop: "-25px",
-            marginLeft: "-10px",
-            cursor: "pointer",
-            zIndex: 1000,
-          }}
+
         >
           <i className="bi bi-x-circle bi-1x"></i>
         </div>
