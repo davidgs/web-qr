@@ -48,7 +48,7 @@ export default function WelcomePage() {
   };
 
   const gobuy = () => {
-    navigate("/buy");
+    navigate("/pricing");
   };
 
   return (
@@ -156,7 +156,7 @@ export default function WelcomePage() {
             delay={{ show: 250, hide: 300 }}
             overlay={
               <Tooltip id="basic-coming-soon-tooltip">
-                Coming Soon! Basic License
+                Purchase a Basic License
               </Tooltip>
             }
           >
@@ -164,7 +164,6 @@ export default function WelcomePage() {
               variant="success"
               size={"sm"}
               onClick={gobuy}
-              disabled={true}
             >
               Purchase
             </Button>
@@ -195,8 +194,7 @@ export default function WelcomePage() {
           <Button
             variant="success"
             size={"sm"}
-            disabled={true}
-            onClick={() => {}}
+            onClick={gobuy}
           >
             Purchase
           </Button>
