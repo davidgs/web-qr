@@ -207,7 +207,7 @@ export default function WelcomeModal({
         <div className="fullrow">
           <strong>QR Builder</strong>&nbsp; is open source and licensed under
           the MIT license. The source code is available on &nbsp;
-          <a href="https://github.com/davidgs/link-maker">
+          <a href="https://github.com/davidgs/web-qr">
             <Github
               className={darkClass}
               style={{ height: "20px", width: "20px" }}

@@ -20,16 +20,9 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-import React, { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
 import Footer from "../../components/Footer";
 
 export default function PaySuccessPage() {
-  const navigate = useNavigate();
-
-  const go = (dest: string) => {
-    navigate(dest);
-  };
 
   return (
     <>
