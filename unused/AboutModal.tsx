@@ -23,7 +23,7 @@ import {
     version: currentBuild,
     credits: 'Credits:\n\t• David G. Simmons\n\t• Electron React Boilerplate',
     authors: ['David G. Simmons'],
-    website: 'https://github.com/davidgs/link-maker',
+    website: 'https://github.com/davidgs/web-qr',
     iconPath: getAssetPath('icon.png'),
   };
  */
@@ -132,7 +132,7 @@ export default function AboutModal({
           </ul>
           <strong>QR Builder</strong> is open source and licensed under the MIT
           license. The source code is available on{" "}
-          <a href="https://github.com/davidgs/link-maker">
+          <a href="https://github.com/davidgs/web-qr">
             <Github
               className={darkClass}
               style={{ height: "20px", width: "20px" }}
