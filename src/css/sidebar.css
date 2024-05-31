@@ -23,11 +23,29 @@
 
  .prod-hunt {
   position: absolute !important;
-  top: 10px !important;
+  top: 20px !important;
   left: calc(100vw - 550px) !important;
   width: 100%;
   /* padding: 10px; */
   z-index: 1000;
+}
+
+.error-pop {
+  position: absolute !important;
+  bottom: 20px !important;
+  left: calc(100vw - 550px) !important;
+  width: 100%;
+  /* padding: 10px; */
+  z-index: 1000;
+}
+.error-pop-content {
+  display: flex;
+    flex-direction: column;
+    width: 350px;
+    padding: 5px;
+    border-radius: 10px;
+    background-color: rgb(11, 54, 101);
+    border: 4px solid #ff00be7d;
 }
 .handle .bi-grip-vertical::before {
     content: "\f3fe";

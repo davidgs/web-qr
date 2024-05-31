@@ -38,6 +38,7 @@ const initialState: LicenseState = {
     active: defaultLicense.active,
     confirmed: defaultLicense.confirmed,
     license_status: defaultLicense.license_status,
+    machines: defaultLicense.machines,
   },
   loading: false,
   error: undefined,
@@ -69,20 +70,56 @@ export const fetchLicense = createAsyncThunk('license/fetchLicense',
     return session;
   });
 
-export const updateLicenseSettings = createAsyncThunk('license/updateLicenseSettings',
+export const deleteLicense = createAsyncThunk('license/deleteLicense',
   async (props: LicenseProps) => {
-    const data = { username: props.cust_id, data_update: "license_settings", data: props };
+    const data = { username: props.cust_id, data_delete: "license_settings" };
+    if (props.cust_id === "") {
+      return defaultLicense as LicenseProps;
+    }
     const session = fetch(`${settingsServer}delete-license`, {
       method: "POST",
       headers: {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify(data),
-    });
-    const response = await session;
-    const json = await response.json();
-    console.log(`updateLicenseSettings: ${JSON.stringify(json)}`)
-    return json;
+    })
+      .then(response => response.json())
+      .then(data => {
+        console.log(`deleteLicense: ${JSON.stringify(data)}`)
+        return data;
+      })
+      .catch((error) => {
+        console.error('Error:', error);
+        return defaultLicense as LicenseProps;
+      });
+    console.log(`deleteLicense: ${session}`)
+    return session;
+  });
+
+export const updateLicenseSettings = createAsyncThunk('license/updateLicenseSettings',
+  async (props: LicenseProps) => {
+    const data = { username: props.cust_id, fetch_data: "license_settings", settings: props };
+    if (props.cust_id === "") {
+      return defaultLicense as LicenseProps;
+    }
+    const session = fetch(`${settingsServer}save-data`, {
+      method: "POST",
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(data),
+    })
+      .then(response => response.json())
+      .then(data => {
+        console.log(`updateLicenseSettings: ${JSON.stringify(data)}`)
+        return data;
+      })
+      .catch((error) => {
+        console.error('Error:', error);
+        return error;
+      });
+    console.log(`updateLicenseSettings: ${session}`)
+    return session;
   });
 
 export const licenseSlice = createSlice({
@@ -124,6 +161,18 @@ export const licenseSlice = createSlice({
         state.settings = action.payload;
       })
       .addCase(fetchLicense.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.error.message;
+      });
+    builder
+      .addCase(deleteLicense.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(deleteLicense.fulfilled, (state, action) => {
+        state.loading = false;
+        state.settings = action.payload;
+      })
+      .addCase(deleteLicense.rejected, (state, action) => {
         state.loading = false;
         state.error = action.error.message;
       });

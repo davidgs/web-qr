@@ -25,14 +25,12 @@
 import "./css/hyde.css";
 import Logo from "./images/NewLinkerLogo.png";
 import { RootState } from "./stores/store";
-import { updateDark, updateMainSettings } from "./reducers/main/mainSlice";
+import { saveMain, updateDark } from "./reducers/main/mainSlice";
 import Userfront from "@userfront/core";
-import axios from "axios";
 import { logoutUserFront, setLogin } from "./reducers/session/loginSlice";
 import { Link } from "react-router-dom";
 import { useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "./stores/hooks";
-import { settingsServer } from "./types";
 
 export default function SideNav() {
   // const navigate = useNavigate();
@@ -53,18 +51,10 @@ export default function SideNav() {
    */
   const setSaveDark = () => {
     const d = !dark;
-    const newSet = { ...mainSet, dark: d };
-    const payload = { username: username, settings: newSet };
+    const newSet = { ...mainSet.settings, dark: d };
     if (loggedIn) {
-      axios
-        .post(`${settingsServer}update-main-settings`, payload)
-        .then((res) => {
-          console.log(`res`, res);
-          dispatch(updateMainSettings(res.data.main_settings));
-        })
-        .catch((err) => {
-          console.log(`err`, err);
-        });
+      const payload = { username: username, settings: { ...newSet } };
+      dispatch(saveMain(payload));
     }
     dispatch(updateDark(d));
   };

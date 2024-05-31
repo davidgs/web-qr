@@ -81,9 +81,12 @@ export const saveBitly = createAsyncThunk(
   }: {
     username: string;
     settings: BitlyConfig;
-  }) => {
-    const data = { username: username, settings: settings };
-    const session = fetch(`${settingsServer}update-bitly-settings`, {
+    }) => {
+    if (username === "") {
+      return settings;
+    }
+    const data = { username: username, data_fetch: "bitly_settings", settings: settings };
+    const session = fetch(`${settingsServer}save-data`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -92,7 +95,7 @@ export const saveBitly = createAsyncThunk(
     })
       .then((res) => res.json())
       .then((data) => {
-        return data.bitly_settings;
+        return data;
       })
       .catch((err) => {
         console.error("saving bitly user error", err);

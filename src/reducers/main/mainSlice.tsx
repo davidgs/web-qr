@@ -69,9 +69,13 @@ export const fetchMain = createAsyncThunk(
 
 export const saveMain = createAsyncThunk(
   "main/saveMain",
-  async ({ settings, username }: { settings: MainSettings, username: string }) => {
-    const data = { username: username, settings: settings };
-    const session = fetch(`${settingsServer}update-main-settings`, {
+  async ({ username, settings }: { username: string, settings: MainSettings }) => {
+    const data = { username: username, data_fetch: "main_settings", settings: settings };
+    if (username === "") {
+      return defaultMainSettings as MainSettings;
+    }
+    console.log(`data`, data)
+    const session = fetch(`${settingsServer}save-data`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -85,6 +89,7 @@ export const saveMain = createAsyncThunk(
       .catch((err) => {
         return err;
       });
+    console.log(`session`, session)
     return session;
   }
 );

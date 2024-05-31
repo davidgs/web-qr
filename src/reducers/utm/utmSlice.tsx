@@ -67,8 +67,11 @@ export const fetchUtm = createAsyncThunk(
 export const saveUtm = createAsyncThunk(
   "utm/saveUtm",
   async ({ username, settings }: { username: string; settings: UtmParams }) => {
-    const dataObj = { username: username, settings: settings };
-    const session = fetch(`${settingsServer}update-utm-settings`, {
+    if (username === "") {
+      return defaultUTMParams as UtmParams;
+    }
+    const dataObj = { username: username, data_fetch: "utm_settings", settings: settings };
+    const session = fetch(`${settingsServer}save-data`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

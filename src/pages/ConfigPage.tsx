@@ -46,7 +46,6 @@ import { saveQrCodeSettings } from "../reducers/qr/qrCodeSettingsSlice";
 import { saveBitly } from "../reducers/bitly/bitlySlice";
 import { setSettingsUpdated } from "../reducers/session/loginSlice";
 import Logo from "../images/NewLinkerLogo.png";
-import WiFiConfigurator from "../configuration/Configurators/WiFiConfigurator";
 import Footer from "../components/Footer";
 import PHunt from "../components/PHunt";
 

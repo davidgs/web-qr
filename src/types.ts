@@ -105,6 +105,15 @@ export type UtmParams = {
   utm_content: UtmObj;
 };
 
+export type License = {
+  username: string;
+  license: string;
+  fingerprint: string;
+  platform: string;
+  name: string;
+  id: string;
+}
+
 export type SessionProps = {
   id: number;
   login: string;
@@ -182,6 +191,7 @@ export type LicenseProps = {
   confirmed: boolean;
   expire_date: Date;
   license_status: string;
+  machines: string[];
 }
 
 export const defaultLicense: LicenseProps = {
@@ -192,6 +202,7 @@ export const defaultLicense: LicenseProps = {
   confirmed: false,
   expire_date: new Date(),
   license_status: 'no license',
+  machines: [],
 };
 
 export const defaultSession: SessionProps = {
@@ -633,4 +644,4 @@ export const qrImageSettings = {
   minWidth: 50,
 };
 
-export const settingsServer = "https://qr-builder.io/api/";
+export const settingsServer = "http://localhost:4242/api/";

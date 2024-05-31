@@ -92,10 +92,10 @@ export const saveQrCodeSettings = createAsyncThunk(
     }
     const props = fromQRProps(settings);
     console.log(`Props: ${props}`);
-    const data = { username: username, settings: JSON.parse(props) };
+    const data = { username: username, data_fetch: "qr_settings", settings: props };
     const s = JSON.stringify(data).length;
     console.log(`Data Size: ${s}`);
-    const session = fetch(`${settingsServer}update-qr-settings`, {
+    const session = fetch(`${settingsServer}save-data`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -104,7 +104,7 @@ export const saveQrCodeSettings = createAsyncThunk(
     })
       .then((res) => res.json())
       .then((json) => {
-        return json.qrSettings;
+        return json;
       });
     return session;
   }

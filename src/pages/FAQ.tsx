@@ -21,7 +21,6 @@
  * SOFTWARE.
  */
 
-import { useNavigate } from "react-router-dom";
 import Logo from "../images/NewLinkerLogo.png";
 import { RootState } from "../stores/store";
 import { useAppSelector } from "../stores/hooks";
@@ -29,17 +28,9 @@ import Footer from "../components/Footer";
 import PHunt from "../components/PHunt";
 
 export default function FAQPage() {
-  const navigate = useNavigate();
   const dark = useAppSelector((state: RootState) => state.main.settings.dark);
   const darkClass = dark ? "header-stuff-dark" : "header-stuff";
 
-  const go = () => {
-    navigate("/build");
-  };
-
-  const gobuy = () => {
-    navigate("/buy");
-  };
 
   return (
     <div className={`main-column`}>

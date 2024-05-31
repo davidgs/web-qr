@@ -23,9 +23,14 @@ import {
   saveUserSettings,
 } from "../reducers/user/userSlice";
 import Footer from "../components/Footer";
-import { updateLicense, updateLicenseSettings } from "../reducers/licensing/licenseSlice";
+import {
+  deleteLicense,
+  updateLicense,
+} from "../reducers/licensing/licenseSlice";
 import { dtf } from "../utils/dateformat";
 import PHunt from "../components/PHunt";
+import EnterLicenseModal from "../components/Modals/EnterLicenseModal";
+import ErrorPop from "../components/ErrorPop";
 
 function MyAccount() {
   const dark = useAppSelector((state) => state.main.settings.dark);
@@ -35,20 +40,27 @@ function MyAccount() {
   const license = useAppSelector((state) => state.license.settings);
   const [editMe, setEditMe] = useState<boolean>(false);
   const [LicType, setLicType] = useState<string>("Free");
+  const [LicSeats, setLicSeats] = useState<number>(0);
+  const [licLimit, setLicLimit] = useState<number>(0);
   const [LicStat, setLicStat] = useState<string>("None");
-
+  const [enterLicense, setEnterLicense] = useState<boolean>(false);
   const cancelSub = () => {
     console.log("Cancelling subscription...");
     const ld = { ...license };
     ld.license_key = "";
-    ld.license_status = "canceled";
+    ld.license_status = "Canceled";
     ld.active = false;
     ld.expire_date = new Date();
     ld.license_type = "free";
     dispatch(updateLicense(ld));
-    dispatch(updateLicenseSettings(ld));
+    dispatch(deleteLicense(ld));
+  };
 
-  }
+  const addLicense = () => {
+    console.log("Adding License...");
+    setEnterLicense(true);
+  };
+
   const saveEdit = () => {
     if (editMe) {
       // save the data
@@ -95,7 +107,7 @@ function MyAccount() {
   };
 
   useEffect(() => {
-    console.log(license.license_type);
+    console.log(license?.license_type);
     const spl = license?.license_type?.split("-");
     const lst = spl[0].charAt(0).toUpperCase() + spl[0].slice(1);
     if (spl[1]) {
@@ -104,13 +116,30 @@ function MyAccount() {
     } else {
       setLicType(lst);
     }
-    const tspl = license.license_status.split("-");
-    const ls = tspl[0].charAt(0).toUpperCase() + tspl[0].slice(1);
-    if (tspl[1]) {
-      const l = ls + " " + tspl[1].charAt(0).toUpperCase() + tspl[1].slice(1);
-      setLicStat(l);
-    } else {
+
+    const ls =
+      license?.license_status.charAt(0).toUpperCase() +
+      license?.license_status.slice(1);
       setLicStat(ls);
+    switch (spl[0]) {
+      case "free":
+        setLicLimit(1);
+        break;
+      case "basic":
+        setLicLimit(3);
+        break;
+      case "pro":
+        setLicLimit(5);
+        break;
+      case "enterprise":
+        setLicLimit(10);
+        break;
+      default:
+        setLicLimit(0);
+        break;
+    }
+    if (license.machines) {
+      setLicSeats(license.machines.length);
     }
   }, [license]);
   return (
@@ -454,106 +483,119 @@ function MyAccount() {
         <div className="col50" style={{ margin: "auto" }}>
           <div className="fullrow">
             <div className="col50" style={{ margin: "auto" }}>
-              <InputGroup size="lg">
-                <OverlayTrigger
-                  placement="auto"
-                  delay={{ show: 250, hide: 300 }}
-                  overlay={
-                    <Tooltip id="ssid-label-tooltip">License type</Tooltip>
-                  }
-                >
-                  <FloatingLabel label="License Type" className={darkClass}>
-                    <FormControl
-                      required
-                      className={darkClass}
-                      type="text"
-                      size="sm"
-                      id="license-type"
-                      aria-label="License Type"
-                      aria-describedby="license type"
-                      value={LicType}
-                      disabled={true}
-                    />
-                  </FloatingLabel>
-                </OverlayTrigger>
-              </InputGroup>
+              <OverlayTrigger
+                placement="auto"
+                delay={{ show: 250, hide: 300 }}
+                overlay={
+                  <Tooltip id="ssid-label-tooltip">License type</Tooltip>
+                }
+              >
+                <FloatingLabel label="License Type" className={darkClass}>
+                  <FormControl
+                    required
+                    className={darkClass}
+                    type="text"
+                    size="sm"
+                    id="license-type"
+                    aria-label="License Type"
+                    aria-describedby="license type"
+                    value={LicType}
+                    disabled={true}
+                  />
+                </FloatingLabel>
+              </OverlayTrigger>
             </div>
-            <div className="col50" style={{ margin: "auto" }}>
-              <InputGroup size="lg">
-                <OverlayTrigger
-                  placement="auto"
-                  delay={{ show: 250, hide: 300 }}
-                  overlay={
-                    <Tooltip id="ssid-label-tooltip">License status</Tooltip>
-                  }
-                >
-                  <FloatingLabel label="License Status" className={darkClass}>
-                    <FormControl
-                      required
-                      className={darkClass}
-                      type="text"
-                      size="sm"
-                      id="license-type"
-                      aria-label="License Type"
-                      aria-describedby="license type"
-                      value={LicStat}
-                      disabled={true}
-                    />
-                  </FloatingLabel>
-                </OverlayTrigger>
-              </InputGroup>
+            <div className="col30" style={{ margin: "auto" }}>
+              <OverlayTrigger
+                placement="auto"
+                delay={{ show: 250, hide: 300 }}
+                overlay={
+                  <Tooltip id="ssid-label-tooltip">License status</Tooltip>
+                }
+              >
+                <FloatingLabel label="License Status" className={darkClass}>
+                  <FormControl
+                    required
+                    className={darkClass}
+                    type="text"
+                    size="sm"
+                    id="license-type"
+                    aria-label="License Type"
+                    aria-describedby="license type"
+                    value={license.license_status}
+                    disabled={true}
+                  />
+                </FloatingLabel>
+              </OverlayTrigger>
+            </div>
+            <div className="col20" style={{ margin: "auto" }}>
+              <OverlayTrigger
+                placement="auto"
+                delay={{ show: 250, hide: 300 }}
+                overlay={
+                  <Tooltip id="ssid-label-tooltip">Number of license seats Used</Tooltip>
+                }
+              >
+                <FloatingLabel label="Licenses Used" className={darkClass}>
+                  <FormControl
+                    required
+                    className={darkClass}
+                    type="text"
+                    size="sm"
+                    id="license-used"
+                    aria-label="Licenses Used"
+                    aria-describedby="licenses used"
+                    value={`${LicSeats} of ${licLimit} used`}
+                    disabled={true}
+                  />
+                </FloatingLabel>
+              </OverlayTrigger>
             </div>
           </div>
         </div>
         {/* License Key */}
         <div className="col50" style={{ margin: "auto" }}>
-          <InputGroup size="lg">
-            <OverlayTrigger
-              placement="auto"
-              delay={{ show: 250, hide: 300 }}
-              overlay={<Tooltip id="ssid-label-tooltip">License Token</Tooltip>}
-            >
-              <FloatingLabel label="License Token" className={darkClass}>
-                <FormControl
-                  required
-                  className={darkClass}
-                  type="text"
-                  size="sm"
-                  id="license-type"
-                  aria-label="License Type"
-                  aria-describedby="license type"
-                  value={license.license_key}
-                  disabled={true}
-                />
-              </FloatingLabel>
-            </OverlayTrigger>
-          </InputGroup>
+          <OverlayTrigger
+            placement="auto"
+            delay={{ show: 250, hide: 300 }}
+            overlay={<Tooltip id="ssid-label-tooltip">License Token</Tooltip>}
+          >
+            <FloatingLabel label="License Token" className={darkClass}>
+              <FormControl
+                required
+                className={darkClass}
+                type="text"
+                size="sm"
+                id="license-type"
+                aria-label="License Type"
+                aria-describedby="license type"
+                value={license.license_key}
+                disabled={true}
+              />
+            </FloatingLabel>
+          </OverlayTrigger>
         </div>
         {/* License Expiration */}
         <div className="col50" style={{ margin: "auto" }}>
-          <InputGroup size="lg">
-            <OverlayTrigger
-              placement="auto"
-              delay={{ show: 250, hide: 300 }}
-              overlay={
-                <Tooltip id="ssid-label-tooltip">Expiration Date</Tooltip>
-              }
-            >
-              <FloatingLabel label="License Expiration" className={darkClass}>
-                <FormControl
-                  required
-                  className={darkClass}
-                  type="text"
-                  size="sm"
-                  id="expiration-date"
-                  aria-label="License Expiration Date"
-                  aria-describedby="license expiration"
-                  value={dtf.format(new Date(license.expire_date))}
-                  disabled={true}
-                />
-              </FloatingLabel>
-            </OverlayTrigger>
-          </InputGroup>
+          <OverlayTrigger
+            placement="auto"
+            delay={{ show: 250, hide: 300 }}
+            overlay={<Tooltip id="ssid-label-tooltip">Expiration Date</Tooltip>}
+          >
+            <FloatingLabel label="License Expiration" className={darkClass}>
+              <FormControl
+                required
+                className={darkClass}
+                type="text"
+                size="sm"
+                id="expiration-date"
+                aria-label="License Expiration Date"
+                aria-describedby="license expiration"
+                value={dtf.format(new Date(license.expire_date))}
+                disabled={true}
+              />
+            </FloatingLabel>
+          </OverlayTrigger>
         </div>
         {/* cancel subscription */}
         <div className="col50" style={{ margin: "auto" }}>
@@ -574,6 +616,27 @@ function MyAccount() {
               </OverlayTrigger>
             </InputGroup>
           )}
+          {license.license_key === "" && (
+            <InputGroup size="lg">
+              <OverlayTrigger
+                placement="auto"
+                delay={{ show: 250, hide: 300 }}
+                overlay={
+                  <Tooltip id="ssid-label-tooltip">
+                    Have a license? Click here to enter it.
+                  </Tooltip>
+                }
+              >
+                <Button variant="success" onClick={addLicense}>
+                  Enter A License
+                </Button>
+              </OverlayTrigger>
+            </InputGroup>
+          )}
+          <EnterLicenseModal show={enterLicense} callback={setEnterLicense} />
+          <div className="fullrow">
+            <ErrorPop errorMsg="Some Error Message. But what happens when the error message is really really long?" duration={99} />
+          </div>
         </div>
         <Footer />
       </div>

@@ -20,7 +20,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-import { PayloadAction, createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import thunkAPI, { PayloadAction, createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { UserfrontProps, defaultUserFront } from '../../types';
 import Userfront from '@userfront/toolkit';
 export interface UserFrontState {
@@ -81,10 +81,12 @@ export const fetchUserfront = createAsyncThunk('userfront/fetchUserfront', async
             console.log("data", data);
             return data as UserfrontProps;
           })
-          .catch((err) => {
-            console.error("getting userfront user error", err);
-            return defaultUserFront;
-          });
+                    .catch((err) => {
+                      console.error("getting userfront user error", err);
+                      if (!err.response) {
+                        throw err
+                      }
+                    });
         return sesData;
       } else {
         return defaultUserFront;

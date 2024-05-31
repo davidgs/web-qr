@@ -43,8 +43,7 @@ import { useAppDispatch, useAppSelector } from "../stores/hooks";
 import Footer from "../components/Footer";
 import Logo from "../images/NewLinkerLogo.png";
 import PHunt from "../components/PHunt";
-Userfront.init("xbp876mb");
-
+import { useNavigate } from "react-router-dom";
 type goodBad = {
   lengthGood: boolean;
   numberGood: boolean;
@@ -57,12 +56,14 @@ const regExes = {
   numRegEx: /^(?=.*[0-9])/,
   upperRegEx: /^(?=.*[A-Z])/,
   lowerRegEx: /^(?=.*[a-z])/,
+  // eslint-disable-next-line no-useless-escape
   specialRegEx: /^(?=.*[!@#$%^&*\(\)_+={[}\]|\\:;<,>\.\?\/])/,
   lengthRegEx: /^(?=.{8,16})/,
 };
 
 export default function Account() {
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
   const dark = useAppSelector((state) => state.main.settings.dark);
   const darkClass = dark ? "header-stuff-dark" : "header-stuff";
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -86,7 +87,6 @@ export default function Account() {
     lowerGood: false,
     specialGood: false,
   });
-  const db_url = `${settingsServer}create-user`;
   /**
    * toggle the password visibility
    */
@@ -197,7 +197,6 @@ export default function Account() {
   async function registerMe (e: any) {
     e.preventDefault();
     e.stopPropagation();
-    console.log("Registering user");
     console.log(
       `Registering ${firstName} ${lastName} with email ${email} and password ${passwd}`
     );
@@ -207,6 +206,7 @@ export default function Account() {
       email: email,
       password: passwd,
     };
+    console.log(`u_data`, u_data, settingsServer)
     const session = await fetch(`${settingsServer}create-user`, {
       method: "POST",
       headers: {
@@ -216,6 +216,7 @@ export default function Account() {
     })
       .then((res) => res.json())
       .then((data) => {
+        console.log(`data`, data);
         return data;
       })
       .catch((err) => {
@@ -226,6 +227,11 @@ export default function Account() {
       setErrorMessage(session.error);
       setShowError(true);
       return session;
+    } else if (session.result) {
+      console.log(`Session Result: ${session.result}`);
+      setRegisterSuccess(true);
+      navigate("/login");
+
     }
     return session;
   };

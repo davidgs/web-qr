@@ -27,12 +27,12 @@ import { RootState } from "../stores/store";
 import "../css/MainConfig.css";
 import "../css/AccountModal.css";
 import { useEffect, useState } from "react";
-import Userfront from "@userfront/core";
 import { setLogin } from "../reducers/session/loginSlice";
 import { useAppDispatch, useAppSelector } from "../stores/hooks";
 import ResetPassword from "../components/Modals/PasswordReset";
 import Footer from "../components/Footer";
 import { useSearchParams } from "react-router-dom";
+import Userfront from "@userfront/core";
 
 export default function Login() {
   const dispatch = useAppDispatch();
@@ -51,16 +51,16 @@ export default function Login() {
 const [params] = useSearchParams();
 const uuid = params.get("uuid");
 const token = params.get("token");
-const type = params.get("type");
 console.log(`uuid`, uuid);
 console.log(`token`, token);
-
+Userfront.init("xbp876mb");
 
   async function resetPassword() {
     const payload = {
     token: token,
     uuid: uuid,
-};
+    };
+
     const response = await fetch(
       "https://api.userfront.com/v0/tenants/xbp876mb/auth/link",
       {
@@ -106,23 +106,76 @@ console.log(`token`, token);
     }
   };
 
+  async function login({ username, password }: { username: string, password: string }) {
+    Userfront.init("xbp876mb");
+    const loginObj = {
+      method: "password",
+      password: password,
+      emailOrUsername: username,
+    };
+    console.log(`loginObj`, loginObj);
+    Userfront.login(loginObj);
+  }
+      // method: "password",
+      // emailOrUsername: username,
+      // password: password,
+      // handleRedirect(redirect: any, data: any) {
+      //   console.log(redirect);
+      //   console.log(data);
+      // },
+      // redirect: "/custom-path"
+    // );
+    // const response = await fetch(
+    //   "https://api.userfront.com/v0/tenants/xbp876mb/auth/password",
+    //   {
+    //     method: "POST",
+    //     headers: {
+    //       "Content-Type": "application/json",
+    //     },
+    //     body: JSON.stringify(loginObj),
+    //   }
+    // )
+    //   .then((response) => response.json())
+    //   .then((data) => {
+    //     console.log(`data`, data);
+    //     if (data.error) {
+    //       setErrorText(`${data.message}`);
+    //       setShowError(true);
+    //       return;
+    //     }
+    //     return data;
+    //   })
+    //   .catch((error) => {
+    //     setErrorText(`${error}`);
+    //     setShowError(true);
+    //     console.log(`err`, error);
+    //     console.error(`error`, error);
+    //   });
+
+    // console.log(response.json());
+  // }
+
+  const tryLogOut = async () => {
+    const jwtResponse = await fetch("https://api.userfront.com/v0/tenants/xbp876mb/jwks", {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        console.log(`data`, data);
+        return data;
+      })
+      .catch((error) => {
+        console.error(`error`, error);
+      });
+    console.log(`jwtResponse`, jwtResponse);
+  }
+
   const tryLogin = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    Userfront.login({
-      method: "password",
-      username: (email === "" ? userName : userName),
-      password: password,
-    })
-      .then((session) => {
-        console.log(`session`, session);
-        dispatch(setLogin(true));
-        Userfront.redirectIfLoggedIn();
-      })
-      .catch((err) => {
-        setErrorText(`${err}`);
-        setShowError(true);
-        console.log(`err`, err);
-      });
+    login({ username: userName, password: password });
   };
 
   return (
@@ -242,7 +295,7 @@ console.log(`token`, token);
           <div className="main-settings-row">
             <div className="controls-row">
               <div className="controls-row">
-                <Button variant="danger" onClick={() => Userfront.logout()}>
+                <Button variant="danger" onClick={tryLogOut}>
                   Logout
                 </Button>
               </div>

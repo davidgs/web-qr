@@ -75,10 +75,10 @@ export const saveUserSettings = createAsyncThunk('user/saveUser', async ({ usern
   if (username === "") {
     return defaultUserSettings as UserSettings;
   }
-  const data = { username: username, settings: settings };
+  const data = { username: username, data_fetch: "user_settings", settings: settings };
   const s = JSON.stringify(data).length;
   console.log(`Data Size: ${s}`);
-  const session = fetch(`${settingsServer}update-user-settings`, {
+  const session = fetch(`${settingsServer}save-data`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -87,7 +87,7 @@ export const saveUserSettings = createAsyncThunk('user/saveUser', async ({ usern
   })
     .then((res) => res.json())
     .then((json) => {
-      return json.user;
+      return json;
     });
   return session;
 });

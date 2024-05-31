@@ -22,27 +22,13 @@
  */
 
 import { Col, Row } from "react-bootstrap";
-import { useNavigate } from "react-router-dom";
 import Logo from "../images/NewLinkerLogo.png";
-import { RootState } from "../stores/store";
 import { PricingTable } from "../components/StripePricing";
-import { useAppSelector } from "../stores/hooks";
-import FreeCard from "../components/Cards/FreeCard";
-import BasicCard from "../components/Cards/BasicCard";
 import "../css/Pricing.css";
-import ProCard from "../components/Cards/ProCard";
-import EnterpriseCard from "../components/Cards/EnterpriseCard";
 import Footer from "../components/Footer";
 import PHunt from "../components/PHunt";
 
 export default function PricingPage() {
-  const navigate = useNavigate();
-  const dark = useAppSelector((state: RootState) => state.main.settings.dark);
-  const darkClass = dark ? "header-stuff-dark" : "header-stuff";
-
-  const go = () => {
-    navigate("/build");
-  };
 
   // const gobuy = () => {
   //   navigate("/buy");
